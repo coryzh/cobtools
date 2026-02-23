@@ -45,7 +45,6 @@ def test_get_ecdf_duplicates():
     """Test ECDF with duplicate values."""
     arr = np.array([2, 1, 1, 2, 3])
     x, y = get_ecdf(arr, normalised=False)
-    print(y)
     assert y[-1] == len(arr)
     assert np.array_equal(x, np.array([1, 1, 1, 2, 2, 3]))
     assert np.array_equal(y, np.array([0, 1, 2, 3, 4, 5]))
