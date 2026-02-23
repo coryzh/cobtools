@@ -41,7 +41,6 @@ def plot_ecdf(
         ax.step(x, y, where="post", lw=1.5, **kwargs)
         ax.step(x_lo, y_lo, where="post", lw=1.0, ls=":")
         ax.step(x_up, y_up, where="post", lw=1.0, ls=":")
-        # ax.fill_betweenx(y, x_lo, x_up, step="post", alpha=0.5)
 
     else:
         ax.step(x, y, where="post", **kwargs)
