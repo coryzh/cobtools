@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cobtools"
+version = "0.1.0"
+description = "A modern Python package for astrometry, statistics, kinematics, and IO."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["astrometry", "statistics", "kinematics", "io"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "numpy>=2.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "black"
+]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+target-version = "py310"
+select = ["E", "F", "W", "C90"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
