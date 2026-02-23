@@ -7,6 +7,34 @@ from numpy.typing import ArrayLike
 def get_ecdf(
         data: ArrayLike, normalised: bool = True
 ) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Compute the empirical cumulative distribution function (ECDF) for 1D data.
+
+    Parameters
+    ----------
+    data : ArrayLike
+        One-dimensional array-like sequence of sample values from which to
+        compute the ECDF.
+    normalised : bool, optional
+        If True (default), the ECDF y-values are normalised to the range
+        [0, 1]. If False, y-values are raw counts.
+
+    Returns
+    -------
+    x : numpy.ndarray
+        Sorted data values prepared for step plotting. The smallest value is
+        duplicated at the start so that the first ECDF step begins at the
+        minimum x-value.
+    y : numpy.ndarray
+        ECDF values corresponding to ``x``. If ``normalised`` is True,
+        ``y`` ranges from 0 to 1; otherwise, it contains cumulative counts
+        from 0 up to ``len(data)``.
+
+    Raises
+    ------
+    ValueError
+        If the input array is empty or not one-dimensional.
+    """
     data = np.asarray(data)
 
     if len(data) == 0:
