@@ -21,7 +21,8 @@ def get_ecdf(
     if normalised:
         y = y / float(len(x))
 
-    # Ensure the first step starts at 0 and the last step ends at 1
+    # Duplicate the smallest x so the ECDF starts at y=0; if normalised=True,
+    # the final step ends at 1 (otherwise at len(x)).
     x = np.insert(x, 0, x[0])  # Duplicate the smallest x-value
 
     return x, y
