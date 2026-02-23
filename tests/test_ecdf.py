@@ -68,3 +68,26 @@ def test_get_ecdf_empty_array():
     arr = np.array([])
     with pytest.raises(ValueError, match="Input array must not be empty."):
         get_ecdf(arr, normalised=True)
+
+
+def test_get_ecdf_list_input():
+    """Test ECDF with non-array input."""
+    arr = [1, 2, 3]  # This is a list, not a numpy array
+    x, y = get_ecdf(arr, normalised=True)
+
+    assert len(x) == len(y)
+    assert x[0] == 0
+    assert np.allclose(y[-1], 1.0)
+    assert np.array_equal(x, np.array([0, 1, 2, 3]))
+    assert np.array_equal(y, np.array([0.0, 1./3, 2./3, 1.0]))
+
+
+def test_get_ecdf_tuple_input():
+    """Test ECDF with tuple input."""
+    arr = (4, 2, 1)  # This is a tuple, not a numpy array
+    x, y = get_ecdf(arr, normalised=False)
+
+    assert len(x) == len(y)
+    assert x[0] == 0
+    assert np.array_equal(x, np.array([0, 1, 2, 4]))
+    assert np.array_equal(y, np.array([0, 1, 2, 3]))
