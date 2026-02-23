@@ -21,8 +21,10 @@ def get_ecdf(
     if normalised:
         y = y / float(len(x))
 
-    x_new = np.insert(x, obj=0, values=0)
-    return x_new, y
+    # Ensure the first step starts at 0 and the last step ends at 1
+    x = np.insert(x, 0, x[0])  # Duplicate the smallest x-value
+
+    return x, y
 
 
 def plot_ecdf(
