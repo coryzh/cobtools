@@ -2,7 +2,8 @@
 Different models for distance estimation from parallax.
 """
 import numpy as np
-from scipy.stats import truncnorm
+from scipy.stats import truncnorm, gamma
+from scipy.optimize import minimize, Bounds
 
 
 class SimpleInversion:
@@ -86,5 +87,93 @@ class SimpleInversion:
             truncnorm.rvs(a=a, b=b, size=n_samples) * self.d_est_error
             + self.d_est
         )
+
+        return samples
+
+
+class FromLiterature:
+    def __init__(
+            self, x_est: float, x_lo: float, x_hi: float,
+            conf_level: float = 0.68
+    ):
+        self.x_est = x_est
+        self.x_lo = x_lo
+        self.x_hi = x_hi
+        self.conf_level = conf_level
+
+        if x_lo >= x_hi:
+            raise ValueError(
+                "Lower limit (x_lo) must be less than the upper limit (x_hi)."
+            )
+
+        if conf_level < 0 or conf_level > 1:
+            raise ValueError(
+                "Confidence level must be a number between 0 and 1."
+            )
+
+    @property
+    def x_loerr(self) -> float:
+        return self.x_est - self.x_lo
+
+    @property
+    def x_uperr(self) -> float:
+        return self.x_hi - self.x_est
+
+    @property
+    def sigma_0(self) -> float:
+        """
+        Averaged error, which could be used as an initial guess for fitting
+        a skewed distribution.
+        """
+        return 0.5 * (self.x_loerr + self.x_uperr)
+
+    @property
+    def _sigma_min(self) -> float:
+        return min(self.x_loerr, self.x_uperr)
+
+    def fit_gamma(self) -> dict:
+        """Fit the literature nominal values to a gamma distribution."""
+
+        def get_gamma_distribution(sigma_x) -> dict:
+            alpha = (
+                (
+                    2 * sigma_x + self.x_est ** 2
+                    + np.sqrt(4 * sigma_x * self.x_est ** 2 + self.x_est ** 4)
+                )
+                / (2 * sigma_x)
+            )
+
+            theta = self.x_est / (alpha - 1)
+            x_gamma = gamma(a=alpha, scale=theta)
+
+            return dict(alpha=alpha, theta=theta, distribution=x_gamma)
+
+        def difference(sigma_x) -> float:
+            _re = get_gamma_distribution(sigma_x)
+            x_gamma = _re["distribution"]
+
+            x_lo_model = x_gamma.ppf((1 - self.conf_level) / 2)
+            x_hi_model = x_gamma.ppf((1 + self.conf_level) / 2)
+
+            diff = np.sqrt(
+                (self.x_lo - x_lo_model) ** 2 + (self.x_hi - x_hi_model) ** 2
+            )
+
+            return diff
+
+        results = minimize(
+            difference, x0=self.sigma_0, bounds=Bounds(self._sigma_min, np.inf)
+        )
+
+        return get_gamma_distribution(results.x[0])
+
+    def sample_distance(
+            self, n_samples: int = 1000
+    ) -> np.ndarray:
+        """Sample distance from the fitted gamma distribution."""
+        gamma_params = self.fit_gamma()
+        x_gamma = gamma_params["distribution"]
+
+        samples = x_gamma.rvs(size=n_samples)
 
         return samples
