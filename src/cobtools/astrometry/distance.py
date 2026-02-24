@@ -4,6 +4,9 @@ Different models for distance estimation from parallax.
 import numpy as np
 from scipy.stats import truncnorm, gamma
 from scipy.optimize import minimize, Bounds
+from typing import Any
+from functools import partial
+import emcee
 
 
 class SimpleInversion:
@@ -231,3 +234,65 @@ class XRBExponentialPriorModel:
         self.parallax = parallax
         self.parallax_error = parallax_error
         self.scale_length = scale_length
+
+    @property
+    def parallax_over_error(self) -> float:
+        return self.parallax / self.parallax_error
+
+    def log_priord(self, d: float) -> float:
+        if d < 0:
+            return -np.inf
+
+        else:
+            return 2 * np.log(d) - d / self.scale_length
+
+    def log_likelihood(self, d) -> float:
+        if d < 0:
+            return -np.inf
+
+        else:
+            return (
+                -0.5 * (self.parallax - 1 / d) ** 2 / self.parallax_error ** 2
+            )
+
+    def log_posterior(self, d) -> float:
+        return self.log_priord(d) + self.log_likelihood(d)
+
+    def sample_distance(
+            self, nwalkers: int = 4, nsteps: int = 2000, burn_in: int = 500,
+            **kwargs: Any
+    ) -> np.ndarray[Any, np.dtype[np.float64]]:
+        """
+        Sample the posterior distribution using the
+        MCMC sampler in emcee.
+
+        Parameters
+        ----------
+        nwalkers : int, optional
+            Number of walkers for the MCMC sampler, by default 4
+        nsteps : int, optional
+            Number of steps for each walker, by default 2000
+        burn_in : int, optional
+            Number of steps to discard as burn-in, by default 500
+        kwargs : Any
+            Additional keyword arguments to pass to the emcee.EnsembleSampler
+
+        Returns
+        -------
+        np.ndarray[Any, np.dtype[np.float64]]
+            Array of sampled distances from the posterior distribution.
+        """
+        initial_distances = np.random.uniform(0.1, 20, size=nwalkers)
+
+        log_prob_fn = partial(self.log_posterior)
+        sampler = emcee.EnsembleSampler(
+            nwalkers=nwalkers, ndim=1, log_prob_fn=log_prob_fn, **kwargs
+        )
+
+        _ = sampler.run_mcmc(
+            initial_distances[:, None], nsteps=nsteps, progress=False
+        )
+
+        samples = sampler.get_chain(discard=burn_in, flat=True)[:, 0]
+
+        return samples
