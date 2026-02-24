@@ -16,6 +16,11 @@ class SimpleInversion:
                     "To use SimpleInversion, parallax must be positive."
             )
 
+        if parallax_error <= 0:
+            raise ValueError(
+                    "parallax_error must be a positive number."
+            )
+
         self.parallax = parallax
         self.parallax_error = parallax_error
 
