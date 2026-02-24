@@ -55,3 +55,13 @@ class TestSimpleInversion:
             inv.sample_distance(n_samples=100.0)
         with pytest.raises(ValueError):
             inv.sample_distance(n_samples=-10)
+
+    def test_sample_distance_bounds(self):
+        # Validate truncation behavior with non-default bounds
+        inv = SimpleInversion(0.06, 0.2)
+        dist_up = 20.0
+        trunc_samples = inv.sample_distance(
+            n_samples=100, dist_up=dist_up
+        )
+        assert np.all(trunc_samples >= 0.0)
+        assert np.all(trunc_samples <= dist_up)
