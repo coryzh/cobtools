@@ -182,3 +182,52 @@ class FromLiterature:
         samples = x_gamma.rvs(size=n_samples)
 
         return samples
+
+
+class XRBExponentialPriorModel:
+    """
+    Distance Bayesian model based on a exponential prior derived from known
+    X-ray binaries.
+    """
+
+    def __init__(
+            self, parallax: float,
+            parallax_error: float, scale_length: float = 1.97
+    ):
+        """
+        An Bayesian distance model using a exponential prior. The exponential
+        prior has a scale_length parameter obtained from fitting to known
+        X-ray binaries in the literature.
+
+        Parameters
+        ----------
+        parallax : float
+            The measured parallax in milliarcseconds (mas). Could be negative.
+        parallax_error : float
+            The uncertainty of the parallax measurement in
+            milliarcseconds (mas).
+        scale_length : float, optional
+            The scale length of the exponential prior in kiloparsecs (kpc),
+            by default 1.97 (Zhao, Y+23)
+
+        Raises
+        ------
+        ValueError
+            If parallax_error is not a positive number.
+        ValueError
+            If scale_length is not a positive number.
+        """
+
+        if parallax_error <= 0:
+            raise ValueError(
+                "parallax_error must be a positive number."
+            )
+
+        if scale_length <= 0:
+            raise ValueError(
+                "scale_length must be a positive number."
+            )
+
+        self.parallax = parallax
+        self.parallax_error = parallax_error
+        self.scale_length = scale_length
