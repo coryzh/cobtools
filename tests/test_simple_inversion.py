@@ -27,6 +27,11 @@ class TestSimpleInversion:
         with pytest.raises(ValueError):
             SimpleInversion(0, 0.2)
 
+    def test_negative_parallax_error(self):
+        """Test initialization with negative parallax error."""
+        with pytest.raises(ValueError):
+            SimpleInversion(0.5, -0.2)
+
     def test_invert_estimate(self):
         """Test inversion with single element."""
         inv = SimpleInversion(0.5, 0.2)
