@@ -1,6 +1,7 @@
 import pytest
 import numpy as np
 from cobtools.astrometry.distance import XRBExponentialPriorModel
+from pathlib import Path
 
 
 class TestXRBExponentialPriorModel:
@@ -61,6 +62,16 @@ class TestXRBExponentialPriorModel:
             1 / model.parallax, color="red", linestyle="--", label="1/parallax"
         )
         plt.xlabel("Distance (kpc)")
-        plt.ylabel("Density")
+        plt.ylabel("Probability Density")
+        plt.text(
+            0.5, 0.8,
+            f"Parallax: {model.parallax} mas\n"
+            f"Parallax Error: {model.parallax_error} mas\n"
+            f"Scale Length: {model.scale_length} kpc",
+            fontsize=10,
+            transform=plt.gca().transAxes,
+        )
         plt.legend()
-        plt.show()
+        out_path = Path().cwd() / "test_exponential_distance_samples.pdf"
+        plt.savefig(out_path, bbox_inches="tight")
+        plt.close()
