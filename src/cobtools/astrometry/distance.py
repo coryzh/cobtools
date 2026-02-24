@@ -239,7 +239,7 @@ class XRBExponentialPriorModel:
     def parallax_over_error(self) -> float:
         return self.parallax / self.parallax_error
 
-    def log_priord(self, d: float) -> float:
+    def log_prior(self, d: float) -> float:
         if d < 0:
             return -np.inf
 
@@ -256,7 +256,7 @@ class XRBExponentialPriorModel:
             )
 
     def log_posterior(self, d) -> float:
-        return self.log_priord(d) + self.log_likelihood(d)
+        return self.log_prior(d) + self.log_likelihood(d)
 
     def sample_distance(
             self, nwalkers: int = 4, nsteps: int = 2000, burn_in: int = 500,
