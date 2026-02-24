@@ -25,6 +25,7 @@ htmlcov/
 .coverage.*
 .cache
 pytest_cache/
+figures/
 
 # IDEs and editors
 .idea/
