@@ -33,6 +33,12 @@ class TestFromLiterature:
         with pytest.raises(ValueError):
             FromLiterature(5.0, 4.0, 6.0, conf_level=1.1)  # conf_level > 1
 
+        with pytest.raises(ValueError):
+            FromLiterature(3.0, 4.0, 6.0)  # x_est < x_lo
+
+        with pytest.raises(ValueError):
+            FromLiterature(7.0, 4.0, 6.0)  # x_est > x_hi
+
     def test_fit_gamma(self):
         """Test fitting a gamma distribution."""
         fl = FromLiterature(3.5, 1.8, 6.5)

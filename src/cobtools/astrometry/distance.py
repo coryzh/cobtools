@@ -106,6 +106,11 @@ class FromLiterature:
                 "Lower limit (x_lo) must be less than the upper limit (x_hi)."
             )
 
+        if x_est < x_lo or x_est > x_hi:
+            raise ValueError(
+                "Estimated value (x_est) must be between x_lo and x_hi."
+            )
+
         if conf_level < 0 or conf_level > 1:
             raise ValueError(
                 "Confidence level must be a number between 0 and 1."
