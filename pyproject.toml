@@ -33,8 +33,8 @@ line-length = 88
 
 [tool.ruff]
 target-version = "py310"
-select = ["E", "F", "W", "C90"]
-ignore = ["E501"]
+lint.select = ["E", "F", "W", "C90"]
+lint.ignore = ["E501"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
