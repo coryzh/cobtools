@@ -47,6 +47,22 @@ class TestXRBExponentialPriorModel:
         assert len(samples) == 10 * (500 - 100)
         assert np.all(samples > 0)  # Distances should all be positive
 
+    def test_sample_distance_invalid_sampler_parameters(self):
+        """Test that non-integer nwalkers and nsteps raise ValueError."""
+        model = XRBExponentialPriorModel(parallax=0.5, parallax_error=0.1)
+
+        with pytest.raises(ValueError):
+            model.sample_distance(nwalkers=3.5, nsteps=500, burn_in=100)
+
+        with pytest.raises(ValueError):
+            model.sample_distance(nwalkers=10, nsteps=2000.5, burn_in=100)
+
+        with pytest.raises(ValueError):
+            model.sample_distance(nwalkers=10, nsteps=500, burn_in=-50)
+
+        with pytest.raises(ValueError):
+            model.sample_distance(nwalkers=10, nsteps=200, burn_in=201)
+
     def test_plot_distance_samples(self):
         """Test that distance samples can be plotted without errors."""
         import matplotlib.pyplot as plt

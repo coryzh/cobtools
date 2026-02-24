@@ -282,6 +282,18 @@ class XRBExponentialPriorModel:
         np.ndarray[Any, np.dtype[np.float64]]
             Array of sampled distances from the posterior distribution.
         """
+        if not isinstance(nwalkers, int) or nwalkers <= 0:
+            raise ValueError("nwalkers must be a positive integer.")
+
+        if not isinstance(nsteps, int) or nsteps <= 0:
+            raise ValueError("nsteps must be a positive integer.")
+
+        if not isinstance(burn_in, int) or burn_in < 0:
+            raise ValueError("burn_in must be a non-negative integer.")
+
+        if burn_in >= nsteps:
+            raise ValueError("burn_in must be less than nsteps.")
+
         initial_distances = np.random.uniform(0.1, 20, size=nwalkers)
 
         log_prob_fn = partial(self.log_posterior)
