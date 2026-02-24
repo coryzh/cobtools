@@ -51,10 +51,12 @@ class SimpleInversion:
             Number of random samples to generate, by default 1000
 
         dist_lo : float, optional
-            Lower bound for distance sampling, by default 0
+            Lower bound for distance sampling, by default 0. Should keep it
+            default.
 
         dist_up : float, optional
-            Upper bound for distance sampling, by default np.inf
+            Upper bound for distance sampling, by default np.inf. Should
+            keep it default.
 
         Returns
         -------
@@ -77,7 +79,7 @@ class SimpleInversion:
             raise ValueError("n_samples must be a positive integer.")
 
         # Generate samples from truncated normal distribution
-        a = (self.d_est - dist_lo) / self.d_est_error
+        a = (dist_lo - self.d_est) / self.d_est_error
         b = (dist_up - self.d_est) / self.d_est_error
 
         samples = (
