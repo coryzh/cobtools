@@ -77,9 +77,12 @@ class SimpleInversion:
             raise ValueError("n_samples must be a positive integer.")
 
         # Generate samples from truncated normal distribution
-        samples = truncnorm.rvs(
-            a=dist_lo, b=dist_up,
-            loc=self.d_est, scale=self.d_est_error, size=n_samples
+        a = (self.d_est - dist_lo) / self.d_est_error
+        b = (dist_up - self.d_est) / self.d_est_error
+
+        samples = (
+            truncnorm.rvs(a=a, b=b, size=n_samples) * self.d_est_error
+            + self.d_est
         )
 
         return samples
