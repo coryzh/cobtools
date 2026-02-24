@@ -198,7 +198,7 @@ class XRBExponentialPriorModel:
             parallax_error: float, scale_length: float = 1.97
     ):
         """
-        A Bayesian distance model using a exponential prior. The exponential
+        A Bayesian distance model using an exponential prior. The exponential
         prior has a scale_length parameter obtained from fitting to known
         X-ray binaries in the literature.
 
