@@ -107,7 +107,7 @@ def galactic_proper_motion(
         ra: Union[float, ArrayLike], dec: Union[float, ArrayLike],
         pmra_cosdec: Union[float, ArrayLike], pmdec: Union[float, ArrayLike],
         dt: float = 1.0
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]:
     """
     This function calculate differences in ra and dec due to PM and convert it
     to Galactic coordinate. Input ra and dec should be in degrees.
@@ -135,7 +135,7 @@ def galactic_proper_motion(
 
     Returns
     -------
-    Tuple[np.ndarray, np.ndarray]
+    Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]
         Proper motion in Galactic longitude (mu_l) and latitude (mu_b) in
         mas/yr. Note that mu_l does not contain the cos(b) factor,
         i.e., it is the proper motion in the direction of increasing Galactic
