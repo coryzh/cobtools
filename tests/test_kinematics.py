@@ -87,6 +87,16 @@ class TestGalacticProperMotion:
         assert np.isclose(mu_l, mu_l_astropy, atol=1e-3)
         assert np.isclose(mu_b, mu_b_astropy, atol=1e-3)
 
+    def test_valid_list_input(self):
+        ra = [10.3, 150.3, 355.1]
+        dec = [5.3, 25.1, 88.2]
+        pmra_cosdec = [15.2, -20.1, 5.5]
+        pmdec = [-10.5, 30.2, -5.0]
+        mu_l, mu_b = galactic_proper_motion(ra, dec, pmra_cosdec, pmdec)
+
+        assert isinstance(mu_l, np.ndarray) and isinstance(mu_b, np.ndarray)
+        assert mu_l.shape == (len(ra),) and mu_b.shape == (len(dec),)
+
     def test_valid_array_input(self):
         n_sample = 100000
         np.random.seed(42)

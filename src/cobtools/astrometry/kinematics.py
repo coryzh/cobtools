@@ -150,6 +150,8 @@ def galactic_proper_motion(
     if dt <= 0:
         raise ValueError("Time step dt must be positive.")
 
+    ra = np.array(ra)
+    dec = np.array(dec)
     pmra_cosdec = np.array(pmra_cosdec)
     pmdec = np.array(pmdec)
 
