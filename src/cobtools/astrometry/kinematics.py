@@ -158,10 +158,10 @@ def galactic_proper_motion(
     dra = dt * (pmra_cosdec / cos_dec)
     ddec = dt * pmdec
 
-    conv = 1e-3 * (1 / 3600)  # conversion factor from mas to degree
+    mas_to_deg = 1e-3 * (1 / 3600)  # conversion factor from mas to degree
 
-    dra *= conv
-    ddec *= conv
+    dra *= mas_to_deg
+    ddec *= mas_to_deg
 
     # Then, apply the differences to the equatorial coordinates
     ra_new = ra + dra
@@ -176,7 +176,7 @@ def galactic_proper_motion(
     mu_l = d_gal_l / dt  # in degree/yr
     mu_b = d_gal_b / dt
 
-    mu_l /= conv
-    mu_b /= conv
+    mu_l /= mas_to_deg
+    mu_b /= mas_to_deg
 
     return mu_l, mu_b
