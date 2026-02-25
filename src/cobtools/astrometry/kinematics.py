@@ -170,6 +170,9 @@ def galactic_proper_motion(
     gal_l_old, gal_b_old = equatorial_to_galactic(ra, dec)
     gal_l_new, gal_b_new = equatorial_to_galactic(ra_new, dec_new)
 
+    # Calculate the differences in Galactic coordinates, taking care of the
+    # wrap-around for longitude. E.g., if gal_l_old is 359.9 and gal_l_new
+    # is 0.1, the difference should be 0.2, not -359.8.
     d_gal_l = (gal_l_new - gal_l_old + 180) % 360 - 180
     d_gal_b = gal_b_new - gal_b_old
 
