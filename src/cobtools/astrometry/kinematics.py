@@ -101,3 +101,69 @@ def equatorial_to_galactic(
         l_deg.item() if l_deg.size == 1 else l_deg,
         b_deg.item() if b_deg.size == 1 else b_deg,
     )
+
+
+def galactic_proper_motion(
+        ra: Union[float, ArrayLike], dec: Union[float, ArrayLike],
+        pmra_cosdec: Union[float, ArrayLike], pmdec: Union[float, ArrayLike],
+        dt: float = 1.0
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    This function calculate differences in ra and dec due to PM and convert it
+    to Galactic coordinate. Input ra and dec should be in degrees.
+    Input equatorial PMs should be in units of mas/yr; note that mu_ra_cosdec
+    contain the cos(dec) factor. Input timestep should be in unit of years
+    (default is 1).
+
+    Parameters
+    ----------
+    ra : float or ArrayLike
+        Right ascension in decimal degrees.
+
+    dec : float or ArrayLike
+        Declination in decimal degrees.
+
+    pmra_cosdec : float or ArrayLike
+        Proper motion in right ascension multiplied by cos(dec), in mas/yr.
+
+    pmdec : float or ArrayLike
+        Proper motion in declination, in mas/yr.
+
+    dt : float, optional
+        Time step in arbitrary units for which to calculate the proper motion,
+        by default 1.0.
+    """
+
+    if dt <= 0:
+        raise ValueError("Time step dt must be positive.")
+
+    pmra_cosdec = np.array(pmra_cosdec)
+    pmdec = np.array(pmdec)
+
+    # Compute differences in ra and dec (in degrees)
+    cos_dec = np.cos(dec * (np.pi / 180.))
+    dra = dt * (pmra_cosdec / cos_dec)
+    ddec = dt * pmdec
+
+    conv = 1e-3 * (1 / 3600)  # conversion factor from mas to degree
+
+    dra *= conv
+    ddec *= conv
+
+    # Then, apply the differences to the equatorial coordinates
+    ra_new = ra + dra
+    dec_new = dec + ddec
+
+    gal_l_old, gal_b_old = equatorial_to_galactic(ra, dec)
+    gal_l_new, gal_b_new = equatorial_to_galactic(ra_new, dec_new)
+
+    d_gal_l = gal_l_new - gal_l_old
+    d_gal_b = gal_b_new - gal_b_old
+
+    mu_l = d_gal_l / dt  # in degree/yr
+    mu_b = d_gal_b / dt
+
+    mu_l /= conv
+    mu_b /= conv
+
+    return mu_l, mu_b
