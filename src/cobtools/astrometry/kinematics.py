@@ -170,7 +170,7 @@ def galactic_proper_motion(
     gal_l_old, gal_b_old = equatorial_to_galactic(ra, dec)
     gal_l_new, gal_b_new = equatorial_to_galactic(ra_new, dec_new)
 
-    d_gal_l = gal_l_new - gal_l_old
+    d_gal_l = (gal_l_new - gal_l_old + 180) % 360 - 180
     d_gal_b = gal_b_new - gal_b_old
 
     mu_l = d_gal_l / dt  # in degree/yr
