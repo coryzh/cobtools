@@ -60,18 +60,29 @@ def equatorial_to_galactic(
     # this is the default range of np.arcsin()
     gal_b = np.arcsin(sinb)
 
+    # Handle numerical instability for cos(gal_b) near 0.
+    cos_gal_b = np.cos(gal_b)
+    small_cos_gal_b_mask = cos_gal_b < 1e-10
+
+    sinphi = np.zeros_like(gal_b)
+    cosphi = np.zeros_like(gal_b)
+    valid_mask = ~small_cos_gal_b_mask
+
     # phi is an angle defined to calculate Galactic longitude
-    sinphi = (
-        (1 / np.cos(gal_b))
+    sinphi[valid_mask] = (
+        (1 / cos_gal_b[valid_mask])
         * (
-            - np.cos(dec_rad) * np.cos(ra_rad - con.ra_ngp_rad)
+            - np.cos(dec_rad[valid_mask])
+            * np.cos(ra_rad[valid_mask] - con.ra_ngp_rad)
             * np.sin(con.dec_ngp_rad)
-            + np.sin(dec_rad) * np.cos(con.dec_ngp_rad)
+            + np.sin(dec_rad[valid_mask]) * np.cos(con.dec_ngp_rad)
         )
     )
 
-    cosphi = (
-        (1 / np.cos(gal_b)) * np.cos(dec_rad) * np.sin(ra_rad - con.ra_ngp_rad)
+    cosphi[valid_mask] = (
+        (1 / cos_gal_b[valid_mask])
+        * np.cos(dec_rad[valid_mask])
+        * np.sin(ra_rad[valid_mask] - con.ra_ngp_rad)
     )
 
     # np.atan2 function can handle the sign, the result is between -pi and pi
