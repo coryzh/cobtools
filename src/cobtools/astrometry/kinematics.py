@@ -54,6 +54,7 @@ def equatorial_to_galactic(
         + np.cos(dec_rad)
         * np.cos(ra_rad - con.ra_ngp_rad) * np.cos(con.dec_ngp_rad)
     )
+    sinb = np.clip(sinb, -1.0, 1.0)  # Clip to handle numerical issues
 
     # Galactic latitude from -90 deg to 90 deg,
     # this is the default range of np.arcsin()
