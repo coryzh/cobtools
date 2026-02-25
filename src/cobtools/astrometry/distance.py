@@ -4,6 +4,9 @@ Different models for distance estimation from parallax.
 import numpy as np
 from scipy.stats import truncnorm, gamma
 from scipy.optimize import minimize, Bounds
+from typing import Any
+from functools import partial
+import emcee
 
 
 class SimpleInversion:
@@ -180,5 +183,128 @@ class FromLiterature:
         x_gamma = gamma_params["distribution"]
 
         samples = x_gamma.rvs(size=n_samples)
+
+        return samples
+
+
+class XRBExponentialPriorModel:
+    """
+    Distance Bayesian model based on a exponential prior derived from known
+    X-ray binaries.
+    """
+
+    def __init__(
+            self, parallax: float,
+            parallax_error: float, scale_length: float = 1.97
+    ):
+        """
+        A Bayesian distance model using an exponential prior. The exponential
+        prior has a scale_length parameter obtained from fitting to known
+        X-ray binaries in the literature.
+
+        Parameters
+        ----------
+        parallax : float
+            The measured parallax in milliarcseconds (mas). Could be negative.
+        parallax_error : float
+            The uncertainty of the parallax measurement in
+            milliarcseconds (mas).
+        scale_length : float, optional
+            The scale length of the exponential prior in kiloparsecs (kpc),
+            by default 1.97 (Zhao, Y+23)
+
+        Raises
+        ------
+        ValueError
+            If parallax_error is not a positive number.
+        ValueError
+            If scale_length is not a positive number.
+        """
+
+        if parallax_error <= 0:
+            raise ValueError(
+                "parallax_error must be a positive number."
+            )
+
+        if scale_length <= 0:
+            raise ValueError(
+                "scale_length must be a positive number."
+            )
+
+        self.parallax = parallax
+        self.parallax_error = parallax_error
+        self.scale_length = scale_length
+
+    @property
+    def parallax_over_error(self) -> float:
+        return self.parallax / self.parallax_error
+
+    def log_prior(self, d: float) -> float:
+        if d < 0:
+            return -np.inf
+
+        else:
+            return 2 * np.log(d) - d / self.scale_length
+
+    def log_likelihood(self, d) -> float:
+        if d < 0:
+            return -np.inf
+
+        else:
+            return (
+                -0.5 * (self.parallax - 1 / d) ** 2 / self.parallax_error ** 2
+            )
+
+    def log_posterior(self, d) -> float:
+        return self.log_prior(d) + self.log_likelihood(d)
+
+    def sample_distance(
+            self, nwalkers: int = 4, nsteps: int = 2000, burn_in: int = 500,
+            **kwargs: Any
+    ) -> np.ndarray[Any, np.dtype[np.float64]]:
+        """
+        Sample the posterior distribution using the
+        MCMC sampler in emcee.
+
+        Parameters
+        ----------
+        nwalkers : int, optional
+            Number of walkers for the MCMC sampler, by default 4
+        nsteps : int, optional
+            Number of steps for each walker, by default 2000
+        burn_in : int, optional
+            Number of steps to discard as burn-in, by default 500
+        kwargs : Any
+            Additional keyword arguments to pass to the emcee.EnsembleSampler
+
+        Returns
+        -------
+        np.ndarray[Any, np.dtype[np.float64]]
+            Array of sampled distances from the posterior distribution.
+        """
+        if not isinstance(nwalkers, int) or nwalkers <= 0:
+            raise ValueError("nwalkers must be a positive integer.")
+
+        if not isinstance(nsteps, int) or nsteps <= 0:
+            raise ValueError("nsteps must be a positive integer.")
+
+        if not isinstance(burn_in, int) or burn_in < 0:
+            raise ValueError("burn_in must be a non-negative integer.")
+
+        if burn_in >= nsteps:
+            raise ValueError("burn_in must be less than nsteps.")
+
+        initial_distances = np.random.uniform(0.1, 20, size=nwalkers)
+
+        log_prob_fn = partial(self.log_posterior)
+        sampler = emcee.EnsembleSampler(
+            nwalkers=nwalkers, ndim=1, log_prob_fn=log_prob_fn, **kwargs
+        )
+
+        _ = sampler.run_mcmc(
+            initial_distances[:, None], nsteps=nsteps, progress=False
+        )
+
+        samples = sampler.get_chain(discard=burn_in, flat=True)[:, 0]
 
         return samples
