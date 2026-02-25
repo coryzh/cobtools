@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+import cobtools.constants as con
 from cobtools.astrometry.kinematics import equatorial_to_galactic
 from astropy.coordinates import SkyCoord
 
@@ -44,3 +45,10 @@ class TestEquatorialToGalactic:
         l_astropy, b_astropy = coord.galactic.l.deg, coord.galactic.b.deg
         assert np.allclose(gal_l, l_astropy, atol=5e-3)
         assert np.allclose(gal_b, b_astropy, atol=5e-3)
+
+    def test_egdge_cases(self):
+        ra = con.ra_ngp_deg
+        dec = con.dec_ngp_deg
+
+        _, gal_b = equatorial_to_galactic(ra, dec)
+        assert np.allclose(gal_b, 90.0)
