@@ -132,6 +132,19 @@ def galactic_proper_motion(
     dt : float, optional
         Time step in arbitrary units for which to calculate the proper motion,
         by default 1.0.
+
+    Returns
+    -------
+    Tuple[np.ndarray, np.ndarray]
+        Proper motion in Galactic longitude (mu_l) and latitude (mu_b) in
+        mas/yr. Note that mu_l does not contain the cos(b) factor,
+        i.e., it is the proper motion in the direction of increasing Galactic
+        longitude.
+
+    Raises
+    ------
+    ValueError
+        If the time step dt is not positive.
     """
 
     if dt <= 0:
