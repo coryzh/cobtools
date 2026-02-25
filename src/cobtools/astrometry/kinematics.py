@@ -130,7 +130,7 @@ def galactic_proper_motion(
         Proper motion in declination, in mas/yr.
 
     dt : float, optional
-        Time step in arbitrary units for which to calculate the proper motion,
+        Time step in years for which to calculate the proper motion,
         by default 1.0.
 
     Returns
