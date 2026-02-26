@@ -195,7 +195,8 @@ def galactocentric_cartesian_velocity(
         v_sun: Union[float, ArrayLike] = con.v_sun,
         w_sun: Union[float, ArrayLike] = con.w_sun,
         theta_sun: Union[float, ArrayLike] = con.theta_sun,
-        r_sun: Union[float, ArrayLike] = con.r_sun
+        r_sun: Union[float, ArrayLike] = con.r_sun,
+        dt: float = 1.0
 ):
     """
     Convert equatorial coordinates and proper motions to galactocentric
@@ -225,12 +226,15 @@ def galactocentric_cartesian_velocity(
         Solar rotation velocity in the Galactic plane in km/s.
     r_sun : float or ArrayLike, optional
         Solar Galactocentric distance in kpc.
+    dt : float, optional
+        Time step in years for which to calculate the proper motion,
+        see `galactic_proper_motion`, by default 1.0 (year).
 
     Returns
     -------
     Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
-    Union[float, np.ndarray]]
-        Galactocentric Cartesian velocities (vx, vy, vz) in km/s.
+    Union[float, np.ndarray], Union[float, np.ndarray]]
+        Galactocentric Cartesian velocities (vx, vy, vz, vspace) in km/s.
     """
 
     ra = np.array(ra)
@@ -244,6 +248,34 @@ def galactocentric_cartesian_velocity(
     w_sun = np.array(w_sun)
     theta_sun = np.array(theta_sun)
     r_sun = np.array(r_sun)
-    dist = dist * con.kpc_to_cm
 
     gal_l, gal_b = equatorial_to_galactic(ra, dec)
+    gal_l, gal_b = np.radians(gal_l), np.radians(gal_b)
+
+    mu_l, mu_b = galactic_proper_motion(ra, dec, pmra_cosdec, pmdec, dt=dt)
+
+    # Velocity components in the Galactic coordinate system (l, b)
+    v_b = dist * mu_b * con.kpc_mas_per_yr_to_km_per_s
+    v_l = dist * mu_l * con.kpc_mas_per_yr_to_km_per_s
+
+    # Convert the spherical coordinate to Galactic Cartesian coordinates at
+    # the location of the Sun
+    u1 = (
+        (rv * np.cos(gal_b) - v_b * np.sin(gal_b))
+        * np.cos(gal_l) - v_l * np.sin(gal_l)
+    )
+
+    v1 = (
+        (rv * np.cos(gal_b) - v_b * np.sin(gal_b))
+        * np.sin(gal_l) + v_l * np.cos(gal_l)
+    )
+
+    w1 = v_b * np.cos(gal_b) + rv * np.sin(gal_b)
+
+    u2 = u1 + u_sun
+    v2 = v1 + v_sun + theta_sun
+    w2 = w1 + w_sun
+
+    vspace = np.sqrt(u2**2 + v2**2 + w2**2)
+
+    return u2, v2, w2, vspace
