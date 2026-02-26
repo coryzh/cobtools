@@ -185,3 +185,65 @@ def galactic_proper_motion(
     mu_b /= mas_to_deg
 
     return mu_l, mu_b
+
+
+def galactocentric_cartesian_velocity(
+        ra: Union[float, ArrayLike], dec: Union[float, ArrayLike],
+        pmra_cosdec: Union[float, ArrayLike], pmdec: Union[float, ArrayLike],
+        dist: Union[float, ArrayLike], rv: Union[float, ArrayLike],
+        u_sun: Union[float, ArrayLike] = con.u_sun,
+        v_sun: Union[float, ArrayLike] = con.v_sun,
+        w_sun: Union[float, ArrayLike] = con.w_sun,
+        theta_sun: Union[float, ArrayLike] = con.theta_sun,
+        r_sun: Union[float, ArrayLike] = con.r_sun
+):
+    """
+    Convert equatorial coordinates and proper motions to galactocentric
+    Cartesian velocities.
+
+    Parameters
+    ----------
+    ra : float or ArrayLike
+        Right ascension in decimal degrees.
+    dec : float or ArrayLike
+        Declination in decimal degrees.
+    pmra_cosdec : float or ArrayLike
+        Proper motion in ra*cos(dec), in mas/yr.
+    pmdec : float or ArrayLike
+        Proper motion in declination, in mas/yr.
+    dist : float or ArrayLike
+        Distance in kpc.
+    rv : float or ArrayLike
+        Radial velocity in km/s.
+    u_sun : float or ArrayLike, optional
+        Solar motion u component in km/s.
+    v_sun : float or ArrayLike, optional
+        Solar motion v component in km/s.
+    w_sun : float or ArrayLike, optional
+        Solar motion w component in km/s.
+    theta_sun : float or ArrayLike, optional
+        Solar rotation velocity in the Galactic plane in km/s.
+    r_sun : float or ArrayLike, optional
+        Solar Galactocentric distance in kpc.
+
+    Returns
+    -------
+    Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
+    Union[float, np.ndarray]]
+        Galactocentric Cartesian velocities (vx, vy, vz) in km/s.
+    """
+
+    ra = np.array(ra)
+    dec = np.array(dec)
+    pmra_cosdec = np.array(pmra_cosdec)
+    pmdec = np.array(pmdec)
+    dist = np.array(dist)
+    rv = np.array(rv)
+    u_sun = np.array(u_sun)
+    v_sun = np.array(v_sun)
+    w_sun = np.array(w_sun)
+    theta_sun = np.array(theta_sun)
+    r_sun = np.array(r_sun)
+    dist = dist * con.kpc_to_cm
+
+    gal_l, gal_b = equatorial_to_galactic(ra, dec)
