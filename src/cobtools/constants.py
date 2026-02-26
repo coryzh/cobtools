@@ -23,3 +23,4 @@ r_sun, d_r_sun = 8.34, 0.16  # Solar distance to the GC (in kpc; Reid+14)
 
 # Conversion factors
 kpc_to_cm = 3.08567758e+21
+kpc_mas_per_yr_to_km_per_s = 4.74047046
