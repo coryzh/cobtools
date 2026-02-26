@@ -19,3 +19,7 @@ w_sun, dw_sun = 8.9, 0.9
 # 4. Rotation speed of the LSR (km/s)
 theta_sun, d_theta_sun = 240.0, 8  # Galactic rotation (Reid+14)
 r_sun, d_r_sun = 8.34, 0.16  # Solar distance to the GC (in kpc; Reid+14)
+
+
+# Conversion factors
+kpc_to_cm = 3.08567758e+21
