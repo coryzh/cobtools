@@ -256,7 +256,7 @@ def galactocentric_cartesian_velocity(
 
     # Velocity components in the Galactic coordinate system (l, b)
     v_b = dist * mu_b * con.kpc_mas_per_yr_to_km_per_s
-    v_l = dist * mu_l * con.kpc_mas_per_yr_to_km_per_s
+    v_l = dist * mu_l * np.cos(gal_b) * con.kpc_mas_per_yr_to_km_per_s
 
     # Convert the spherical coordinate to Galactic Cartesian coordinates at
     # the location of the Sun
