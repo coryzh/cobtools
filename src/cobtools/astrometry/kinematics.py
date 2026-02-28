@@ -195,7 +195,6 @@ def galactocentric_cartesian_velocity(
         v_sun: Union[float, ArrayLike] = con.v_sun,
         w_sun: Union[float, ArrayLike] = con.w_sun,
         theta_sun: Union[float, ArrayLike] = con.theta_sun,
-        r_sun: Union[float, ArrayLike] = con.r_sun,
         dt: float = 1.0
 ):
     """
@@ -224,8 +223,6 @@ def galactocentric_cartesian_velocity(
         Solar motion w component in km/s.
     theta_sun : float or ArrayLike, optional
         Solar rotation velocity in the Galactic plane in km/s.
-    r_sun : float or ArrayLike, optional
-        Solar Galactocentric distance in kpc.
     dt : float, optional
         Time step in years for which to calculate the proper motion,
         see `galactic_proper_motion`, by default 1.0 (year).
@@ -247,7 +244,6 @@ def galactocentric_cartesian_velocity(
     v_sun = np.array(v_sun)
     w_sun = np.array(w_sun)
     theta_sun = np.array(theta_sun)
-    r_sun = np.array(r_sun)
 
     gal_l, gal_b = equatorial_to_galactic(ra, dec)
     gal_l, gal_b = np.radians(gal_l), np.radians(gal_b)
