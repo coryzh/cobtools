@@ -185,3 +185,93 @@ def galactic_proper_motion(
     mu_b /= mas_to_deg
 
     return mu_l, mu_b
+
+
+def galactocentric_cartesian_velocity(
+        ra: Union[float, ArrayLike], dec: Union[float, ArrayLike],
+        pmra_cosdec: Union[float, ArrayLike], pmdec: Union[float, ArrayLike],
+        dist: Union[float, ArrayLike], rv: Union[float, ArrayLike],
+        u_sun: Union[float, ArrayLike] = con.u_sun,
+        v_sun: Union[float, ArrayLike] = con.v_sun,
+        w_sun: Union[float, ArrayLike] = con.w_sun,
+        theta_sun: Union[float, ArrayLike] = con.theta_sun,
+        dt: float = 1.0
+):
+    """
+    Convert equatorial coordinates and proper motions to galactocentric
+    Cartesian velocities.
+
+    Parameters
+    ----------
+    ra : float or ArrayLike
+        Right ascension in decimal degrees.
+    dec : float or ArrayLike
+        Declination in decimal degrees.
+    pmra_cosdec : float or ArrayLike
+        Proper motion in ra*cos(dec), in mas/yr.
+    pmdec : float or ArrayLike
+        Proper motion in declination, in mas/yr.
+    dist : float or ArrayLike
+        Distance in kpc.
+    rv : float or ArrayLike
+        Radial velocity in km/s.
+    u_sun : float or ArrayLike, optional
+        Solar motion u component in km/s.
+    v_sun : float or ArrayLike, optional
+        Solar motion v component in km/s.
+    w_sun : float or ArrayLike, optional
+        Solar motion w component in km/s.
+    theta_sun : float or ArrayLike, optional
+        Solar rotation velocity in the Galactic plane in km/s.
+    dt : float, optional
+        Time step in years for which to calculate the proper motion,
+        see `galactic_proper_motion`, by default 1.0 (year).
+
+    Returns
+    -------
+    Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
+    Union[float, np.ndarray], Union[float, np.ndarray]]
+        Galactocentric Cartesian velocities (vx, vy, vz, vspace) in km/s.
+    """
+
+    ra = np.array(ra)
+    dec = np.array(dec)
+    pmra_cosdec = np.array(pmra_cosdec)
+    pmdec = np.array(pmdec)
+    dist = np.array(dist)
+    rv = np.array(rv)
+    u_sun = np.array(u_sun)
+    v_sun = np.array(v_sun)
+    w_sun = np.array(w_sun)
+    theta_sun = np.array(theta_sun)
+
+    gal_l, gal_b = equatorial_to_galactic(ra, dec)
+    gal_l, gal_b = np.radians(gal_l), np.radians(gal_b)
+
+    mu_l, mu_b = galactic_proper_motion(ra, dec, pmra_cosdec, pmdec, dt=dt)
+
+    # Velocity components in the Galactic coordinate system (l, b)
+    v_b = dist * mu_b * con.kpc_mas_per_yr_to_km_per_s
+    v_l = dist * mu_l * np.cos(gal_b) * con.kpc_mas_per_yr_to_km_per_s
+
+    # Convert the spherical coordinate to Galactic Cartesian coordinates at
+    # the location of the Sun
+    u1 = (
+        (rv * np.cos(gal_b) - v_b * np.sin(gal_b))
+        * np.cos(gal_l) - v_l * np.sin(gal_l)
+    )
+
+    v1 = (
+        (rv * np.cos(gal_b) - v_b * np.sin(gal_b))
+        * np.sin(gal_l) + v_l * np.cos(gal_l)
+    )
+
+    w1 = v_b * np.cos(gal_b) + rv * np.sin(gal_b)
+
+    u2 = u1 + u_sun
+    v2 = v1 + v_sun + theta_sun
+    w2 = w1 + w_sun
+
+    vspace = np.sqrt(u2**2 + v2**2 + w2**2)
+
+    return u2, v2, w2, vspace

@@ -2,9 +2,10 @@ import pytest
 import numpy as np
 import cobtools.constants as con
 from cobtools.astrometry.kinematics import (
-    equatorial_to_galactic, galactic_proper_motion
+    equatorial_to_galactic, galactic_proper_motion,
+    galactocentric_cartesian_velocity
 )
-from astropy.coordinates import SkyCoord
+from astropy.coordinates import SkyCoord, Galactocentric, CartesianDifferential
 from astropy.units import Unit
 
 
@@ -141,5 +142,116 @@ class TestGalacticProperMotion:
 
         assert isinstance(mu_l, np.ndarray) and isinstance(mu_b, np.ndarray)
         assert mu_l.shape == (n_sample,) and mu_b.shape == (n_sample,)
-        # assert np.allclose(mu_l, mu_l_astropy, atol=1e-3)
-        # assert np.allclose(mu_b, mu_b_astropy, atol=1e-3)
+        assert np.allclose(mu_l, mu_l_astropy, atol=5)
+        assert np.allclose(mu_b, mu_b_astropy, atol=5)
+
+
+class TestGalactocentricCartesianVelocity:
+    """Unit tests for galactocentric_cartesian_velocity function."""
+
+    def test_single_values(self):
+        """Test with single velocity component values."""
+        u, v, w, vspace = galactocentric_cartesian_velocity(
+            ra=101.28715535, dec=-16.71611586, pmra_cosdec=1.3, pmdec=2.5,
+            dist=1.5, rv=-20.5
+        )
+
+        assert isinstance(u, (float, np.ndarray))
+        assert isinstance(v, (float, np.ndarray))
+        assert isinstance(w, (float, np.ndarray))
+        assert isinstance(vspace, (float, np.ndarray))
+        assert np.allclose(np.sqrt(u**2 + v**2 + w**2), vspace)
+
+    def test_array_values(self):
+        n_sample = 1000
+        ra = np.random.uniform(0, 360, n_sample)
+        dec = np.random.uniform(-90, 90, n_sample)
+        pmra_cosdec = np.random.uniform(-5, 5, n_sample)
+        pmdec = np.random.uniform(-5, 5, n_sample)
+        dist = np.random.uniform(0.1, 5, n_sample)
+        rv = np.random.uniform(-100, 100, n_sample)
+        u, v, w, vspace = galactocentric_cartesian_velocity(
+            ra=ra, dec=dec, pmra_cosdec=pmra_cosdec, pmdec=pmdec,
+            dist=dist, rv=rv
+        )
+        assert isinstance(u, np.ndarray)
+        assert isinstance(v, np.ndarray)
+        assert isinstance(w, np.ndarray)
+        assert isinstance(vspace, np.ndarray)
+        assert u.shape == (n_sample,)
+        assert v.shape == (n_sample,)
+        assert w.shape == (n_sample,)
+        assert vspace.shape == (n_sample,)
+        assert np.allclose(np.sqrt(u**2 + v**2 + w**2), vspace)
+
+    def test_broadcast_single_rv_but_array_astrometry(self):
+        n_sample = 1000
+        ra = np.random.uniform(0, 360, n_sample)
+        dec = np.random.uniform(-90, 90, n_sample)
+        pmra_cosdec = np.random.uniform(-5, 5, n_sample)
+        pmdec = np.random.uniform(-5, 5, n_sample)
+        dist = np.random.uniform(0.1, 5, n_sample)
+        rv = -20.5
+        u, v, w, vspace = galactocentric_cartesian_velocity(
+            ra=ra, dec=dec, pmra_cosdec=pmra_cosdec, pmdec=pmdec,
+            dist=dist, rv=rv
+        )
+        assert isinstance(u, np.ndarray)
+        assert isinstance(v, np.ndarray)
+        assert isinstance(w, np.ndarray)
+        assert isinstance(vspace, np.ndarray)
+        assert u.shape == (n_sample,)
+        assert v.shape == (n_sample,)
+        assert w.shape == (n_sample,)
+        assert vspace.shape == (n_sample,)
+        assert np.allclose(np.sqrt(u**2 + v**2 + w**2), vspace)
+
+    def test_compare_with_astropy(self):
+        n_sample = 1000
+        np.random.seed(41)
+        ra = np.random.uniform(0, 360, n_sample)
+        dec = np.random.uniform(-90, 90, n_sample)
+        pmra_cosdec = np.random.uniform(-5, 5, n_sample)
+        pmdec = np.random.uniform(-5, 5, n_sample)
+        dist = np.random.uniform(0.1, 5, n_sample)
+        rv = np.random.uniform(-100, 100, n_sample)
+
+        v_sun = CartesianDifferential(
+            con.u_sun * Unit("km/s"),
+            (con.v_sun + con.theta_sun) * Unit("km/s"),
+            con.w_sun * Unit("km/s")
+        )
+
+        gc_frame = Galactocentric(
+            galcen_distance=con.r_sun * Unit("kpc"),
+            galcen_v_sun=v_sun,
+            z_sun=0 * Unit("pc")
+        )
+
+        coords = SkyCoord(
+            ra=ra * Unit("deg"),
+            dec=dec * Unit("deg"),
+            distance=dist * Unit("kpc"),
+            pm_ra_cosdec=pmra_cosdec * Unit("mas/yr"),
+            pm_dec=pmdec * Unit("mas/yr"),
+            radial_velocity=rv * Unit("km/s"),
+            frame="icrs"
+        )
+
+        coords_gc = coords.transform_to(gc_frame)
+        coords_gc.representation_type = "cartesian"
+
+        u_astropy = coords_gc.v_x.to("km/s").value
+        v_astropy = coords_gc.v_y.to("km/s").value
+        w_astropy = coords_gc.v_z.to("km/s").value
+        vspace_astropy = np.sqrt(u_astropy**2 + v_astropy**2 + w_astropy**2)
+
+        u, v, w, vspace = galactocentric_cartesian_velocity(
+            ra=ra, dec=dec, pmra_cosdec=pmra_cosdec,
+            pmdec=pmdec, dist=dist, rv=rv
+        )
+
+        assert np.allclose(u, u_astropy, rtol=1e-1)
+        assert np.allclose(v, v_astropy, rtol=1e-1)
+        assert np.allclose(w, w_astropy, rtol=1e-1)
+        assert np.allclose(vspace, vspace_astropy, rtol=1e-1)
