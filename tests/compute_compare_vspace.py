@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from pathlib import Path
 from cobtools.astrometry.kinematics import (
     galactocentric_cartesian_velocity, equatorial_to_galactic
@@ -9,11 +10,9 @@ from astropy.units import Unit
 from cobtools import constants as con
 
 
-def test_find_discrepancies(threshold=1):
+def test_find_discrepancies(threshold=0, n_sample=1000, random_seed=42):
     """Generate random astrometric parameters and find discrepancies."""
-
-    n_sample = 1000000
-    np.random.seed(42)
+    np.random.seed(random_seed)
     ra = np.random.uniform(0, 360, n_sample)
     dec = np.random.uniform(-90, 90, n_sample)
     pmra_cosdec = np.random.uniform(-5, 5, n_sample)
@@ -58,42 +57,77 @@ def test_find_discrepancies(threshold=1):
 
     discrepancies = []
     for i in range(n_sample):
-        du = abs(u[i] - u_astropy[i])
-        dv = abs(v[i] - v_astropy[i])
-        dw = abs(w[i] - w_astropy[i])
+        discrepancies.append(
+            {
+                "ra": ra[i],
+                "dec": dec[i],
+                "pmra_cosdec": pmra_cosdec[i],
+                "pmdec": pmdec[i],
+                "dist": dist[i],
+                "rv": rv[i],
+                "u_cobtools": u[i],
+                "u_astropy": u_astropy[i],
+                "v_cobtools": v[i],
+                "v_astropy": v_astropy[i],
+                "w_cobtools": w[i],
+                "w_astropy": w_astropy[i],
+                "vspace_cobtools": vspace[i],
+                "vspace_astropy": v_space_astropy[i],
+                "l": l[i],
+                "b": b[i]
+            }
+        )
 
-        if du > threshold or dv > threshold or dw > threshold:
-            discrepancies.append(
-                {
-                    "ra": ra[i],
-                    "dec": dec[i],
-                    "pmra_cosdec": pmra_cosdec[i],
-                    "pmdec": pmdec[i],
-                    "dist": dist[i],
-                    "rv": rv[i],
-                    "u_cobtools": u[i],
-                    "u_astropy": u_astropy[i],
-                    "v_cobtools": v[i],
-                    "v_astropy": v_astropy[i],
-                    "w_cobtools": w[i],
-                    "w_astropy": w_astropy[i],
-                    "vspace_cobtools": vspace[i],
-                    "vspace_astropy": v_space_astropy[i],
-                    "l": l[i],
-                    "b": b[i]
-                }
-            )
-
-    df_discrepancies = pd.DataFrame(data=discrepancies)
-    out_file = Path("data/vspace_discrepancy.csv")
+    df_comparison = pd.DataFrame(data=discrepancies)
+    out_file = Path("data/vspace_comparison.csv")
     if not out_file.parent.exists():
         out_file.parent.mkdir(parents=True, exist_ok=True)
 
-    df_discrepancies.to_csv(out_file, index=False)
+    df_comparison.to_csv(out_file, index=False)
 
-    return df_discrepancies
+    return df_comparison
+
+
+def plot_comparison(df_comparison: pd.DataFrame) -> None:
+    fig, ax = plt.subplots(2, 2, figsize=(12, 12))
+
+    df_comparison.plot(
+        x="u_astropy", y="u_cobtools", kind="scatter", ax=ax[0, 0], alpha=0.5
+    )
+    df_comparison.plot(
+        x="v_astropy", y="v_cobtools", kind="scatter", ax=ax[0, 1], alpha=0.5
+    )
+    df_comparison.plot(
+        x="w_astropy", y="w_cobtools", kind="scatter", ax=ax[1, 0], alpha=0.5
+    )
+    df_comparison.plot(
+        x="vspace_astropy", y="vspace_cobtools",
+        kind="scatter", ax=ax[1, 1], alpha=0.5
+    )
+
+    out_file = Path("figures/vspace_comparison.pdf")
+    for i in range(2):
+        for j in range(2):
+            col_name = ['u', 'v', 'w', 'vspace'][j]
+            astropy_col = f"{col_name}_astropy"
+            min_val = df_comparison[astropy_col].min()
+            max_val = df_comparison[astropy_col].max()
+            ax[i, j].plot(
+                [min_val, max_val],
+                [min_val, max_val],
+                color="red",
+                linestyle="--"
+            )
+
+            ax[i, j].set_xlim(min_val, max_val)
+            ax[i, j].set_ylim(min_val, max_val)
+
+    if not out_file.parent.exists():
+        out_file.parent.mkdir(parents=True, exist_ok=True)
+
+    plt.savefig(out_file, bbox_inches="tight")
 
 
 if __name__ == "__main__":
-    df_discrepancies = test_find_discrepancies()
-    print(df_discrepancies)
+    df_comparison = test_find_discrepancies()
+    plot_comparison(df_comparison)
