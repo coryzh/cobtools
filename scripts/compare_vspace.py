@@ -2,7 +2,7 @@
 This script generates random astrometric parameters and compares the results
 from my `galactocentric_cartesian_velocity` function with those from
 astropy's `Galactocentric` frame transformation. The results are saved to a
-CSV file and plotted for visual comparison. 
+CSV file and plotted for visual comparison.
 """
 import numpy as np
 import pandas as pd
