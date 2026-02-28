@@ -275,3 +275,49 @@ def galactocentric_cartesian_velocity(
     vspace = np.sqrt(u2**2 + v2**2 + w2**2)
 
     return u2, v2, w2, vspace
+
+
+def peculiar_velocity(
+        ra: Union[float, ArrayLike], dec: Union[float, ArrayLike],
+        pmra_cosdec: Union[float, ArrayLike], pmdec: Union[float, ArrayLike],
+        dist: Union[float, ArrayLike], rv: Union[float, ArrayLike],
+        u_sun: Union[float, ArrayLike] = con.u_sun,
+        v_sun: Union[float, ArrayLike] = con.v_sun,
+        w_sun: Union[float, ArrayLike] = con.w_sun,
+        theta_sun: Union[float, ArrayLike] = con.theta_sun,
+        r_sun: Union[float, ArrayLike] = con.r_sun,
+        dt: float = 1.0
+) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
+           Union[float, np.ndarray], Union[float, np.ndarray]]:
+    """
+    Calculate the peculiar velocity and the cartesian components given its
+    equatorial coordinates, proper motions, distance, and radial velocity.
+
+    Parameters
+    ----------
+    ra : float or ArrayLike
+        Right ascension in decimal degrees.
+    dec : float or ArrayLike
+        Declination in decimal degrees.
+    pmra_cosdec : float or ArrayLike
+        Proper motion in ra*cos(dec), in mas/yr.
+    pmdec : float or ArrayLike
+        Proper motion in declination, in mas/yr.
+    dist : float or ArrayLike
+        Distance in kpc.
+    rv : float or ArrayLike
+        Radial velocity in km/s.
+    u_sun : float or ArrayLike, optional
+        Solar motion u component in km/s.
+    v_sun : float or ArrayLike, optional
+        Solar motion v component in km/s.
+    w_sun : float or ArrayLike, optional
+        Solar motion w component in km/s.
+    theta_sun : float or ArrayLike, optional
+        Solar rotation velocity in the Galactic plane in km/s.
+    r_sun : float or ArrayLike, optional
+        Distance from the Sun to the Galactic center in kpc.
+    dt : float, optional
+        Time step in years for which to calculate the proper motion,
+        see `galactic_proper_motion`, by default 1.0 (year).
+    """
