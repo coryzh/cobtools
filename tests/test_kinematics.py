@@ -53,8 +53,7 @@ class TestEquatorialToGalactic:
 
     def test_compare_to_astropy_from_file(self):
         """
-        The data file contains astrometry parameters that lead to large
-        discrepancies between my results and those from astropy.
+        Compare pre-computed results loaded from a data file.
         """
         df = pd.read_csv("data/vspace_discrepancy.csv")
         ra = df['ra'].values
