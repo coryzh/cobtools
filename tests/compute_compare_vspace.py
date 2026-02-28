@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from cobtools.astrometry.kinematics import (
     galactocentric_cartesian_velocity, equatorial_to_galactic
 )
@@ -84,7 +85,12 @@ def test_find_discrepancies(threshold=1):
             )
 
     df_discrepancies = pd.DataFrame(data=discrepancies)
-    df_discrepancies.to_csv("data/vspace_discrepancy.csv", index=False)
+    out_file = Path("data/vspace_discrepancy.csv")
+    if not out_file.parent.exists():
+        out_file.parent.mkdir(parents=True, exist_ok=True)
+
+    df_discrepancies.to_csv(out_file, index=False)
+
     return df_discrepancies
 
 
