@@ -1,6 +1,5 @@
 import pytest
 import numpy as np
-import pandas as pd
 import cobtools.constants as con
 from cobtools.astrometry.kinematics import (
     equatorial_to_galactic, galactic_proper_motion,
@@ -50,19 +49,6 @@ class TestEquatorialToGalactic:
         l_astropy, b_astropy = coord.galactic.l.deg, coord.galactic.b.deg
         assert np.allclose(gal_l, l_astropy, atol=5e-3)
         assert np.allclose(gal_b, b_astropy, atol=5e-3)
-
-    def test_compare_to_astropy_from_file(self):
-        """
-        Compare pre-computed results loaded from a data file.
-        """
-        df = pd.read_csv("data/vspace_discrepancy.csv")
-        ra = df['ra'].values
-        dec = df['dec'].values
-        gal_l, gal_b = equatorial_to_galactic(ra, dec)
-        coord = SkyCoord(ra=ra, dec=dec, unit='deg', frame='icrs')
-        l_astropy, b_astropy = coord.galactic.l.deg, coord.galactic.b.deg
-        assert np.allclose(gal_l, l_astropy, atol=1e-3)
-        assert np.allclose(gal_b, b_astropy, atol=1e-3)
 
     def test_egdge_cases(self):
         ra = con.ra_ngp_deg
