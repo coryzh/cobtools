@@ -251,16 +251,6 @@ class TestGalactocentricCartesianVelocity:
             pmdec=pmdec, dist=dist, rv=rv
         )
 
-        for i in range(n_sample):
-            print(
-                f"cobtools: ({u[i]:.2f}, {v[i]:.2f}, {w[i]:.2f}, "
-                f"{vspace[i]:.2f})km/s"
-            )
-
-            print(
-                f"astropy: ({u_astropy[i]:.2f}, {v_astropy[i]:.2f}, "
-                f"{w_astropy[i]:.2f}, {vspace_astropy[i]:.2f}) km/s\n"
-            )
         assert np.allclose(u, u_astropy, rtol=1e-1)
         assert np.allclose(v, v_astropy, rtol=1e-1)
         assert np.allclose(w, w_astropy, rtol=1e-1)
