@@ -50,8 +50,8 @@ def get_rotation_curve(
         raise ValueError("r_sun and theta_sun must be positive values.")
 
     if data_path is None:
-        data_path = Path(
-            resources.files("cobtools.data") / "rotcurve_mw2014.npy"
+        data_path = (
+            resources.files("cobtools") / "data" / "rotcurve_mw2014.npy"
         )
 
     if not data_path.exists():
