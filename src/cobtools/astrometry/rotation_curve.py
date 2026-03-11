@@ -28,12 +28,13 @@ def get_rotation_curve(
         by default con.theta_sun
 
     data_path : Path, optional
-        Path to the rotation curve data file,
-        by default Path("./data/rotcurve_mw2014.npy")
+        Path to the rotation curve data file. If not provided, the default
+        path is resolved as
+        `resources.files("cobtools") / "data" / "rotcurve_mw2014.npy"`.
 
     Returns
     -------
-    np.ndarray
+    Callable[[ArrayLike], np.ndarray]
         Interpolated rotation velocity as a function of radius.
         The function extrapolates beyond the provided data range, but clamps
         negative radii to zero, i.e., v_rot(r < 0) = v_rot(0).
