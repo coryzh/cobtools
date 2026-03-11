@@ -2,11 +2,12 @@ import numpy as np
 from cobtools import constants as con
 from pathlib import Path
 from scipy.interpolate import interp1d
+from importlib import resources
 
 
 def get_rotation_curve(
         r_sun: float = con.r_sun, theta_sun: float = con.theta_sun,
-        data_path: Path = Path("./data/rotcurve_mw2014.npy")
+        data_path: Path = None
 ) -> np.ndarray:
     """
     Load a pre-computed rotation curve, and return an interpolated function
@@ -45,6 +46,11 @@ def get_rotation_curve(
 
     if r_sun <= 0 or theta_sun <= 0:
         raise ValueError("r_sun and theta_sun must be positive values.")
+
+    if data_path is None:
+        data_path = Path(
+            resources.files("cobtools.data") / "rotcurve_mw2014.npy"
+        )
 
     if not data_path.exists():
         raise FileNotFoundError(
