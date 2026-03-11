@@ -55,7 +55,7 @@ def test_find_discrepancies(threshold=0, n_sample=1000, random_seed=42):
     v_astropy = coords_gc.v_y.to("km/s").value
     w_astropy = coords_gc.v_z.to("km/s").value
     v_space_astropy = np.sqrt(u_astropy**2 + v_astropy**2 + w_astropy**2)
-    l, b = equatorial_to_galactic(ra, dec)
+    gal_l, gal_b = equatorial_to_galactic(ra, dec)
     u, v, w, vspace = galactocentric_cartesian_velocity(
         ra=ra, dec=dec, pmra_cosdec=pmra_cosdec,
         pmdec=pmdec, dist=dist, rv=rv, dt=0.01
@@ -79,8 +79,8 @@ def test_find_discrepancies(threshold=0, n_sample=1000, random_seed=42):
                 "w_astropy": w_astropy[i],
                 "vspace_cobtools": vspace[i],
                 "vspace_astropy": v_space_astropy[i],
-                "l": l[i],
-                "b": b[i]
+                "l": gal_l[i],
+                "b": gal_b[i]
             }
         )
 
