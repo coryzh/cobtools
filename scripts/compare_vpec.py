@@ -40,8 +40,8 @@ def compare_vpec() -> None:
         ecolor="gray", elinewidth=0.5, capsize=2
     )
 
-    ax.set_xlabel("vpec (cobtools)")
-    ax.set_ylabel("vpec (Zhao+23)")
+    ax.set_xlabel("vpec (Zhao+23)")
+    ax.set_ylabel("vpec (cobtools)")
 
     ax.set_xscale("log")
     ax.set_yscale("log")
