@@ -1,5 +1,6 @@
 import numpy as np
 import cobtools.constants as con
+from cobtools.astrometry.rotation_curve import get_rotation_curve
 from typing import Tuple, Union
 from numpy.typing import ArrayLike
 
@@ -336,11 +337,14 @@ def peculiar_velocity(
     d_p = dist * np.cos(gal_b)
     r_p = np.sqrt(r_sun ** 2 + d_p ** 2 - 2 * r_sun * d_p * np.cos(gal_l))
 
+    vrot_interp = get_rotation_curve(r_sun=r_sun, theta_sun=theta_sun)
+    vrot = vrot_interp(r_p)
+
     sinbeta = np.sin(gal_l) * (d_p / r_p)
     cosbeta = (r_sun - d_p * np.cos(gal_l)) / r_p
 
     u_s = u2 * cosbeta - v2 * sinbeta
-    v_s = u2 * sinbeta + v2 * cosbeta - theta_sun
+    v_s = u2 * sinbeta + v2 * cosbeta - vrot
     w_s = w2
 
     vpec = np.sqrt(u_s ** 2 + v_s ** 2 + w_s ** 2)
