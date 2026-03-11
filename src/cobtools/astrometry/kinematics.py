@@ -337,7 +337,7 @@ def peculiar_velocity(
     d_p = dist * np.cos(gal_b)
     r_p = np.sqrt(r_sun ** 2 + d_p ** 2 - 2 * r_sun * d_p * np.cos(gal_l))
 
-    vrot_interp = get_rotation_curve(r_sun=r_sun, theta_sun=theta_sun)
+    vrot_interp = get_rotation_curve()
     vrot = vrot_interp(r_p)
 
     sinbeta = np.sin(gal_l) * (d_p / r_p)
