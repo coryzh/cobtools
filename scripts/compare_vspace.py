@@ -85,7 +85,7 @@ def test_find_discrepancies(threshold=0, n_sample=1000, random_seed=42):
         )
 
     df_comparison = pd.DataFrame(data=discrepancies)
-    out_file = Path("data/vspace_comparison.csv")
+    out_file = Path("test_data/vspace_comparison.csv")
     if not out_file.parent.exists():
         out_file.parent.mkdir(parents=True, exist_ok=True)
 

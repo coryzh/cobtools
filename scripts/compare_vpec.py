@@ -4,7 +4,7 @@ from cobtools.astrometry.kinematics import peculiar_velocity
 
 
 def compare_vpec() -> None:
-    df = pd.read_csv("./data/zhao23_catalogue.csv")
+    df = pd.read_csv("./test_data/zhao23_catalogue.csv")
 
     ra = df["ra_gaia"].values
     dec = df["dec_gaia"].values
