@@ -3,8 +3,10 @@ from cobtools import constants as con
 from pathlib import Path
 from scipy.interpolate import interp1d
 from importlib import resources
+from functools import lru_cache
 
 
+@lru_cache(maxsize=None)
 def get_rotation_curve(
         r_sun: float = con.r_sun, theta_sun: float = con.theta_sun,
         data_path: Path = None
