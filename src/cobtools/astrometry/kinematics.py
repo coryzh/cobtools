@@ -287,8 +287,10 @@ def peculiar_velocity(
         theta_sun: Union[float, ArrayLike] = con.theta_sun,
         r_sun: Union[float, ArrayLike] = con.r_sun,
         dt: float = 1.0
-) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
-           Union[float, np.ndarray], Union[float, np.ndarray]]:
+) -> Tuple[
+    Union[float, np.ndarray], Union[float, np.ndarray],
+    Union[float, np.ndarray], Union[float, np.ndarray]
+]:
     """
     Calculate the peculiar velocity and the cartesian components given its
     equatorial coordinates, proper motions, distance, and radial velocity.
@@ -321,3 +323,26 @@ def peculiar_velocity(
         Time step in years for which to calculate the proper motion,
         see `galactic_proper_motion`, by default 1.0 (year).
     """
+
+    gal_l, gal_b = equatorial_to_galactic(ra, dec)
+    gal_l, gal_b = np.radians(gal_l), np.radians(gal_b)
+
+    u2, v2, w2, vspace = galactocentric_cartesian_velocity(
+        ra, dec, pmra_cosdec, pmdec, dist, rv,
+        u_sun=u_sun, v_sun=v_sun, w_sun=w_sun,
+        theta_sun=theta_sun, dt=dt
+    )
+
+    d_p = dist * np.cos(gal_b)
+    r_p = np.sqrt(r_sun ** 2 + d_p ** 2 - 2 * r_sun * d_p * np.cos(gal_l))
+
+    sinbeta = np.sin(gal_l) * (d_p / r_p)
+    cosbeta = (r_sun - d_p * np.cos(gal_l)) / r_p
+
+    u_s = u2 * cosbeta - v2 * sinbeta
+    v_s = u2 * sinbeta + v2 * cosbeta - theta_sun
+    w_s = w2
+
+    vpec = np.sqrt(u_s ** 2 + v_s ** 2 + w_s ** 2)
+
+    return u_s, v_s, w_s, vpec
