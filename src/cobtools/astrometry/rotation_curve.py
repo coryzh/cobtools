@@ -1,16 +1,18 @@
 import numpy as np
+from numpy.typing import ArrayLike
 from cobtools import constants as con
 from pathlib import Path
 from scipy.interpolate import interp1d
 from importlib import resources
 from functools import lru_cache
+from typing import Callable
 
 
 @lru_cache(maxsize=None)
 def get_rotation_curve(
         r_sun: float = con.r_sun, theta_sun: float = con.theta_sun,
         data_path: Path = None
-) -> np.ndarray:
+) -> Callable[[ArrayLike], np.ndarray]:
     """
     Load a pre-computed rotation curve, and return an interpolated function
     for the rotation velocity as a function of radius.
