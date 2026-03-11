@@ -1,5 +1,6 @@
 import numpy as np
 import cobtools.constants as con
+from cobtools.astrometry.rotation_curve import get_rotation_curve
 from typing import Tuple, Union
 from numpy.typing import ArrayLike
 
@@ -275,3 +276,77 @@ def galactocentric_cartesian_velocity(
     vspace = np.sqrt(u2**2 + v2**2 + w2**2)
 
     return u2, v2, w2, vspace
+
+
+def peculiar_velocity(
+        ra: Union[float, ArrayLike], dec: Union[float, ArrayLike],
+        pmra_cosdec: Union[float, ArrayLike], pmdec: Union[float, ArrayLike],
+        dist: Union[float, ArrayLike], rv: Union[float, ArrayLike],
+        u_sun: Union[float, ArrayLike] = con.u_sun,
+        v_sun: Union[float, ArrayLike] = con.v_sun,
+        w_sun: Union[float, ArrayLike] = con.w_sun,
+        theta_sun: Union[float, ArrayLike] = con.theta_sun,
+        r_sun: Union[float, ArrayLike] = con.r_sun,
+        dt: float = 1.0
+) -> Tuple[
+    Union[float, np.ndarray], Union[float, np.ndarray],
+    Union[float, np.ndarray], Union[float, np.ndarray]
+]:
+    """
+    Calculate the peculiar velocity and the cartesian components given its
+    equatorial coordinates, proper motions, distance, and radial velocity.
+
+    Parameters
+    ----------
+    ra : float or ArrayLike
+        Right ascension in decimal degrees.
+    dec : float or ArrayLike
+        Declination in decimal degrees.
+    pmra_cosdec : float or ArrayLike
+        Proper motion in ra*cos(dec), in mas/yr.
+    pmdec : float or ArrayLike
+        Proper motion in declination, in mas/yr.
+    dist : float or ArrayLike
+        Distance in kpc.
+    rv : float or ArrayLike
+        Radial velocity in km/s.
+    u_sun : float or ArrayLike, optional
+        Solar motion u component in km/s.
+    v_sun : float or ArrayLike, optional
+        Solar motion v component in km/s.
+    w_sun : float or ArrayLike, optional
+        Solar motion w component in km/s.
+    theta_sun : float or ArrayLike, optional
+        Solar rotation velocity in the Galactic plane in km/s.
+    r_sun : float or ArrayLike, optional
+        Distance from the Sun to the Galactic center in kpc.
+    dt : float, optional
+        Time step in years for which to calculate the proper motion,
+        see `galactic_proper_motion`, by default 1.0 (year).
+    """
+
+    gal_l, gal_b = equatorial_to_galactic(ra, dec)
+    gal_l, gal_b = np.radians(gal_l), np.radians(gal_b)
+
+    u2, v2, w2, vspace = galactocentric_cartesian_velocity(
+        ra, dec, pmra_cosdec, pmdec, dist, rv,
+        u_sun=u_sun, v_sun=v_sun, w_sun=w_sun,
+        theta_sun=theta_sun, dt=dt
+    )
+
+    d_p = dist * np.cos(gal_b)
+    r_p = np.sqrt(r_sun ** 2 + d_p ** 2 - 2 * r_sun * d_p * np.cos(gal_l))
+
+    vrot_interp = get_rotation_curve()
+    vrot = vrot_interp(r_p)
+
+    sinbeta = np.sin(gal_l) * (d_p / r_p)
+    cosbeta = (r_sun - d_p * np.cos(gal_l)) / r_p
+
+    u_s = u2 * cosbeta - v2 * sinbeta
+    v_s = u2 * sinbeta + v2 * cosbeta - vrot
+    w_s = w2
+
+    vpec = np.sqrt(u_s ** 2 + v_s ** 2 + w_s ** 2)
+
+    return u_s, v_s, w_s, vpec

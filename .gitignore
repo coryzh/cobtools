@@ -26,7 +26,7 @@ htmlcov/
 .cache
 pytest_cache/
 figures/
-data/
+test_data/
 .DS_Store
 # IDEs and editors
 .idea/

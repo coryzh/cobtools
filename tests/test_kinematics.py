@@ -7,6 +7,7 @@ from cobtools.astrometry.kinematics import (
 )
 from astropy.coordinates import SkyCoord, Galactocentric, CartesianDifferential
 from astropy.units import Unit
+from cobtools.astrometry.kinematics import peculiar_velocity
 
 
 class TestEquatorialToGalactic:
@@ -255,3 +256,45 @@ class TestGalactocentricCartesianVelocity:
         assert np.allclose(v, v_astropy, rtol=1e-1)
         assert np.allclose(w, w_astropy, rtol=1e-1)
         assert np.allclose(vspace, vspace_astropy, rtol=1e-1)
+
+
+class TestPeculiarVelocity:
+    def test_single_values(self):
+        """Test peculiar_velocity with single input values."""
+
+        u_s, v_s, w_s, vpec = peculiar_velocity(
+            ra=101.28715535, dec=-16.71611586, pmra_cosdec=1.3, pmdec=2.5,
+            dist=1.5, rv=-20.5
+        )
+
+        assert isinstance(u_s, (float, np.ndarray))
+        assert isinstance(v_s, (float, np.ndarray))
+        assert isinstance(w_s, (float, np.ndarray))
+        assert isinstance(vpec, (float, np.ndarray))
+        assert np.allclose(np.sqrt(u_s**2 + v_s**2 + w_s**2), vpec)
+
+    def test_array_values(self):
+        """Test peculiar_velocity with array inputs."""
+
+        n_sample = 100
+        ra = np.random.uniform(0, 360, n_sample)
+        dec = np.random.uniform(-90, 90, n_sample)
+        pmra_cosdec = np.random.uniform(-5, 5, n_sample)
+        pmdec = np.random.uniform(-5, 5, n_sample)
+        dist = np.random.uniform(0.1, 5, n_sample)
+        rv = np.random.uniform(-100, 100, n_sample)
+
+        u_s, v_s, w_s, vpec = peculiar_velocity(
+            ra=ra, dec=dec, pmra_cosdec=pmra_cosdec, pmdec=pmdec,
+            dist=dist, rv=rv
+        )
+
+        assert isinstance(u_s, np.ndarray)
+        assert isinstance(v_s, np.ndarray)
+        assert isinstance(w_s, np.ndarray)
+        assert isinstance(vpec, np.ndarray)
+        assert u_s.shape == (n_sample,)
+        assert v_s.shape == (n_sample,)
+        assert w_s.shape == (n_sample,)
+        assert vpec.shape == (n_sample,)
+        assert np.allclose(np.sqrt(u_s**2 + v_s**2 + w_s**2), vpec)

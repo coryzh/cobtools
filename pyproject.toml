@@ -44,3 +44,6 @@ lint.ignore = ["E501"]
 minversion = "6.0"
 addopts = "-ra -q"
 testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+"cobtools" = ["data/*"]
