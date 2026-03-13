@@ -1,4 +1,1 @@
-"""
-The cobtools package provides modules for astrometry, statistics, kinematics,
-and IO.
-"""
+__version__ = "0.1.0"
