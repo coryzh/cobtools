@@ -61,16 +61,14 @@ class TestBpRpToTeff:
             bp_rp_to_teff(3.0, kind="giant")
 
     def test_bp_rp_to_teff_non_convertible_input(self):
-        with pytest.raises(TypeError) as exec_info:
+        with pytest.raises(
+            TypeError,
+            match="bp_rp must be convertible to a numpy array of float"
+        ):
             bp_rp_to_teff("not_a_number", kind="dwarf")
-            assert (
-                "bp_rp must be convertible to a numpy array of float"
-                in str(exec_info.value)
-            )
 
-        with pytest.raises(TypeError) as exec_info:
+        with pytest.raises(
+            TypeError,
+            match="mh must be convertible to a numpy array of float"
+        ):
             bp_rp_to_teff(1.0, mh="not_a_number", kind="dwarf")
-            assert (
-                "mh must be convertible to a numpy array of float"
-                in str(exec_info.value)
-            )
