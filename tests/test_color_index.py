@@ -74,4 +74,3 @@ class TestBpRpToTeff:
                 "mh must be convertible to a numpy array of float"
                 in str(exec_info.value)
             )
-
