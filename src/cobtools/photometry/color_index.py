@@ -62,18 +62,26 @@ def bp_rp_to_teff(
     bp_rp_min, bp_rp_max = row["bp_rp_min"], row["bp_rp_max"]
 
     try:
-        bp_rp = np.asarray(bp_rp)
+        bp_rp = np.asarray(bp_rp, dtype=float)
     except Exception as e:
-        raise TypeError(f"bp_rp must be convertible to a numpy array: {e}")
+        raise TypeError(
+            f"bp_rp must be convertible to a numpy array of float: {e}"
+        )
 
     try:
-        mh = np.asarray(mh)
+        mh = np.asarray(mh, dtype=float)
     except Exception as e:
-        raise TypeError(f"mh must be convertible to a numpy array: {e}")
+        raise TypeError(
+            f"mh must be convertible to a numpy array of float: {e}"
+        )
+
+    # Make mh broadcastable to bp_rp
+    if np.isscalar(mh) or mh.ndim == 0:
+        mh = np.full_like(bp_rp, fill_value=mh)
 
     if bp_rp.shape != mh.shape:
         raise ValueError(
-            f"bp_rp and mh must have the same shape, got {bp_rp.shape}"
+            f"bp_rp and mh must have the same shape, got {bp_rp.shape} "
             f"for bp_rp but {mh.shape} for mh."
         )
 
@@ -86,7 +94,7 @@ def bp_rp_to_teff(
 
     coeffs = row[coeff_cols].values
 
-    teff = 5040.0 * (
+    teff = 5040.0 / (
         coeffs[0] + coeffs[1] * bp_rp + coeffs[2] * bp_rp ** 2
         + coeffs[3] * mh + coeffs[4] * mh ** 2 + coeffs[5] * bp_rp * mh
     )
