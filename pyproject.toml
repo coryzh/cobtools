@@ -29,7 +29,9 @@ dependencies = [
 dev = [
     "pytest",
     "ruff",
-    "black"
+    "black",
+    "sphinx",
+    "sphinx-rtd-theme"
 ]
 
 [tool.black]
