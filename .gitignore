@@ -25,7 +25,9 @@ htmlcov/
 .coverage.*
 .cache
 pytest_cache/
-
+figures/
+test_data/
+.DS_Store
 # IDEs and editors
 .idea/
 .vscode/
