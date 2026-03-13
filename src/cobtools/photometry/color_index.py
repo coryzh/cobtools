@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from numpy.typing import ArrayLike
-from typing import Union
+from typing import Union, List
 from importlib import resources
 
 
@@ -12,12 +12,20 @@ def _load_coefficients() -> pd.DataFrame:
     return pd.read_csv(coefficient_file_path, index_col="kind")
 
 
+def _load_sptypes() -> pd.DataFrame:
+    sptype_file_path = (
+        resources.files("cobtools") / "data" / "teff_and_sptype.csv"
+    )
+    return pd.read_csv(sptype_file_path)
+
+
 df_coefs = _load_coefficients()
+df_sptypes = _load_sptypes()
 
 
 def bp_rp_to_teff(
-    bp_rp: Union[float, ArrayLike], mh: Union[float, ArrayLike] = 0.0,
-    kind: str = "dwarf"
+        bp_rp: Union[float, ArrayLike], mh: Union[float, ArrayLike] = 0.0,
+        kind: str = "dwarf"
 ) -> Union[float, ArrayLike]:
     """
     Convert Gaia BP-RP color index to effective temperature (Teff) using
@@ -103,3 +111,57 @@ def bp_rp_to_teff(
         teff = float(teff)
 
     return teff
+
+
+def bp_rp_to_sptype(
+        bp_rp: Union[float, ArrayLike], mh: Union[float, ArrayLike] = 0.0,
+        kind: str = "dwarf"
+) -> Union[str, List[str]]:
+    """
+    Convert Gaia BP-RP color index to spectral type using the Teff derived
+    from bp_rp_to_teff and the Teff-SpType relation from Pecaut & Mamajek
+    (2013).
+
+    Parameters
+    ----------
+    bp_rp : Union[float, ArrayLike]
+        Gaia BP-RP color index.
+    mh : Union[float, ArrayLike], optional
+        Metallicity, by default 0.0 (solar metallicity).
+    kind : str, optional
+        Kind of star, by default "dwarf". Valid options are "dwarf" and "giant"
+
+    Returns
+    -------
+    Union[str, List[str]]
+        Spectral type. If the input is a single value, returns a string.
+        If the input is an ArrayLike, returns a list of strings.
+
+    Raises
+    ------
+    ValueError
+        If the calculated effective temperature is out of the valid range for
+        spectral type determination.
+    """
+
+    teff_min, teff_max = df_sptypes["Teff"].min(), df_sptypes["Teff"].max()
+
+    teff = bp_rp_to_teff(bp_rp, mh, kind)
+
+    if np.any((teff < teff_min) | (teff > teff_max)):
+        raise ValueError(
+            f"Calculated Teff must be between {teff_min} and {teff_max} K "
+            f"to determine spectral type, but got Teff={teff} K."
+        )
+
+    if np.isscalar(teff):
+        idx_closest = np.argmin(np.abs(df_sptypes["Teff"] - teff))
+        return df_sptypes.loc[idx_closest, "SpType"]
+    else:
+        idx_closest = np.abs(
+            df_sptypes["Teff"].values[:, None] - teff
+        ).argmin(axis=0)
+
+        sptypes = df_sptypes.iloc[idx_closest]["SpType"].tolist()
+
+        return sptypes
