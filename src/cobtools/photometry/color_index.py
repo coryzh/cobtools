@@ -7,7 +7,7 @@ from importlib import resources
 
 def _load_coefficients() -> pd.DataFrame:
     coefficient_file_path = (
-        resources.files("cobtools.data") / "bprp_to_teff_coefficients.csv"
+        resources.files("cobtools") / "data" / "bprp_to_teff_coefficients.csv"
     )
     return pd.read_csv(coefficient_file_path, index_col="kind")
 
