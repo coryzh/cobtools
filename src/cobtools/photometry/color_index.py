@@ -161,7 +161,7 @@ def bp_rp_to_sptype(
 
     if np.isscalar(teff):
         idx_closest = np.argmin(np.abs(df_sptypes["Teff"] - teff))
-        return df_sptypes.loc[idx_closest, "SpType"]
+        return df_sptypes.iloc[idx_closest]["SpType"]
     else:
         idx_closest = np.abs(
             df_sptypes["Teff"].values[:, None] - teff
