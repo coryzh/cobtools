@@ -38,7 +38,8 @@ def bp_rp_to_teff(
     mh : Union[float, ArrayLike], optional
         Metallicity, by default 0.0 (solar metallicity).
     kind : str, optional
-        Kind of star, by default "dwarf"
+        Kind of star, by default "dwarf". Currently, only "dwarf"
+        is supported. Passing any other value will raise a ValueError.
 
     Returns
     -------
