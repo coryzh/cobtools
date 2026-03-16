@@ -83,9 +83,13 @@ def bp_rp_to_teff(
             f"mh must be convertible to a numpy array of float: {e}"
         )
 
-    # Make mh broadcastable to bp_rp
-    if np.isscalar(mh) or mh.ndim == 0:
-        mh = np.full_like(bp_rp, fill_value=mh)
+    try:
+        bp_rp, mh = np.broadcast_arrays(bp_rp, mh)
+
+    except ValueError as e:
+        raise ValueError(
+            f"bp_rp and mh must be broadcastable to the same shape: {e}"
+        )
 
     if bp_rp.shape != mh.shape:
         raise ValueError(
