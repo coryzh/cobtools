@@ -1,0 +1,44 @@
+# Figure settings
+figure.figsize: 12.8, 9.6
+
+# Axes labels
+axes.titlesize : 16
+axes.labelsize : 28
+
+# Tick related 
+xtick.direction : in
+ytick.direction : in
+xtick.top       : True
+ytick.right     : True
+
+xtick.minor.visible : True
+ytick.minor.visible : True
+
+xtick.major.size    : 10
+xtick.minor.size    : 5
+ytick.major.size    : 10
+ytick.minor.size    : 5
+
+xtick.labelsize : 26
+ytick.labelsize : 26
+
+
+ytick.alignment : center_baseline
+
+# LaTeX
+text.usetex: False
+
+# Font
+font.family: STIXGeneral
+#font.family: Optima
+mathtext.fontset: cm
+
+# Save Figure
+savefig.bbox : tight
+savefig.facecolor : white        # figure face color when saving
+
+# Legend related
+legend.fontsize : 22
+
+# Misc
+# figure.autolayout : True # Enable auto-sizing of text and other elements in the figure based on the figure size.
