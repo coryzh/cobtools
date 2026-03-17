@@ -1,0 +1,22 @@
+# Ignore everything
+*
+
+# Allow only the built HTML files
+!.gitignore
+!*.html
+!*.css
+!*.js
+!*.png
+!*.jpg
+!*.gif
+!*.svg
+!*.ico
+!*.woff
+!*.woff2
+!*.ttf
+!*.eot
+!*.otf
+!*.json
+!*.xml
+!*.txt
+!CNAME
