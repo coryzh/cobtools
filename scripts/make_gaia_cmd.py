@@ -60,7 +60,7 @@ def override_axis_labels():
     plt.show()
 
 
-def test_image_anchoring():
+def check_image_anchoring():
     fig = plt.figure()
     ax = GaiaCMDAxis(fig)
 
@@ -75,4 +75,4 @@ def test_image_anchoring():
 
 
 if __name__ == "__main__":
-    override_axis_labels()
+    check_image_anchoring()
