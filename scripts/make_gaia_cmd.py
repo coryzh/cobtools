@@ -37,5 +37,33 @@ def different_figure_sizes():
     plt.show()
 
 
+def change_axislimit():
+    fig = plt.figure(figsize=(10, 10))
+    ax = GaiaCMDAxis(fig)
+    ax.plot(0.5, -4.0, "ro")
+
+    # Change x-axis limits
+    ax.set_xlim(-5, 10.0)
+
+    # Change y-axis limits
+    ax.set_ylim(25.0, -10)
+
+    plt.show()
+
+
+def test_image_anchoring():
+    fig = plt.figure()
+    ax = GaiaCMDAxis(fig)
+
+    # Plot points at the corners of the extent
+    ax.plot([-1.5, -1.5, 5.4, 5.4], [19.0, -5.0, -5.0, 19.0], "ro")
+
+    # Change axis limits to test anchoring
+    ax.set_xlim(-5, 10)
+    ax.set_ylim(-10, 25)
+
+    plt.show()
+
+
 if __name__ == "__main__":
-    different_figure_sizes()
+    test_image_anchoring()
