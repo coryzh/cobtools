@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import json
 from importlib import resources
 from functools import lru_cache
+from matplotlib import style
 
 
 @lru_cache(maxsize=1)
@@ -30,14 +31,36 @@ class GaiaCMDAxis(plt.Axes):
     Example
     -------
     import matplotlib.pyplot as plt
-    from gaia_cmd_plotter import GaiaCMDAxis
+    from cobtools.plot_utils.cmd import GaiaCMDAxis
 
     # This will create a Gaia CMD plot with a red point at (0.5, -4.0)
     fig = plt.figure()
     ax = GaiaCMDAxis(fig)
     ax.plot(0.5, -4.0, "ro")
     plt.show()
+
+    # To use a more publication-ready style, use the style_context method:
+    with GaiaCMDAxis.style_context():
+        fig = plt.figure()
+        ax = GaiaCMDAxis(fig)
+        ax.plot(0.5, -4.0, "ro")
+        plt.show()
     """
+
+    @staticmethod
+    def style_context():
+        """
+        Return a matplotlib style.context configured for the Gaia CMD style.
+        Usage
+        -----
+        with GaiaCMDAxis._style_context():
+            fig = plt.figure()
+            ax = GaiaCMDAxis(fig)
+            ...
+        """
+        return style.context(
+            resources.files("cobtools") / "data" / "gaia_cmd.mplstyle"
+        )
 
     def __init__(self, fig, rect=None, **kwargs):
         """
