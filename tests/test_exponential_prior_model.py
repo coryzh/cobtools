@@ -1,7 +1,6 @@
 import pytest
 import numpy as np
 from cobtools.astrometry.distance import XRBExponentialPriorModel
-from pathlib import Path
 
 
 class TestXRBExponentialPriorModel:
