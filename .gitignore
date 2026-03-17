@@ -22,3 +22,5 @@
 !CNAME
 !_static/
 !_static/**
+!_modules/
+!_sources/
