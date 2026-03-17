@@ -20,3 +20,5 @@
 !*.xml
 !*.txt
 !CNAME
+!_static/
+!_static/**
