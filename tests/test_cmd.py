@@ -23,6 +23,8 @@ class TestGaiaCMDAxis:
         assert ax._GaiaCMDAxis__bottom == -5.0
         assert ax._GaiaCMDAxis__top == 5.0
 
+        plt.close(fig)
+
     @patch("cobtools.plot_utils.cmd._load_background_metadata")
     def test_background_image_loading(self, mock_load_metadata):
         mock_load_metadata.return_value = {
@@ -37,11 +39,15 @@ class TestGaiaCMDAxis:
         # Check if the background image is loaded as an image in the axis
         assert len(ax.images) == 1
 
+        plt.close(fig)
+
     def test_axis_labels(self):
         fig = plt.figure()
         ax = GaiaCMDAxis(fig)
         assert ax.get_xlabel() == r"$\mathrm{G_{BP} - G_{RP}}$"
         assert ax.get_ylabel() == r"$\mathrm{M_G}$"
+
+        plt.close(fig)
 
     @patch("cobtools.plot_utils.cmd._load_background_metadata")
     def test_axis_limits(self, mock_load_metadata):
@@ -59,6 +65,8 @@ class TestGaiaCMDAxis:
         # image, which is specified by the loaded metadata.
         assert ax.get_xlim() == (-1.0, 1.0)
         assert ax.get_ylim() == (-5.0, 5.0)
+
+        plt.close(fig)
 
     @patch("cobtools.plot_utils.cmd._load_background_metadata")
     def test_background_anchoring_with_changed_limits(
@@ -85,6 +93,7 @@ class TestGaiaCMDAxis:
 
         # The background image's extent should remain the same
         assert tuple(background_image.get_extent()) == (-1.0, 1.0, -5.0, 5.0)
+        plt.close(fig)
 
     def test_override_axis_labels(self):
         fig = plt.figure()
@@ -94,6 +103,8 @@ class TestGaiaCMDAxis:
         ax.set_ylabel("Custom Y Label")
         assert ax.get_xlabel() == "Custom X Label"
         assert ax.get_ylabel() == "Custom Y Label"
+
+        plt.close(fig)
 
     def test_override_axis_limits(self):
         fig = plt.figure()
@@ -106,3 +117,5 @@ class TestGaiaCMDAxis:
         ax.set_ylim(-10.0, 25.0)
         assert ax.get_xlim() == (-5, 10.0)
         assert ax.get_ylim() == (-10.0, 25.0)
+
+        plt.close(fig)
