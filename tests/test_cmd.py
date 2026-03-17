@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
+import matplotlib
 from unittest.mock import patch
 from cobtools.plot_utils.cmd import GaiaCMDAxis
+
+matplotlib.use("Agg")  # Use a non-interactive backend for testing
 
 
 class TestGaiaCMDAxis:
