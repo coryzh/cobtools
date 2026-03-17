@@ -1,4 +1,4 @@
-from cobtools.plot_utils.gaia_cmd import GaiaCMDAxis
+from cobtools.plot_utils.cmd import GaiaCMDAxis
 import matplotlib.pyplot as plt
 
 
