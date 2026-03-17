@@ -51,6 +51,15 @@ def change_axislimit():
     plt.show()
 
 
+def override_axis_labels():
+    fig = plt.figure()
+    ax = GaiaCMDAxis(fig)
+    ax.plot(0.5, -4.0, "ro")
+    ax.set_xlabel("Custom X Label")
+    ax.set_ylabel("Custom Y Label")
+    plt.show()
+
+
 def test_image_anchoring():
     fig = plt.figure()
     ax = GaiaCMDAxis(fig)
@@ -66,4 +75,4 @@ def test_image_anchoring():
 
 
 if __name__ == "__main__":
-    test_image_anchoring()
+    override_axis_labels()
