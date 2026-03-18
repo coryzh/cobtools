@@ -24,4 +24,5 @@
 !_static/**
 !_modules/
 !_sources/
+!_sources/**
 !.nojekyll
