@@ -1,17 +1,36 @@
-"""Use this module to plot colour-magnitude diagrams (CMDs) with a Gaia CMD
-background image. The GaiaCMDAxis class provides a convenient way to create
-CMD plots with the Gaia background, and the style_context method allows you
-to easily apply a consistent style to your plots.
+"""
+cmd.py
+======
+
+This module provides tools for creating Color-Magnitude Diagrams (CMDs)
+using matplotlib. It includes a customised matplotlib Axes class that has a
+predefined background image and metadata.
+
+Functions:
+- `_load_background_image`: Load the Gaia CMD background image.
+- `_load_background_metadata`: Load metadata for the Gaia CMD background.
+
+Classes:
+- `GaiaCMDAxis`: A custom matplotlib Axes for Gaia CMDs.
 """
 import matplotlib.pyplot as plt
 import json
+import numpy as np
 from importlib import resources
 from functools import lru_cache
 from matplotlib import style
 
 
 @lru_cache(maxsize=1)
-def _load_background_image():
+def _load_background_image() -> np.ndarray:
+    """
+    Load the Gaia CMD background image.
+
+    Returns
+    -------
+    np.ndarray
+        The background image as a numpy array.
+    """
     _background_image = plt.imread(
         resources.files("cobtools") / "data" / "gaia_cmd_background.png"
     )
