@@ -486,9 +486,32 @@ class XRBExponentialPriorModel:
 
     @property
     def parallax_over_error(self) -> float:
+        """
+        Calculate the signal-to-noise ratio of the parallax measurement.
+
+        Returns
+        -------
+        float
+            The signal-to-noise ratio of the parallax measurement.
+        """
         return self.parallax / self.parallax_error
 
     def log_prior(self, d: float) -> float:
+        """
+        Logarithm of the exponential prior probability density. For negative
+        distances, the log prior is set to negative infinity.
+
+        Parameters
+        ----------
+        d : float
+            distance in kiloparsecs (kpc) for which to calculate the log prior.
+
+        Returns
+        -------
+        float
+            The logarithm of the exponential prior probability density
+            at distance d.
+        """
         if d < 0:
             return -np.inf
 
@@ -496,6 +519,21 @@ class XRBExponentialPriorModel:
             return 2 * np.log(d) - d / self.scale_length
 
     def log_likelihood(self, d) -> float:
+        """
+        Logarithm of the Gaussian likelihood at a given distance d. For
+        negative distances, the log likelihood is set to negative infinity.
+
+        Parameters
+        ----------
+        d : distance
+            distance in kiloparsecs (kpc) for which to calculate the log
+            likelihood.
+
+        Returns
+        -------
+        float
+            The logarithm of the Gaussian likelihood at distance d.
+        """
         if d < 0:
             return -np.inf
 
@@ -505,6 +543,21 @@ class XRBExponentialPriorModel:
             )
 
     def log_posterior(self, d) -> float:
+        """
+        Logarithm of the posterior probability at a given distance d. For
+        negative distances, the log posterior is set to negative infinity.
+
+        Parameters
+        ----------
+        d : float
+            distance in kiloparsecs (kpc) for which to calculate the log
+            posterior.
+
+        Returns
+        -------
+        float
+            Logarithm of the posterior probability at distance d.
+        """
         return self.log_prior(d) + self.log_likelihood(d)
 
     def sample_distance(
@@ -512,8 +565,8 @@ class XRBExponentialPriorModel:
             **kwargs: Any
     ) -> np.ndarray[Any, np.dtype[np.float64]]:
         """
-        Sample the posterior distribution using the
-        MCMC sampler in emcee.
+        Sample distances from the posterior distribution using the
+        EnsembleSampler from the emcee package.
 
         Parameters
         ----------
@@ -530,6 +583,24 @@ class XRBExponentialPriorModel:
         -------
         np.ndarray[Any, np.dtype[np.float64]]
             Array of sampled distances from the posterior distribution.
+
+        Raises
+        ------
+        ValueError
+            If nwalkers is not a positive integer.
+        ValueError
+            If nsteps is not a positive integer.
+        ValueError
+            If burn_in is not a non-negative integer.
+        ValueError
+            If burn_in is greater than or equal to nsteps.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import XRBExponentialPriorModel
+        >>> m = XRBExponentialPriorModel(parallax=0.5, parallax_error=0.1)
+        >>> samples = m.sample_distance(nwalkers=4, nsteps=2000, burn_in=500)
+        >>> print(samples)  # Array of sampled distances
         """
         if not isinstance(nwalkers, int) or nwalkers <= 0:
             raise ValueError("nwalkers must be a positive integer.")
