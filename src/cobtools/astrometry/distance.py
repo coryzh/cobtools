@@ -330,7 +330,22 @@ class FromLiterature:
         return min(self.x_loerr, self.x_uperr)
 
     def fit_gamma(self) -> dict:
-        """Fit the literature nominal values to a gamma distribution."""
+        """
+        Fit the asymmetric errors from the literature to a gamma distribution.
+        The fitting is done by minimizing the difference between the confidence
+        intervals of the fitted gamma distribution and the literature values.
+
+        Fitting is performed using the scipy.optimize.minimize function, with
+        the initial guess for the scale parameter (sigma_x) set to the
+        averaged error (self.sigma_0).
+
+        Returns
+        -------
+        dict
+            A dictionary containing the parameters of the fitted gamma
+            distribution, including 'alpha', 'theta', and the 'distribution'
+            object itself.
+        """
 
         def get_gamma_distribution(sigma_x) -> dict:
             alpha = (
