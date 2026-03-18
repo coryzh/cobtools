@@ -1,3 +1,8 @@
+"""Use this module to plot colour-magnitude diagrams (CMDs) with a Gaia CMD
+background image. The GaiaCMDAxis class provides a convenient way to create
+CMD plots with the Gaia background, and the style_context method allows you
+to easily apply a consistent style to your plots.
+"""
 import matplotlib.pyplot as plt
 import json
 from importlib import resources
@@ -65,12 +70,17 @@ class GaiaCMDAxis(plt.Axes):
     def __init__(self, fig, rect=None, **kwargs):
         """
         Constructor for GaiaCMDAxis.
-
         Parameters
         ----------
         fig : matplotlib.figure.Figure
+            The figure to which the axis will be added.
         rect : list, optional
-        kwargs : dict, optional
+            A list of [left, bottom, width, height] that defines the position
+            of the axis in the figure. If None, a default rect of
+            [0.125, 0.110, 0.775, 0.770] will be used.
+        **kwargs : dict
+            Additional keyword arguments to pass to the parent class
+            constructor matplotlib.pyplot.Axes.__init__().
         """
         metadata = _load_background_metadata()
         self.__left = metadata["left"]
