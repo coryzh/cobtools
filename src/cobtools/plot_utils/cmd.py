@@ -39,7 +39,7 @@ def _load_background_image() -> np.ndarray:
 
 def _load_background_metadata() -> dict:
     """
-    Load the meta data used for positioning the CMD background image.
+    Load the metadata used for positioning the CMD background image.
 
     Returns
     -------
