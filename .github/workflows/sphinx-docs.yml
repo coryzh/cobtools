@@ -32,15 +32,21 @@ jobs:
           pip install .
           pip install sphinx sphinx-rtd-theme  # Add any Sphinx extensions you use
 
+      # Automatically generate Sphinx .rst files for modules
+      - name: Generate Sphinx API docs
+        run: |
+          sphinx-apidoc -o docs/source/ src/cobtools
+
       # Build the documentation
       - name: Build Sphinx documentation
         run: |
           cd docs
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
           make html
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
