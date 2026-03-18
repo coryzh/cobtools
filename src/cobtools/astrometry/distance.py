@@ -1,5 +1,15 @@
 """
-Different models for distance estimation from parallax.
+This module provides various classes for estimating distances from parallax.
+
+Classes
+-------
+- SimpleInversion: A simple model for distance estimation by inverting
+parallax.
+- FromLiterature: Fits literature values to a gamma distribution.
+- XRBExponentialPriorModel: A Bayesian model using an exponential prior.
+
+The module also includes methods for sampling distances and fitting
+distributions.
 """
 import numpy as np
 from scipy.stats import truncnorm, gamma
@@ -11,7 +21,9 @@ import emcee
 
 class SimpleInversion:
     """
-    Distance model object by inverting parallaxing.
+    A class for estimating distance from parallax using simple inversion.
+    Use this method when the measured parallax is positive and has a high
+    signal-to-noise ratio. Commonly parallax/parallax_error >= 5 is preferred.
     """
 
     def __init__(self, parallax: float, parallax_error: float):
