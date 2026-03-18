@@ -113,39 +113,185 @@
 </section>
 <section id="module-cobtools.astrometry.distance">
 <span id="cobtools-astrometry-distance-module"></span><h2>cobtools.astrometry.distance module<a class="headerlink" href="#module-cobtools.astrometry.distance" title="Link to this heading"></a></h2>
-<p>Different models for distance estimation from parallax.</p>
+<p>This module provides various classes for estimating distances from parallax.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>SimpleInversion: A simple model for distance estimation by inverting</p></li>
+</ul>
+<p>parallax.
+- FromLiterature: Fits literature values to a gamma distribution.
+- XRBExponentialPriorModel: A Bayesian model using an exponential prior.</p>
+<p>The module also includes methods for sampling distances and fitting
+distributions.</p>
+</section>
 <dl class="py class">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.astrometry.distance.</span></span><span class="sig-name descname"><span class="pre">FromLiterature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_est</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_lo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_hi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.68</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#FromLiterature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for taking literature distance estimates and errors. The errors
+can be asymmetric. The class has a method to model the asymmetric errors
+with a gamma distribution, and then sample distances from the fitted
+distribution.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.x_est">
+<span class="sig-name descname"><span class="pre">x_est</span></span><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.x_est" title="Link to this definition"></a></dt>
+<dd><p>The estimated distance from the literature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.x_lo">
+<span class="sig-name descname"><span class="pre">x_lo</span></span><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.x_lo" title="Link to this definition"></a></dt>
+<dd><p>The lower limit of the distance estimate from the literature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.x_hi">
+<span class="sig-name descname"><span class="pre">x_hi</span></span><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.x_hi" title="Link to this definition"></a></dt>
+<dd><p>The upper limit of the distance estimate from the literature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.conf_level">
+<span class="sig-name descname"><span class="pre">conf_level</span></span><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.conf_level" title="Link to this definition"></a></dt>
+<dd><p>The confidence level associated with the distance estimate, by default
+0.68.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">x_loerr</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>The lower error, calculated as x_est - x_lo.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">x_uperr</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>The upper error, calculated as x_hi - x_est.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sigma_0</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>The averaged error, calculated as 0.5 * (x_loerr + x_uperr).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit_gamma</span> <span class="pre">:</span> <span class="pre">dict</span></span></dt>
+<dd><p>Fit the literature nominal values to a gamma distribution and
+return the parameters of the fitted distribution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sample_distance</span> <span class="pre">:</span> <span class="pre">np.ndarray</span></span></dt>
+<dd><p>Sample distance from the fitted gamma distribution.</p>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.astrometry.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromLiterature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FromLiterature</span><span class="p">(</span><span class="n">x_est</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">x_lo</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">x_hi</span><span class="o">=</span><span class="mf">6.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">x_loerr</span><span class="p">)</span>  <span class="c1"># Lower error</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">x_uperr</span><span class="p">)</span>  <span class="c1"># Upper error</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.fit_gamma">
 <span class="sig-name descname"><span class="pre">fit_gamma</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#FromLiterature.fit_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.fit_gamma" title="Link to this definition"></a></dt>
-<dd><p>Fit the literature nominal values to a gamma distribution.</p>
+<dd><p>Fit the asymmetric errors from the literature to a gamma distribution.
+The fitting is done by minimizing the difference between the confidence
+intervals of the fitted gamma distribution and the literature values.</p>
+<p>Fitting is performed using the scipy.optimize.minimize function, with
+the initial guess for the scale parameter (sigma_x) set to the
+averaged error (self.sigma_0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing the parameters of the fitted gamma
+distribution, including ‘alpha’, ‘theta’, and the ‘distribution’
+object itself.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.sample_distance">
 <span class="sig-name descname"><span class="pre">sample_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#FromLiterature.sample_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.sample_distance" title="Link to this definition"></a></dt>
 <dd><p>Sample distance from the fitted gamma distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of random samples to generate, by default 1000</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of sampled random distances from the fitted gamma
+distribution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.astrometry.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">FromLiterature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FromLiterature</span><span class="p">(</span><span class="n">x_est</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">x_lo</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">x_hi</span><span class="o">=</span><span class="mf">6.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">samples</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample_distance</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.sigma_0">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sigma_0</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.sigma_0" title="Link to this definition"></a></dt>
-<dd><p>Averaged error, which could be used as an initial guess for fitting
-a skewed distribution.</p>
+<dd><p>Calculate the averaged error, which could be used as an initial guess
+for fitting a skewed distribution.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.x_loerr">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">x_loerr</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.x_loerr" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the lower error of the distance estimate.
+:returns: The lower error of the distance estimate.
+:rtype: float</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.FromLiterature.x_uperr">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">x_uperr</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#cobtools.astrometry.distance.FromLiterature.x_uperr" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the upper error of the distance estimate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The upper error of the distance estimate.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -153,21 +299,115 @@ a skewed distribution.</p>
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.SimpleInversion">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.astrometry.distance.</span></span><span class="sig-name descname"><span class="pre">SimpleInversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parallax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallax_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#SimpleInversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.SimpleInversion" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Distance model object by inverting parallaxing.</p>
+<p>A class for estimating distance from parallax using simple inversion.
+Use this method when the measured parallax is positive and has a high
+signal-to-noise ratio. Commonly parallax/parallax_error &gt;= 5 is preferred.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.SimpleInversion.parallax">
+<span class="sig-name descname"><span class="pre">parallax</span></span><a class="headerlink" href="#cobtools.astrometry.distance.SimpleInversion.parallax" title="Link to this definition"></a></dt>
+<dd><p>The measured parallax in milliarcseconds (mas).
+Must be positive for this method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.SimpleInversion.parallax_error">
+<span class="sig-name descname"><span class="pre">parallax_error</span></span><a class="headerlink" href="#cobtools.astrometry.distance.SimpleInversion.parallax_error" title="Link to this definition"></a></dt>
+<dd><p>The error in the measured parallax in milliarcseconds (mas).
+Must be positive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">d_est</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>The estimated distance in kiloparsecs (kpc) obtained by inverting the
+parallax, i.e., d_est = 1 / parallax.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">d_est_error</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>The error in the estimated distance, calculated using error propagation
+from the parallax error, i.e.,
+d_est_error = parallax_error / parallax^2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parallax_over_error</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>The signal-to-noise ratio of the parallax measurement, calculated as
+parallax / parallax_error.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sample_distance</span> <span class="pre">:</span> <span class="pre">np.ndarray</span></span></dt>
+<dd><p>A method to sample random distances based on a truncated normal
+distribution centred on the inversion of parallax with a standard
+deviation equal to parallax_error / parallax^2.</p>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.astrometry.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleInversion</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">SimpleInversion</span><span class="p">(</span><span class="n">parallax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">parallax_error</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">d_est</span><span class="p">)</span>  <span class="c1"># Estimated distance</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">d_est_error</span><span class="p">)</span>  <span class="c1"># Error in the estimated distance</span>
+<span class="go">0.4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parallax_over_error</span><span class="p">)</span>  <span class="c1"># Signal-to-noise ratio</span>
+<span class="go">5.0</span>
+</pre></div>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.SimpleInversion.d_est">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">d_est</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#cobtools.astrometry.distance.SimpleInversion.d_est" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Estimate distance by inverting the parallax.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The estimated distance in kiloparsecs (kpc).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.SimpleInversion.d_est_error">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">d_est_error</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#cobtools.astrometry.distance.SimpleInversion.d_est_error" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Estimate the error in the distance estimate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The error in the estimated distance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.SimpleInversion.parallax_over_error">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">parallax_over_error</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#cobtools.astrometry.distance.SimpleInversion.parallax_over_error" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the signal-to-noise ratio of the parallax measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The signal-to-noise ratio.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.SimpleInversion.sample_distance">
@@ -198,6 +438,13 @@ keep it default.</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.astrometry.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleInversion</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">SimpleInversion</span><span class="p">(</span><span class="n">parallax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">parallax_error</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">samples</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample_distance</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>  <span class="c1"># Sample distances</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>  <span class="c1"># Array of sampled distances</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -206,33 +453,127 @@ keep it default.</p></li>
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.astrometry.distance.</span></span><span class="sig-name descname"><span class="pre">XRBExponentialPriorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parallax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallax_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.97</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#XRBExponentialPriorModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Distance Bayesian model based on a exponential prior derived from known
-X-ray binaries.</p>
+<p>A class representing distance estimation using a Bayesian method with an
+exponential prior representative for X-ray binaries. The prior formualted
+as</p>
+<blockquote>
+<div><p>p(d) ~ d^2 * exp(-d / scale_length),</p>
+</div></blockquote>
+<p>where scale_length is a parameter obtained from fitting to known X-ray
+binaries in the literature (Zhao, Y+23).</p>
+<p>The likelihood is a Gaussian likelihood centered on 1/d with a standard
+deviation equal to the parallax error.</p>
+<p>This method can be used for negative parallaxes and low signal-to-noise
+ratio parallaxes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.parallax">
+<span class="sig-name descname"><span class="pre">parallax</span></span><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax" title="Link to this definition"></a></dt>
+<dd><p>The measured parallax in milliarcseconds (mas). Could be negative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_error">
+<span class="sig-name descname"><span class="pre">parallax_error</span></span><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_error" title="Link to this definition"></a></dt>
+<dd><p>The uncertainty of the parallax measurement in milliarcseconds (mas).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.scale_length">
+<span class="sig-name descname"><span class="pre">scale_length</span></span><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.scale_length" title="Link to this definition"></a></dt>
+<dd><p>The scale length of the exponential prior in kiloparsecs (kpc).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.log_likelihood">
 <span class="sig-name descname"><span class="pre">log_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#XRBExponentialPriorModel.log_likelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_likelihood" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Logarithm of the Gaussian likelihood at a given distance d. For
+negative distances, the log likelihood is set to negative infinity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>distance</em>) – distance in kiloparsecs (kpc) for which to calculate the log
+likelihood.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The logarithm of the Gaussian likelihood at distance d.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.log_posterior">
 <span class="sig-name descname"><span class="pre">log_posterior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#XRBExponentialPriorModel.log_posterior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_posterior" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Logarithm of the posterior probability at a given distance d. For
+negative distances, the log posterior is set to negative infinity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>float</em>) – distance in kiloparsecs (kpc) for which to calculate the log
+posterior.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Logarithm of the posterior probability at distance d.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.log_prior">
 <span class="sig-name descname"><span class="pre">log_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#XRBExponentialPriorModel.log_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_prior" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Logarithm of the exponential prior probability density. For negative
+distances, the log prior is set to negative infinity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>float</em>) – distance in kiloparsecs (kpc) for which to calculate the log prior.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The logarithm of the exponential prior probability density
+at distance d.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_over_error">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">parallax_over_error</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_over_error" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the signal-to-noise ratio of the parallax measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The signal-to-noise ratio of the parallax measurement.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cobtools.astrometry.distance.XRBExponentialPriorModel.sample_distance">
 <span class="sig-name descname"><span class="pre">sample_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nwalkers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsteps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burn_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cobtools/astrometry/distance.html#XRBExponentialPriorModel.sample_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.sample_distance" title="Link to this definition"></a></dt>
-<dd><p>Sample the posterior distribution using the
-MCMC sampler in emcee.</p>
+<dd><p>Sample distances from the posterior distribution using the
+EnsembleSampler from the emcee package.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -248,7 +589,22 @@ MCMC sampler in emcee.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray[Any, np.dtype[np.float64]]</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If nwalkers is not a positive integer.</p></li>
+<li><p><strong>ValueError</strong> – If nsteps is not a positive integer.</p></li>
+<li><p><strong>ValueError</strong> – If burn_in is not a non-negative integer.</p></li>
+<li><p><strong>ValueError</strong> – If burn_in is greater than or equal to nsteps.</p></li>
+</ul>
+</dd>
 </dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.astrometry.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">XRBExponentialPriorModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">XRBExponentialPriorModel</span><span class="p">(</span><span class="n">parallax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">parallax_error</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">samples</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">sample_distance</span><span class="p">(</span><span class="n">nwalkers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>  <span class="c1"># Array of sampled distances</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
