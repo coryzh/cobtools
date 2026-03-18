@@ -443,9 +443,8 @@ class XRBExponentialPriorModel:
             parallax_error: float, scale_length: float = 1.97
     ):
         """
-        A Bayesian distance model using an exponential prior. The exponential
-        prior has a scale_length parameter obtained from fitting to known
-        X-ray binaries in the literature.
+        Initialize the XRBExponentialPriorModel with parallax, its error, and
+        the scale length of the exponential prior.
 
         Parameters
         ----------
@@ -464,6 +463,11 @@ class XRBExponentialPriorModel:
             If parallax_error is not a positive number.
         ValueError
             If scale_length is not a positive number.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import XRBExponentialPriorModel
+        >>> model = XRBExponentialPriorModel(parallax=0.5, parallax_error=0.1)
         """
 
         if parallax_error <= 0:
