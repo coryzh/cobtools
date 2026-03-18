@@ -37,7 +37,15 @@ def _load_background_image() -> np.ndarray:
     return _background_image
 
 
-def _load_background_metadata():
+def _load_background_metadata() -> dict:
+    """
+    Load the meta data used for positioning the CMD background image.
+
+    Returns
+    -------
+    dict
+        The background metadata as a dictionary.
+    """
     with open(
         resources.files("cobtools")
         / "data"
