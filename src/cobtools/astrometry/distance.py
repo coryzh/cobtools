@@ -1,5 +1,15 @@
 """
-Different models for distance estimation from parallax.
+This module provides various classes for estimating distances from parallax.
+
+Classes
+-------
+- SimpleInversion: A simple model for distance estimation by inverting
+parallax.
+- FromLiterature: Fits literature values to a gamma distribution.
+- XRBExponentialPriorModel: A Bayesian model using an exponential prior.
+
+The module also includes methods for sampling distances and fitting
+distributions.
 """
 import numpy as np
 from scipy.stats import truncnorm, gamma
@@ -11,10 +21,70 @@ import emcee
 
 class SimpleInversion:
     """
-    Distance model object by inverting parallaxing.
+    A class for estimating distance from parallax using simple inversion.
+    Use this method when the measured parallax is positive and has a high
+    signal-to-noise ratio. Commonly parallax/parallax_error >= 5 is preferred.
+
+    Attributes
+    ----------
+    parallax : float
+        The measured parallax in milliarcseconds (mas).
+        Must be positive for this method
+    parallax_error : float
+        The error in the measured parallax in milliarcseconds (mas).
+        Must be positive.
+
+    Methods
+    -------
+    d_est : float
+        The estimated distance in kiloparsecs (kpc) obtained by inverting the
+        parallax, i.e., d_est = 1 / parallax.
+
+    d_est_error : float
+        The error in the estimated distance, calculated using error propagation
+        from the parallax error, i.e.,
+        d_est_error = parallax_error / parallax^2.
+
+    parallax_over_error : float
+        The signal-to-noise ratio of the parallax measurement, calculated as
+        parallax / parallax_error.
+
+    sample_distance : np.ndarray
+        A method to sample random distances based on a truncated normal
+        distribution centred on the inversion of parallax with a standard
+        deviation equal to parallax_error / parallax^2.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.distance import SimpleInversion
+    >>> model = SimpleInversion(parallax=0.5, parallax_error=0.1)
+    >>> print(model.d_est)  # Estimated distance
+    2.0
+    >>> print(model.d_est_error)  # Error in the estimated distance
+    0.4
+    >>> print(model.parallax_over_error)  # Signal-to-noise ratio
+    5.0
     """
 
     def __init__(self, parallax: float, parallax_error: float):
+        """
+        Initialize the SimpleInversion model with parallax and its error.
+
+        Parameters
+        ----------
+        parallax : float
+            The measured parallax in milliarcseconds (mas). Must be positive.
+        parallax_error : float
+            The uncertainty of the parallax measurement in mas, must also
+            be positive.
+
+        Raises
+        ------
+        ValueError
+            If parallax is not positive.
+        ValueError
+            If parallax_error is not positive.
+        """
         if parallax <= 0:
             raise ValueError(
                     "To use SimpleInversion, parallax must be positive."
@@ -30,14 +100,38 @@ class SimpleInversion:
 
     @property
     def d_est(self) -> float:
+        """
+        Estimate distance by inverting the parallax.
+
+        Returns
+        -------
+        float
+            The estimated distance in kiloparsecs (kpc).
+        """
         return 1.0 / self.parallax
 
     @property
     def d_est_error(self) -> float:
+        """
+        Estimate the error in the distance estimate.
+
+        Returns
+        -------
+        float
+            The error in the estimated distance.
+        """
         return self.parallax_error / (self.parallax ** 2)
 
     @property
     def parallax_over_error(self) -> float:
+        """
+        Calculate the signal-to-noise ratio of the parallax measurement.
+
+        Returns
+        -------
+        float
+            The signal-to-noise ratio.
+        """
         return self.parallax / self.parallax_error
 
     def sample_distance(
@@ -74,6 +168,13 @@ class SimpleInversion:
 
         TypeError
             If n_samples is not an integer.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import SimpleInversion
+        >>> model = SimpleInversion(parallax=0.5, parallax_error=0.1)
+        >>> samples = model.sample_distance(n_samples=1000)  # Sample distances
+        >>> print(samples)  # Array of sampled distances
         """
 
         if not isinstance(n_samples, int):
@@ -95,10 +196,75 @@ class SimpleInversion:
 
 
 class FromLiterature:
+    """
+    A class for taking literature distance estimates and errors. The errors
+    can be asymmetric. The class has a method to model the asymmetric errors
+    with a gamma distribution, and then sample distances from the fitted
+    distribution.
+
+    Attributes
+    ----------
+    x_est : float
+        The estimated distance from the literature.
+    x_lo : float
+        The lower limit of the distance estimate from the literature.
+    x_hi : float
+        The upper limit of the distance estimate from the literature.
+    conf_level : float
+        The confidence level associated with the distance estimate, by default
+        0.68.
+
+    Methods
+    -------
+    x_loerr : float
+        The lower error, calculated as x_est - x_lo.
+    x_uperr : float
+        The upper error, calculated as x_hi - x_est.
+    sigma_0 : float
+        The averaged error, calculated as 0.5 * (x_loerr + x_uperr).
+    fit_gamma : dict
+        Fit the literature nominal values to a gamma distribution and
+        return the parameters of the fitted distribution.
+    sample_distance : np.ndarray
+        Sample distance from the fitted gamma distribution.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.distance import FromLiterature
+    >>> model = FromLiterature(x_est=5.0, x_lo=4.0, x_hi=6.0)
+    >>> print(model.x_loerr)  # Lower error
+    1.0
+    >>> print(model.x_uperr)  # Upper error
+    1.0
+    """
     def __init__(
             self, x_est: float, x_lo: float, x_hi: float,
             conf_level: float = 0.68
     ):
+        """
+        Initialize the FromLiterature model with distance estimates and errors.
+
+        Parameters
+        ----------
+        x_est : float
+            The estimated distance from the literature.
+        x_lo : float
+            The lower limit of the distance estimate from the literature.
+        x_hi : float
+            The upper limit of the distance estimate from the literature.
+        conf_level : float, optional
+            The confidence level associated with the distance estimate,
+            by default 0.68
+
+        Raises
+        ------
+        ValueError
+            If x_lo is not less than x_hi.
+        ValueError
+            If x_est is not between x_lo and x_hi.
+        ValueError
+            If conf_level is not between 0 and 1.
+        """
         self.x_est = x_est
         self.x_lo = x_lo
         self.x_hi = x_hi
@@ -121,26 +287,65 @@ class FromLiterature:
 
     @property
     def x_loerr(self) -> float:
+        """
+        Calculate the lower error of the distance estimate.
+        Returns
+        -------
+        float
+            The lower error of the distance estimate.
+        """
         return self.x_est - self.x_lo
 
     @property
     def x_uperr(self) -> float:
+        """
+        Calculate the upper error of the distance estimate.
+
+        Returns
+        -------
+        float
+            The upper error of the distance estimate.
+        """
         return self.x_hi - self.x_est
 
     @property
     def sigma_0(self) -> float:
         """
-        Averaged error, which could be used as an initial guess for fitting
-        a skewed distribution.
+        Calculate the averaged error, which could be used as an initial guess
+        for fitting a skewed distribution.
         """
         return 0.5 * (self.x_loerr + self.x_uperr)
 
     @property
     def _sigma_min(self) -> float:
+        """
+        The minimum error between the lower and upper errors, which could be
+        used as the lower bound for fitting a skewed distribution.
+
+        Returns
+        -------
+        float
+            The minimum error between the lower and upper errors.
+        """
         return min(self.x_loerr, self.x_uperr)
 
     def fit_gamma(self) -> dict:
-        """Fit the literature nominal values to a gamma distribution."""
+        """
+        Fit the asymmetric errors from the literature to a gamma distribution.
+        The fitting is done by minimizing the difference between the confidence
+        intervals of the fitted gamma distribution and the literature values.
+
+        Fitting is performed using the scipy.optimize.minimize function, with
+        the initial guess for the scale parameter (sigma_x) set to the
+        averaged error (self.sigma_0).
+
+        Returns
+        -------
+        dict
+            A dictionary containing the parameters of the fitted gamma
+            distribution, including 'alpha', 'theta', and the 'distribution'
+            object itself.
+        """
 
         def get_gamma_distribution(sigma_x) -> dict:
             alpha = (
@@ -178,7 +383,27 @@ class FromLiterature:
     def sample_distance(
             self, n_samples: int = 1000
     ) -> np.ndarray:
-        """Sample distance from the fitted gamma distribution."""
+        """
+        Sample distance from the fitted gamma distribution.
+
+        Parameters
+        ----------
+        n_samples : int, optional
+            Number of random samples to generate, by default 1000
+
+        Returns
+        -------
+        np.ndarray
+            Array of sampled random distances from the fitted gamma
+            distribution.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import FromLiterature
+        >>> model = FromLiterature(x_est=5.0, x_lo=4.0, x_hi=6.0)
+        >>> samples = model.sample_distance(n_samples=100
+        >>> print(samples)
+        """
         gamma_params = self.fit_gamma()
         x_gamma = gamma_params["distribution"]
 
@@ -189,8 +414,28 @@ class FromLiterature:
 
 class XRBExponentialPriorModel:
     """
-    Distance Bayesian model based on a exponential prior derived from known
-    X-ray binaries.
+    A class representing distance estimation using a Bayesian method with an
+    exponential prior representative for X-ray binaries. The prior formualted
+    as
+        p(d) ~ d^2 * exp(-d / scale_length),
+
+    where scale_length is a parameter obtained from fitting to known X-ray
+    binaries in the literature (Zhao, Y+23).
+
+    The likelihood is a Gaussian likelihood centered on 1/d with a standard
+    deviation equal to the parallax error.
+
+    This method can be used for negative parallaxes and low signal-to-noise
+    ratio parallaxes.
+
+    Attributes
+    ----------
+    parallax : float
+        The measured parallax in milliarcseconds (mas). Could be negative.
+    parallax_error : float
+        The uncertainty of the parallax measurement in milliarcseconds (mas).
+    scale_length : float
+        The scale length of the exponential prior in kiloparsecs (kpc).
     """
 
     def __init__(
@@ -198,9 +443,8 @@ class XRBExponentialPriorModel:
             parallax_error: float, scale_length: float = 1.97
     ):
         """
-        A Bayesian distance model using an exponential prior. The exponential
-        prior has a scale_length parameter obtained from fitting to known
-        X-ray binaries in the literature.
+        Initialize the XRBExponentialPriorModel with parallax, its error, and
+        the scale length of the exponential prior.
 
         Parameters
         ----------
@@ -219,6 +463,11 @@ class XRBExponentialPriorModel:
             If parallax_error is not a positive number.
         ValueError
             If scale_length is not a positive number.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import XRBExponentialPriorModel
+        >>> model = XRBExponentialPriorModel(parallax=0.5, parallax_error=0.1)
         """
 
         if parallax_error <= 0:
@@ -237,9 +486,32 @@ class XRBExponentialPriorModel:
 
     @property
     def parallax_over_error(self) -> float:
+        """
+        Calculate the signal-to-noise ratio of the parallax measurement.
+
+        Returns
+        -------
+        float
+            The signal-to-noise ratio of the parallax measurement.
+        """
         return self.parallax / self.parallax_error
 
     def log_prior(self, d: float) -> float:
+        """
+        Logarithm of the exponential prior probability density. For negative
+        distances, the log prior is set to negative infinity.
+
+        Parameters
+        ----------
+        d : float
+            distance in kiloparsecs (kpc) for which to calculate the log prior.
+
+        Returns
+        -------
+        float
+            The logarithm of the exponential prior probability density
+            at distance d.
+        """
         if d < 0:
             return -np.inf
 
@@ -247,6 +519,21 @@ class XRBExponentialPriorModel:
             return 2 * np.log(d) - d / self.scale_length
 
     def log_likelihood(self, d) -> float:
+        """
+        Logarithm of the Gaussian likelihood at a given distance d. For
+        negative distances, the log likelihood is set to negative infinity.
+
+        Parameters
+        ----------
+        d : distance
+            distance in kiloparsecs (kpc) for which to calculate the log
+            likelihood.
+
+        Returns
+        -------
+        float
+            The logarithm of the Gaussian likelihood at distance d.
+        """
         if d < 0:
             return -np.inf
 
@@ -256,6 +543,21 @@ class XRBExponentialPriorModel:
             )
 
     def log_posterior(self, d) -> float:
+        """
+        Logarithm of the posterior probability at a given distance d. For
+        negative distances, the log posterior is set to negative infinity.
+
+        Parameters
+        ----------
+        d : float
+            distance in kiloparsecs (kpc) for which to calculate the log
+            posterior.
+
+        Returns
+        -------
+        float
+            Logarithm of the posterior probability at distance d.
+        """
         return self.log_prior(d) + self.log_likelihood(d)
 
     def sample_distance(
@@ -263,8 +565,8 @@ class XRBExponentialPriorModel:
             **kwargs: Any
     ) -> np.ndarray[Any, np.dtype[np.float64]]:
         """
-        Sample the posterior distribution using the
-        MCMC sampler in emcee.
+        Sample distances from the posterior distribution using the
+        EnsembleSampler from the emcee package.
 
         Parameters
         ----------
@@ -281,6 +583,24 @@ class XRBExponentialPriorModel:
         -------
         np.ndarray[Any, np.dtype[np.float64]]
             Array of sampled distances from the posterior distribution.
+
+        Raises
+        ------
+        ValueError
+            If nwalkers is not a positive integer.
+        ValueError
+            If nsteps is not a positive integer.
+        ValueError
+            If burn_in is not a non-negative integer.
+        ValueError
+            If burn_in is greater than or equal to nsteps.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import XRBExponentialPriorModel
+        >>> m = XRBExponentialPriorModel(parallax=0.5, parallax_error=0.1)
+        >>> samples = m.sample_distance(nwalkers=4, nsteps=2000, burn_in=500)
+        >>> print(samples)  # Array of sampled distances
         """
         if not isinstance(nwalkers, int) or nwalkers <= 0:
             raise ValueError("nwalkers must be a positive integer.")
