@@ -24,6 +24,35 @@ class SimpleInversion:
     A class for estimating distance from parallax using simple inversion.
     Use this method when the measured parallax is positive and has a high
     signal-to-noise ratio. Commonly parallax/parallax_error >= 5 is preferred.
+
+    Attributes
+    ----------
+    parallax : float
+        The measured parallax in milliarcseconds (mas).
+        Must be positive for this method
+    parallax_error : float
+        The error in the measured parallax in milliarcseconds (mas).
+        Must be positive.
+
+    Methods
+    -------
+    d_est : float
+        The estimated distance in kiloparsecs (kpc) obtained by inverting the
+        parallax, i.e., d_est = 1 / parallax.
+
+    d_est_error : float
+        The error in the estimated distance, calculated using error propagation
+        from the parallax error, i.e.,
+        d_est_error = parallax_error / parallax^2.
+
+    parallax_over_error : float
+        The signal-to-noise ratio of the parallax measurement, calculated as
+        parallax / parallax_error.
+
+    sample_distance : np.ndarray
+        A method to sample random distances based on a truncated normal
+        distribution centred on the inversion of parallax with a standard
+        deviation equal to parallax_error / parallax^2.
     """
 
     def __init__(self, parallax: float, parallax_error: float):
