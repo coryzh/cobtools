@@ -1,19 +1,51 @@
+"""
+cmd.py
+======
+
+This module provides tools for creating Color-Magnitude Diagrams (CMDs)
+using matplotlib. It includes a customised matplotlib Axes class that has a
+predefined background image and metadata.
+
+Functions:
+- `_load_background_image`: Load the Gaia CMD background image.
+- `_load_background_metadata`: Load metadata for the Gaia CMD background.
+
+Classes:
+- `GaiaCMDAxis`: A custom matplotlib Axes for Gaia CMDs.
+"""
 import matplotlib.pyplot as plt
 import json
+import numpy as np
 from importlib import resources
 from functools import lru_cache
 from matplotlib import style
 
 
 @lru_cache(maxsize=1)
-def _load_background_image():
+def _load_background_image() -> np.ndarray:
+    """
+    Load the Gaia CMD background image.
+
+    Returns
+    -------
+    np.ndarray
+        The background image as a numpy array.
+    """
     _background_image = plt.imread(
         resources.files("cobtools") / "data" / "gaia_cmd_background.png"
     )
     return _background_image
 
 
-def _load_background_metadata():
+def _load_background_metadata() -> dict:
+    """
+    Load the metadata used for positioning the CMD background image.
+
+    Returns
+    -------
+    dict
+        The background metadata as a dictionary.
+    """
     with open(
         resources.files("cobtools")
         / "data"
@@ -65,12 +97,17 @@ class GaiaCMDAxis(plt.Axes):
     def __init__(self, fig, rect=None, **kwargs):
         """
         Constructor for GaiaCMDAxis.
-
         Parameters
         ----------
         fig : matplotlib.figure.Figure
+            The figure to which the axis will be added.
         rect : list, optional
-        kwargs : dict, optional
+            A list of [left, bottom, width, height] that defines the position
+            of the axis in the figure. If None, a default rect of
+            [0.125, 0.110, 0.775, 0.770] will be used.
+        **kwargs : dict
+            Additional keyword arguments to pass to the parent class
+            constructor matplotlib.pyplot.Axes.__init__().
         """
         metadata = _load_background_metadata()
         self.__left = metadata["left"]
