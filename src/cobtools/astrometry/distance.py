@@ -196,6 +196,47 @@ class SimpleInversion:
 
 
 class FromLiterature:
+    """
+    A class for taking literature distance estimates and errors. The errors
+    can be asymmetric. The class has a method to model the asymmetric errors
+    with a gamma distribution, and then sample distances from the fitted
+    distribution.
+
+    Attributes
+    ----------
+    x_est : float
+        The estimated distance from the literature.
+    x_lo : float
+        The lower limit of the distance estimate from the literature.
+    x_hi : float
+        The upper limit of the distance estimate from the literature.
+    conf_level : float
+        The confidence level associated with the distance estimate, by default
+        0.68.
+
+    Methods
+    -------
+    x_loerr : float
+        The lower error, calculated as x_est - x_lo.
+    x_uperr : float
+        The upper error, calculated as x_hi - x_est.
+    sigma_0 : float
+        The averaged error, calculated as 0.5 * (x_loerr + x_uperr).
+    fit_gamma : dict
+        Fit the literature nominal values to a gamma distribution and
+        return the parameters of the fitted distribution.
+    sample_distance : np.ndarray
+        Sample distance from the fitted gamma distribution.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.distance import FromLiterature
+    >>> model = FromLiterature(x_est=5.0, x_lo=4.0, x_hi=6.0)
+    >>> print(model.x_loerr)  # Lower error
+    1.0
+    >>> print(model.x_uperr)  # Upper error
+    1.0
+    """
     def __init__(
             self, x_est: float, x_lo: float, x_hi: float,
             conf_level: float = 0.68
