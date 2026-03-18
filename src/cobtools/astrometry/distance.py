@@ -318,6 +318,15 @@ class FromLiterature:
 
     @property
     def _sigma_min(self) -> float:
+        """
+        The minimum error between the lower and upper errors, which could be
+        used as the lower bound for fitting a skewed distribution.
+
+        Returns
+        -------
+        float
+            The minimum error between the lower and upper errors.
+        """
         return min(self.x_loerr, self.x_uperr)
 
     def fit_gamma(self) -> dict:
