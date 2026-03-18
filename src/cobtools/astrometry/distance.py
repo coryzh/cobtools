@@ -56,6 +56,24 @@ class SimpleInversion:
     """
 
     def __init__(self, parallax: float, parallax_error: float):
+        """
+        Initialize the SimpleInversion model with parallax and its error.
+
+        Parameters
+        ----------
+        parallax : float
+            The measured parallax in milliarcseconds (mas). Must be positive.
+        parallax_error : float
+            The uncertainty of the parallax measurement in mas, must also
+            be positive.
+
+        Raises
+        ------
+        ValueError
+            If parallax is not positive.
+        ValueError
+            If parallax_error is not positive.
+        """
         if parallax <= 0:
             raise ValueError(
                     "To use SimpleInversion, parallax must be positive."
