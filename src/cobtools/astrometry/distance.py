@@ -414,8 +414,28 @@ class FromLiterature:
 
 class XRBExponentialPriorModel:
     """
-    Distance Bayesian model based on a exponential prior derived from known
-    X-ray binaries.
+    A class representing distance estimation using a Bayesian method with an
+    exponential prior representative for X-ray binaries. The prior formualted
+    as
+        p(d) ~ d^2 * exp(-d / scale_length),
+
+    where scale_length is a parameter obtained from fitting to known X-ray
+    binaries in the literature (Zhao, Y+23).
+
+    The likelihood is a Gaussian likelihood centered on 1/d with a standard
+    deviation equal to the parallax error.
+
+    This method can be used for negative parallaxes and low signal-to-noise
+    ratio parallaxes.
+
+    Attributes
+    ----------
+    parallax : float
+        The measured parallax in milliarcseconds (mas). Could be negative.
+    parallax_error : float
+        The uncertainty of the parallax measurement in milliarcseconds (mas).
+    scale_length : float
+        The scale length of the exponential prior in kiloparsecs (kpc).
     """
 
     def __init__(
