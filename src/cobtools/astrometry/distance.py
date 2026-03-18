@@ -53,6 +53,17 @@ class SimpleInversion:
         A method to sample random distances based on a truncated normal
         distribution centred on the inversion of parallax with a standard
         deviation equal to parallax_error / parallax^2.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.distance import SimpleInversion
+    >>> model = SimpleInversion(parallax=0.5, parallax_error=0.1)
+    >>> print(model.d_est)  # Estimated distance
+    2.0
+    >>> print(model.d_est_error)  # Error in the estimated distance
+    0.4
+    >>> print(model.parallax_over_error)  # Signal-to-noise ratio
+    5.0
     """
 
     def __init__(self, parallax: float, parallax_error: float):
@@ -157,6 +168,13 @@ class SimpleInversion:
 
         TypeError
             If n_samples is not an integer.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import SimpleInversion
+        >>> model = SimpleInversion(parallax=0.5, parallax_error=0.1)
+        >>> samples = model.sample_distance(n_samples=1000)  # Sample distances
+        >>> print(samples)  # Array of sampled distances
         """
 
         if not isinstance(n_samples, int):
