@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cobtools.photometry.color_index &mdash; cobtools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://coryzh.github.io/cobtools/_modules/cobtools/photometry/color_index.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cobtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.html">cobtools package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">cobtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cobtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cobtools.photometry.color_index</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cobtools.photometry.color_index</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">resources</span>
+
+
+<span class="k">def</span> <span class="nf">_load_coefficients</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">coefficient_file_path</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;cobtools&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span> <span class="o">/</span> <span class="s2">&quot;bprp_to_teff_coefficients.csv&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">coefficient_file_path</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;kind&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_load_sptypes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">sptype_file_path</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;cobtools&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span> <span class="o">/</span> <span class="s2">&quot;teff_and_sptype.csv&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sptype_file_path</span><span class="p">)</span>
+
+
+<span class="n">df_coefs</span> <span class="o">=</span> <span class="n">_load_coefficients</span><span class="p">()</span>
+<span class="n">df_sptypes</span> <span class="o">=</span> <span class="n">_load_sptypes</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="bp_rp_to_teff">
+<a class="viewcode-back" href="../../../cobtools.photometry.html#cobtools.photometry.color_index.bp_rp_to_teff">[docs]</a>
+<span class="k">def</span> <span class="nf">bp_rp_to_teff</span><span class="p">(</span>
+    <span class="n">bp_rp</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mh</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dwarf&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert Gaia BP-RP color index to effective temperature (Teff) using</span>
+<span class="sd">    polynomial coefficients from Mucciarelli et al. (2021).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bp_rp : Union[float, ArrayLike]</span>
+<span class="sd">        Gaia BP-RP color index.</span>
+<span class="sd">    mh : Union[float, ArrayLike], optional</span>
+<span class="sd">        Metallicity, by default 0.0 (solar metallicity).</span>
+<span class="sd">    kind : str, optional</span>
+<span class="sd">        Kind of star, by default &quot;dwarf&quot;. Currently, only &quot;dwarf&quot; is supported.</span>
+<span class="sd">        Passing any other value will raise a ValueError.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[float, ArrayLike]</span>
+<span class="sd">        Effective temperature (Teff) in Kelvin.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input parameters are not of the expected type or cannot be</span>
+<span class="sd">        converted to the expected type.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the input parameters are out of bounds or invalid.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the kind is not valid.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the input arrays have different shapes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;kind must be a string, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_coefs</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid kind &#39;</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Valid options are: </span><span class="si">{</span><span class="n">df_coefs</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">row</span> <span class="o">=</span> <span class="n">df_coefs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">kind</span><span class="p">]</span>
+    <span class="n">bp_rp_min</span><span class="p">,</span> <span class="n">bp_rp_max</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;bp_rp_min&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;bp_rp_max&quot;</span><span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">bp_rp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;bp_rp must be convertible to a numpy array of float: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mh</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;mh must be convertible to a numpy array of float: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">bp_rp</span><span class="p">,</span> <span class="n">mh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">mh</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;bp_rp and mh must be broadcastable to the same shape: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bp_rp</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">mh</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;bp_rp and mh must have the same shape, got </span><span class="si">{</span><span class="n">bp_rp</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;for bp_rp but </span><span class="si">{</span><span class="n">mh</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> for mh.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">bp_rp</span> <span class="o">&lt;</span> <span class="n">bp_rp_min</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">bp_rp</span> <span class="o">&gt;</span> <span class="n">bp_rp_max</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;bp_rp must be between </span><span class="si">{</span><span class="n">bp_rp_min</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">bp_rp_max</span><span class="si">}</span><span class="s2"> for &#39;</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">coeff_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;b0&quot;</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">,</span> <span class="s2">&quot;b2&quot;</span><span class="p">,</span> <span class="s2">&quot;b3&quot;</span><span class="p">,</span> <span class="s2">&quot;b4&quot;</span><span class="p">,</span> <span class="s2">&quot;b5&quot;</span><span class="p">]</span>
+
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">coeff_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="n">teff</span> <span class="o">=</span> <span class="mf">5040.0</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">bp_rp</span> <span class="o">+</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">bp_rp</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="o">+</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">mh</span> <span class="o">+</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">mh</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">bp_rp</span> <span class="o">*</span> <span class="n">mh</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bp_rp</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">teff</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">teff</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">teff</span></div>
+
+
+
+<div class="viewcode-block" id="bp_rp_to_sptype">
+<a class="viewcode-back" href="../../../cobtools.photometry.html#cobtools.photometry.color_index.bp_rp_to_sptype">[docs]</a>
+<span class="k">def</span> <span class="nf">bp_rp_to_sptype</span><span class="p">(</span>
+        <span class="n">bp_rp</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mh</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dwarf&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert Gaia BP-RP color index to spectral type using the Teff derived</span>
+<span class="sd">    from bp_rp_to_teff and the Teff-SpType relation from Pecaut &amp; Mamajek</span>
+<span class="sd">    (2013).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bp_rp : Union[float, ArrayLike]</span>
+<span class="sd">        Gaia BP-RP color index.</span>
+<span class="sd">    mh : Union[float, ArrayLike], optional</span>
+<span class="sd">        Metallicity, by default 0.0 (solar metallicity).</span>
+<span class="sd">    kind : str, optional</span>
+<span class="sd">        Kind of star, by default &quot;dwarf&quot;. Currently, only &quot;dwarf&quot; is supported.</span>
+<span class="sd">        Passing any other value will raise a ValueError.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[str, List[str]]</span>
+<span class="sd">        Spectral type. If the input is a single value, returns a string.</span>
+<span class="sd">        If the input is an ArrayLike, returns a list of strings.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the calculated effective temperature is out of the valid range for</span>
+<span class="sd">        spectral type determination.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">teff_min</span><span class="p">,</span> <span class="n">teff_max</span> <span class="o">=</span> <span class="n">df_sptypes</span><span class="p">[</span><span class="s2">&quot;Teff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df_sptypes</span><span class="p">[</span><span class="s2">&quot;Teff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="n">teff</span> <span class="o">=</span> <span class="n">bp_rp_to_teff</span><span class="p">(</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">mh</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">teff</span> <span class="o">&lt;</span> <span class="n">teff_min</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">teff</span> <span class="o">&gt;</span> <span class="n">teff_max</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Calculated Teff must be between </span><span class="si">{</span><span class="n">teff_min</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">teff_max</span><span class="si">}</span><span class="s2"> K &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;to determine spectral type, but got Teff=</span><span class="si">{</span><span class="n">teff</span><span class="si">}</span><span class="s2"> K.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">teff</span><span class="p">):</span>
+        <span class="n">idx_closest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df_sptypes</span><span class="p">[</span><span class="s2">&quot;Teff&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">teff</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df_sptypes</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_closest</span><span class="p">][</span><span class="s2">&quot;SpType&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">idx_closest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+            <span class="n">df_sptypes</span><span class="p">[</span><span class="s2">&quot;Teff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">teff</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">sptypes</span> <span class="o">=</span> <span class="n">df_sptypes</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_closest</span><span class="p">][</span><span class="s2">&quot;SpType&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">sptypes</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yue (Cory) Zhao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

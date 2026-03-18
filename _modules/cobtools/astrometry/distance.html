@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cobtools.astrometry.distance &mdash; cobtools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://coryzh.github.io/cobtools/_modules/cobtools/astrometry/distance.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cobtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.html">cobtools package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">cobtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cobtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cobtools.astrometry.distance</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cobtools.astrometry.distance</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Different models for distance estimation from parallax.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">truncnorm</span><span class="p">,</span> <span class="n">gamma</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Bounds</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">emcee</span>
+
+
+<div class="viewcode-block" id="SimpleInversion">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.SimpleInversion">[docs]</a>
+<span class="k">class</span> <span class="nc">SimpleInversion</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Distance model object by inverting parallaxing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">parallax_error</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parallax</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;To use SimpleInversion, parallax must be positive.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">parallax_error</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;parallax_error must be a positive number.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">=</span> <span class="n">parallax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span> <span class="o">=</span> <span class="n">parallax_error</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">d_est</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">d_est_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parallax_over_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span>
+
+<div class="viewcode-block" id="SimpleInversion.sample_distance">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.SimpleInversion.sample_distance">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_distance</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">dist_lo</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">dist_up</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A sampler that samples random distance based on a truncated normal</span>
+<span class="sd">        distribution centred on the inversion of parallax with a standard</span>
+<span class="sd">        deviation equal to parallax_error / parallax^2.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_samples : int, optional</span>
+<span class="sd">            Number of random samples to generate, by default 1000</span>
+
+<span class="sd">        dist_lo : float, optional</span>
+<span class="sd">            Lower bound for distance sampling, by default 0. Should keep it</span>
+<span class="sd">            default.</span>
+
+<span class="sd">        dist_up : float, optional</span>
+<span class="sd">            Upper bound for distance sampling, by default np.inf. Should</span>
+<span class="sd">            keep it default.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Array of sampled random distances.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If n_samples is not a positive integer.</span>
+
+<span class="sd">        TypeError</span>
+<span class="sd">            If n_samples is not an integer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;n_samples must be an integer.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_samples must be a positive integer.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Generate samples from truncated normal distribution</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist_lo</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est_error</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist_up</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est_error</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">truncnorm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est_error</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">samples</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FromLiterature">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.FromLiterature">[docs]</a>
+<span class="k">class</span> <span class="nc">FromLiterature</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">x_est</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x_lo</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x_hi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">conf_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.68</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">=</span> <span class="n">x_est</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_lo</span> <span class="o">=</span> <span class="n">x_lo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_hi</span> <span class="o">=</span> <span class="n">x_hi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conf_level</span> <span class="o">=</span> <span class="n">conf_level</span>
+
+        <span class="k">if</span> <span class="n">x_lo</span> <span class="o">&gt;=</span> <span class="n">x_hi</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Lower limit (x_lo) must be less than the upper limit (x_hi).&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x_est</span> <span class="o">&lt;</span> <span class="n">x_lo</span> <span class="ow">or</span> <span class="n">x_est</span> <span class="o">&gt;</span> <span class="n">x_hi</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Estimated value (x_est) must be between x_lo and x_hi.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">conf_level</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">conf_level</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Confidence level must be a number between 0 and 1.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x_loerr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_lo</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x_uperr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_hi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sigma_0</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Averaged error, which could be used as an initial guess for fitting</span>
+<span class="sd">        a skewed distribution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_loerr</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_uperr</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_sigma_min</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_loerr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_uperr</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FromLiterature.fit_gamma">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.FromLiterature.fit_gamma">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit_gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the literature nominal values to a gamma distribution.&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">get_gamma_distribution</span><span class="p">(</span><span class="n">sigma_x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="mi">2</span> <span class="o">*</span> <span class="n">sigma_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">**</span> <span class="mi">2</span>
+                    <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">**</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma_x</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">x_gamma</span> <span class="o">=</span> <span class="n">gamma</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">theta</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">x_gamma</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">difference</span><span class="p">(</span><span class="n">sigma_x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="n">_re</span> <span class="o">=</span> <span class="n">get_gamma_distribution</span><span class="p">(</span><span class="n">sigma_x</span><span class="p">)</span>
+            <span class="n">x_gamma</span> <span class="o">=</span> <span class="n">_re</span><span class="p">[</span><span class="s2">&quot;distribution&quot;</span><span class="p">]</span>
+
+            <span class="n">x_lo_model</span> <span class="o">=</span> <span class="n">x_gamma</span><span class="o">.</span><span class="n">ppf</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf_level</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">x_hi_model</span> <span class="o">=</span> <span class="n">x_gamma</span><span class="o">.</span><span class="n">ppf</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf_level</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_lo</span> <span class="o">-</span> <span class="n">x_lo_model</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_hi</span> <span class="o">-</span> <span class="n">x_hi_model</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">diff</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+            <span class="n">difference</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma_0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">Bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_min</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">get_gamma_distribution</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="FromLiterature.sample_distance">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.FromLiterature.sample_distance">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_distance</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sample distance from the fitted gamma distribution.&quot;&quot;&quot;</span>
+        <span class="n">gamma_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_gamma</span><span class="p">()</span>
+        <span class="n">x_gamma</span> <span class="o">=</span> <span class="n">gamma_params</span><span class="p">[</span><span class="s2">&quot;distribution&quot;</span><span class="p">]</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">x_gamma</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">samples</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="XRBExponentialPriorModel">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel">[docs]</a>
+<span class="k">class</span> <span class="nc">XRBExponentialPriorModel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Distance Bayesian model based on a exponential prior derived from known</span>
+<span class="sd">    X-ray binaries.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">parallax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">parallax_error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.97</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A Bayesian distance model using an exponential prior. The exponential</span>
+<span class="sd">        prior has a scale_length parameter obtained from fitting to known</span>
+<span class="sd">        X-ray binaries in the literature.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parallax : float</span>
+<span class="sd">            The measured parallax in milliarcseconds (mas). Could be negative.</span>
+<span class="sd">        parallax_error : float</span>
+<span class="sd">            The uncertainty of the parallax measurement in</span>
+<span class="sd">            milliarcseconds (mas).</span>
+<span class="sd">        scale_length : float, optional</span>
+<span class="sd">            The scale length of the exponential prior in kiloparsecs (kpc),</span>
+<span class="sd">            by default 1.97 (Zhao, Y+23)</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If parallax_error is not a positive number.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If scale_length is not a positive number.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">parallax_error</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;parallax_error must be a positive number.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">scale_length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;scale_length must be a positive number.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">=</span> <span class="n">parallax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span> <span class="o">=</span> <span class="n">parallax_error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_length</span> <span class="o">=</span> <span class="n">scale_length</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parallax_over_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span>
+
+<div class="viewcode-block" id="XRBExponentialPriorModel.log_prior">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel.log_prior">[docs]</a>
+    <span class="k">def</span> <span class="nf">log_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">-</span> <span class="n">d</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_length</span></div>
+
+
+<div class="viewcode-block" id="XRBExponentialPriorModel.log_likelihood">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel.log_likelihood">[docs]</a>
+    <span class="k">def</span> <span class="nf">log_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">d</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XRBExponentialPriorModel.log_posterior">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel.log_posterior">[docs]</a>
+    <span class="k">def</span> <span class="nf">log_posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_prior</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XRBExponentialPriorModel.sample_distance">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel.sample_distance">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_distance</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">nwalkers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">nsteps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">burn_in</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample the posterior distribution using the</span>
+<span class="sd">        MCMC sampler in emcee.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nwalkers : int, optional</span>
+<span class="sd">            Number of walkers for the MCMC sampler, by default 4</span>
+<span class="sd">        nsteps : int, optional</span>
+<span class="sd">            Number of steps for each walker, by default 2000</span>
+<span class="sd">        burn_in : int, optional</span>
+<span class="sd">            Number of steps to discard as burn-in, by default 500</span>
+<span class="sd">        kwargs : Any</span>
+<span class="sd">            Additional keyword arguments to pass to the emcee.EnsembleSampler</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray[Any, np.dtype[np.float64]]</span>
+<span class="sd">            Array of sampled distances from the posterior distribution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nwalkers</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">nwalkers</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;nwalkers must be a positive integer.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nsteps</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">nsteps</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;nsteps must be a positive integer.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">burn_in</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">burn_in</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;burn_in must be a non-negative integer.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">burn_in</span> <span class="o">&gt;=</span> <span class="n">nsteps</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;burn_in must be less than nsteps.&quot;</span><span class="p">)</span>
+
+        <span class="n">initial_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nwalkers</span><span class="p">)</span>
+
+        <span class="n">log_prob_fn</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_posterior</span><span class="p">)</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">emcee</span><span class="o">.</span><span class="n">EnsembleSampler</span><span class="p">(</span>
+            <span class="n">nwalkers</span><span class="o">=</span><span class="n">nwalkers</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">log_prob_fn</span><span class="o">=</span><span class="n">log_prob_fn</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">_</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">run_mcmc</span><span class="p">(</span>
+            <span class="n">initial_distances</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">get_chain</span><span class="p">(</span><span class="n">discard</span><span class="o">=</span><span class="n">burn_in</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">samples</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yue (Cory) Zhao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

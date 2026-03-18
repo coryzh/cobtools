@@ -1,0 +1,467 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cobtools.astrometry.kinematics &mdash; cobtools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://coryzh.github.io/cobtools/_modules/cobtools/astrometry/kinematics.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cobtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.html">cobtools package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">cobtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cobtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cobtools.astrometry.kinematics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cobtools.astrometry.kinematics</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cobtools.constants</span> <span class="k">as</span> <span class="nn">con</span>
+<span class="kn">from</span> <span class="nn">cobtools.astrometry.rotation_curve</span> <span class="kn">import</span> <span class="n">get_rotation_curve</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+
+
+<div class="viewcode-block" id="equatorial_to_galactic">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.kinematics.equatorial_to_galactic">[docs]</a>
+<span class="k">def</span> <span class="nf">equatorial_to_galactic</span><span class="p">(</span>
+        <span class="n">ra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">dec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert equatorial coordinates (RA, Dec) to galactic coordinates (l, b).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ra : float or ArrayLike</span>
+<span class="sd">        Right ascension in decimal degrees.</span>
+<span class="sd">    dec : float or ArrayLike</span>
+<span class="sd">        Declination in decimal degrees.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[np.ndarray, np.ndarray]</span>
+<span class="sd">        Galactic longitude (l) and latitude (b) in decimal degrees.</span>
+<span class="sd">        If inputs are scalars, outputs will be numpy scalars.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If RA and Dec have different shapes, or if RA is not in [0,</span>
+<span class="sd">        360) degrees, or if Dec is not in [-90, 90] degrees.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ra</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dec</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ra</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">dec</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RA and Dec must have the same shape.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">ra</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">ra</span> <span class="o">&gt;=</span> <span class="mi">360</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Input right ascension must be in the range [0, 360) degrees.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">dec</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">dec</span> <span class="o">&gt;</span> <span class="mi">90</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Input declination must be in the range [-90, 90] degrees.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Source coordinates to radian</span>
+    <span class="n">ra_rad</span><span class="p">,</span> <span class="n">dec_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">ra</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">dec</span><span class="p">)</span>
+
+    <span class="c1"># This part compute the Galactic coordinates of the source</span>
+    <span class="n">sinb</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">dec_rad</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">dec_ngp_rad</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">dec_rad</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ra_rad</span> <span class="o">-</span> <span class="n">con</span><span class="o">.</span><span class="n">ra_ngp_rad</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">dec_ngp_rad</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">sinb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">sinb</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># Clip to handle numerical issues</span>
+
+    <span class="c1"># Galactic latitude from -90 deg to 90 deg,</span>
+    <span class="c1"># this is the default range of np.arcsin()</span>
+    <span class="n">gal_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">sinb</span><span class="p">)</span>
+
+    <span class="c1"># Handle numerical instability for cos(gal_b) near 0.</span>
+    <span class="n">cos_gal_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>
+    <span class="n">small_cos_gal_b_mask</span> <span class="o">=</span> <span class="n">cos_gal_b</span> <span class="o">&lt;</span> <span class="mf">1e-10</span>
+
+    <span class="n">sinphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>
+    <span class="n">cosphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>
+    <span class="n">valid_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">small_cos_gal_b_mask</span>
+
+    <span class="c1"># phi is an angle defined to calculate Galactic longitude</span>
+    <span class="n">sinphi</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">cos_gal_b</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span>
+        <span class="o">*</span> <span class="p">(</span>
+            <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">dec_rad</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ra_rad</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">con</span><span class="o">.</span><span class="n">ra_ngp_rad</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">dec_ngp_rad</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">dec_rad</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">dec_ngp_rad</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">cosphi</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">cos_gal_b</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span>
+        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">dec_rad</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span>
+        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ra_rad</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">con</span><span class="o">.</span><span class="n">ra_ngp_rad</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># np.atan2 function can handle the sign, the result is between -pi and pi</span>
+    <span class="c1"># to convert negative angle to positive angle, add 2 * pi</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">sinphi</span><span class="p">,</span> <span class="n">cosphi</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+    <span class="n">gal_lon</span> <span class="o">=</span> <span class="n">phi</span> <span class="o">+</span> <span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">theta_ngp_rad</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># This is to wrap the angle at 2pi or 360 degree.</span>
+    <span class="n">gal_lon</span> <span class="o">=</span> <span class="n">gal_lon</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+    <span class="n">l_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">gal_lon</span><span class="p">)</span>  <span class="c1"># convert to degree</span>
+    <span class="n">b_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>  <span class="c1"># convert to degree</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">l_deg</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">if</span> <span class="n">l_deg</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">l_deg</span><span class="p">,</span>
+        <span class="n">b_deg</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">if</span> <span class="n">b_deg</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">b_deg</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="galactic_proper_motion">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.kinematics.galactic_proper_motion">[docs]</a>
+<span class="k">def</span> <span class="nf">galactic_proper_motion</span><span class="p">(</span>
+        <span class="n">ra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">dec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">pmra_cosdec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">pmdec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function calculate differences in ra and dec due to PM and convert it</span>
+<span class="sd">    to Galactic coordinate. Input ra and dec should be in degrees.</span>
+<span class="sd">    Input equatorial PMs should be in units of mas/yr; note that mu_ra_cosdec</span>
+<span class="sd">    contain the cos(dec) factor. Input timestep should be in unit of years</span>
+<span class="sd">    (default is 1).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ra : float or ArrayLike</span>
+<span class="sd">        Right ascension in decimal degrees.</span>
+
+<span class="sd">    dec : float or ArrayLike</span>
+<span class="sd">        Declination in decimal degrees.</span>
+
+<span class="sd">    pmra_cosdec : float or ArrayLike</span>
+<span class="sd">        Proper motion in right ascension multiplied by cos(dec), in mas/yr.</span>
+
+<span class="sd">    pmdec : float or ArrayLike</span>
+<span class="sd">        Proper motion in declination, in mas/yr.</span>
+
+<span class="sd">    dt : float, optional</span>
+<span class="sd">        Time step in years for which to calculate the proper motion,</span>
+<span class="sd">        by default 1.0.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]</span>
+<span class="sd">        Proper motion in Galactic longitude (mu_l) and latitude (mu_b) in</span>
+<span class="sd">        mas/yr. Note that mu_l does not contain the cos(b) factor,</span>
+<span class="sd">        i.e., it is the proper motion in the direction of increasing Galactic</span>
+<span class="sd">        longitude.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the time step dt is not positive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">dt</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Time step dt must be positive.&quot;</span><span class="p">)</span>
+
+    <span class="n">ra</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ra</span><span class="p">)</span>
+    <span class="n">dec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dec</span><span class="p">)</span>
+    <span class="n">pmra_cosdec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmra_cosdec</span><span class="p">)</span>
+    <span class="n">pmdec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmdec</span><span class="p">)</span>
+
+    <span class="c1"># Compute differences in ra and dec (in degrees)</span>
+    <span class="n">cos_dec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">dec</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span><span class="p">))</span>
+    <span class="n">dra</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">pmra_cosdec</span> <span class="o">/</span> <span class="n">cos_dec</span><span class="p">)</span>
+    <span class="n">ddec</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">pmdec</span>
+
+    <span class="n">mas_to_deg</span> <span class="o">=</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">)</span>  <span class="c1"># conversion factor from mas to degree</span>
+
+    <span class="n">dra</span> <span class="o">*=</span> <span class="n">mas_to_deg</span>
+    <span class="n">ddec</span> <span class="o">*=</span> <span class="n">mas_to_deg</span>
+
+    <span class="c1"># Then, apply the differences to the equatorial coordinates</span>
+    <span class="n">ra_new</span> <span class="o">=</span> <span class="n">ra</span> <span class="o">+</span> <span class="n">dra</span>
+    <span class="n">dec_new</span> <span class="o">=</span> <span class="n">dec</span> <span class="o">+</span> <span class="n">ddec</span>
+
+    <span class="n">gal_l_old</span><span class="p">,</span> <span class="n">gal_b_old</span> <span class="o">=</span> <span class="n">equatorial_to_galactic</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+    <span class="n">gal_l_new</span><span class="p">,</span> <span class="n">gal_b_new</span> <span class="o">=</span> <span class="n">equatorial_to_galactic</span><span class="p">(</span><span class="n">ra_new</span><span class="p">,</span> <span class="n">dec_new</span><span class="p">)</span>
+
+    <span class="c1"># Calculate the differences in Galactic coordinates, taking care of the</span>
+    <span class="c1"># wrap-around for longitude. E.g., if gal_l_old is 359.9 and gal_l_new</span>
+    <span class="c1"># is 0.1, the difference should be 0.2, not -359.8.</span>
+    <span class="n">d_gal_l</span> <span class="o">=</span> <span class="p">(</span><span class="n">gal_l_new</span> <span class="o">-</span> <span class="n">gal_l_old</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span>
+    <span class="n">d_gal_b</span> <span class="o">=</span> <span class="n">gal_b_new</span> <span class="o">-</span> <span class="n">gal_b_old</span>
+
+    <span class="n">mu_l</span> <span class="o">=</span> <span class="n">d_gal_l</span> <span class="o">/</span> <span class="n">dt</span>  <span class="c1"># in degree/yr</span>
+    <span class="n">mu_b</span> <span class="o">=</span> <span class="n">d_gal_b</span> <span class="o">/</span> <span class="n">dt</span>
+
+    <span class="n">mu_l</span> <span class="o">/=</span> <span class="n">mas_to_deg</span>
+    <span class="n">mu_b</span> <span class="o">/=</span> <span class="n">mas_to_deg</span>
+
+    <span class="k">return</span> <span class="n">mu_l</span><span class="p">,</span> <span class="n">mu_b</span></div>
+
+
+
+<div class="viewcode-block" id="galactocentric_cartesian_velocity">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.kinematics.galactocentric_cartesian_velocity">[docs]</a>
+<span class="k">def</span> <span class="nf">galactocentric_cartesian_velocity</span><span class="p">(</span>
+        <span class="n">ra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">dec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">pmra_cosdec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">pmdec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">dist</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">rv</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">u_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">u_sun</span><span class="p">,</span>
+        <span class="n">v_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">v_sun</span><span class="p">,</span>
+        <span class="n">w_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">w_sun</span><span class="p">,</span>
+        <span class="n">theta_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">theta_sun</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert equatorial coordinates and proper motions to galactocentric</span>
+<span class="sd">    Cartesian velocities.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ra : float or ArrayLike</span>
+<span class="sd">        Right ascension in decimal degrees.</span>
+<span class="sd">    dec : float or ArrayLike</span>
+<span class="sd">        Declination in decimal degrees.</span>
+<span class="sd">    pmra_cosdec : float or ArrayLike</span>
+<span class="sd">        Proper motion in ra*cos(dec), in mas/yr.</span>
+<span class="sd">    pmdec : float or ArrayLike</span>
+<span class="sd">        Proper motion in declination, in mas/yr.</span>
+<span class="sd">    dist : float or ArrayLike</span>
+<span class="sd">        Distance in kpc.</span>
+<span class="sd">    rv : float or ArrayLike</span>
+<span class="sd">        Radial velocity in km/s.</span>
+<span class="sd">    u_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar motion u component in km/s.</span>
+<span class="sd">    v_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar motion v component in km/s.</span>
+<span class="sd">    w_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar motion w component in km/s.</span>
+<span class="sd">    theta_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar rotation velocity in the Galactic plane in km/s.</span>
+<span class="sd">    dt : float, optional</span>
+<span class="sd">        Time step in years for which to calculate the proper motion,</span>
+<span class="sd">        see `galactic_proper_motion`, by default 1.0 (year).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[Union[float, np.ndarray], Union[float, np.ndarray],</span>
+<span class="sd">    Union[float, np.ndarray], Union[float, np.ndarray]]</span>
+<span class="sd">        Galactocentric Cartesian velocities (vx, vy, vz, vspace) in km/s.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ra</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ra</span><span class="p">)</span>
+    <span class="n">dec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dec</span><span class="p">)</span>
+    <span class="n">pmra_cosdec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmra_cosdec</span><span class="p">)</span>
+    <span class="n">pmdec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmdec</span><span class="p">)</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+    <span class="n">u_sun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_sun</span><span class="p">)</span>
+    <span class="n">v_sun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v_sun</span><span class="p">)</span>
+    <span class="n">w_sun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_sun</span><span class="p">)</span>
+    <span class="n">theta_sun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta_sun</span><span class="p">)</span>
+
+    <span class="n">gal_l</span><span class="p">,</span> <span class="n">gal_b</span> <span class="o">=</span> <span class="n">equatorial_to_galactic</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+    <span class="n">gal_l</span><span class="p">,</span> <span class="n">gal_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">gal_l</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>
+
+    <span class="n">mu_l</span><span class="p">,</span> <span class="n">mu_b</span> <span class="o">=</span> <span class="n">galactic_proper_motion</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">pmra_cosdec</span><span class="p">,</span> <span class="n">pmdec</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+
+    <span class="c1"># Velocity components in the Galactic coordinate system (l, b)</span>
+    <span class="n">v_b</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">mu_b</span> <span class="o">*</span> <span class="n">con</span><span class="o">.</span><span class="n">kpc_mas_per_yr_to_km_per_s</span>
+    <span class="n">v_l</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">mu_l</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span> <span class="o">*</span> <span class="n">con</span><span class="o">.</span><span class="n">kpc_mas_per_yr_to_km_per_s</span>
+
+    <span class="c1"># Convert the spherical coordinate to Galactic Cartesian coordinates at</span>
+    <span class="c1"># the location of the Sun</span>
+    <span class="n">u1</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">rv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_b</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">gal_b</span><span class="p">))</span>
+        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_l</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_l</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">gal_l</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">v1</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">rv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_b</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">gal_b</span><span class="p">))</span>
+        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">gal_l</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_l</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_l</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">w1</span> <span class="o">=</span> <span class="n">v_b</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span> <span class="o">+</span> <span class="n">rv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>
+
+    <span class="n">u2</span> <span class="o">=</span> <span class="n">u1</span> <span class="o">+</span> <span class="n">u_sun</span>
+    <span class="n">v2</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v_sun</span> <span class="o">+</span> <span class="n">theta_sun</span>
+    <span class="n">w2</span> <span class="o">=</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">w_sun</span>
+
+    <span class="n">vspace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">w2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">u2</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">vspace</span></div>
+
+
+
+<div class="viewcode-block" id="peculiar_velocity">
+<a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.kinematics.peculiar_velocity">[docs]</a>
+<span class="k">def</span> <span class="nf">peculiar_velocity</span><span class="p">(</span>
+        <span class="n">ra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">dec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">pmra_cosdec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">pmdec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">dist</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">rv</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">u_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">u_sun</span><span class="p">,</span>
+        <span class="n">v_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">v_sun</span><span class="p">,</span>
+        <span class="n">w_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">w_sun</span><span class="p">,</span>
+        <span class="n">theta_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">theta_sun</span><span class="p">,</span>
+        <span class="n">r_sun</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">r_sun</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
+    <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+<span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the peculiar velocity and the cartesian components given its</span>
+<span class="sd">    equatorial coordinates, proper motions, distance, and radial velocity.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ra : float or ArrayLike</span>
+<span class="sd">        Right ascension in decimal degrees.</span>
+<span class="sd">    dec : float or ArrayLike</span>
+<span class="sd">        Declination in decimal degrees.</span>
+<span class="sd">    pmra_cosdec : float or ArrayLike</span>
+<span class="sd">        Proper motion in ra*cos(dec), in mas/yr.</span>
+<span class="sd">    pmdec : float or ArrayLike</span>
+<span class="sd">        Proper motion in declination, in mas/yr.</span>
+<span class="sd">    dist : float or ArrayLike</span>
+<span class="sd">        Distance in kpc.</span>
+<span class="sd">    rv : float or ArrayLike</span>
+<span class="sd">        Radial velocity in km/s.</span>
+<span class="sd">    u_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar motion u component in km/s.</span>
+<span class="sd">    v_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar motion v component in km/s.</span>
+<span class="sd">    w_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar motion w component in km/s.</span>
+<span class="sd">    theta_sun : float or ArrayLike, optional</span>
+<span class="sd">        Solar rotation velocity in the Galactic plane in km/s.</span>
+<span class="sd">    r_sun : float or ArrayLike, optional</span>
+<span class="sd">        Distance from the Sun to the Galactic center in kpc.</span>
+<span class="sd">    dt : float, optional</span>
+<span class="sd">        Time step in years for which to calculate the proper motion,</span>
+<span class="sd">        see `galactic_proper_motion`, by default 1.0 (year).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gal_l</span><span class="p">,</span> <span class="n">gal_b</span> <span class="o">=</span> <span class="n">equatorial_to_galactic</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+    <span class="n">gal_l</span><span class="p">,</span> <span class="n">gal_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">gal_l</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>
+
+    <span class="n">u2</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">vspace</span> <span class="o">=</span> <span class="n">galactocentric_cartesian_velocity</span><span class="p">(</span>
+        <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">pmra_cosdec</span><span class="p">,</span> <span class="n">pmdec</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span>
+        <span class="n">u_sun</span><span class="o">=</span><span class="n">u_sun</span><span class="p">,</span> <span class="n">v_sun</span><span class="o">=</span><span class="n">v_sun</span><span class="p">,</span> <span class="n">w_sun</span><span class="o">=</span><span class="n">w_sun</span><span class="p">,</span>
+        <span class="n">theta_sun</span><span class="o">=</span><span class="n">theta_sun</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
+    <span class="p">)</span>
+
+    <span class="n">d_p</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_b</span><span class="p">)</span>
+    <span class="n">r_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">r_sun</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">d_p</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r_sun</span> <span class="o">*</span> <span class="n">d_p</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_l</span><span class="p">))</span>
+
+    <span class="n">vrot_interp</span> <span class="o">=</span> <span class="n">get_rotation_curve</span><span class="p">()</span>
+    <span class="n">vrot</span> <span class="o">=</span> <span class="n">vrot_interp</span><span class="p">(</span><span class="n">r_p</span><span class="p">)</span>
+
+    <span class="n">sinbeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">gal_l</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">d_p</span> <span class="o">/</span> <span class="n">r_p</span><span class="p">)</span>
+    <span class="n">cosbeta</span> <span class="o">=</span> <span class="p">(</span><span class="n">r_sun</span> <span class="o">-</span> <span class="n">d_p</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gal_l</span><span class="p">))</span> <span class="o">/</span> <span class="n">r_p</span>
+
+    <span class="n">u_s</span> <span class="o">=</span> <span class="n">u2</span> <span class="o">*</span> <span class="n">cosbeta</span> <span class="o">-</span> <span class="n">v2</span> <span class="o">*</span> <span class="n">sinbeta</span>
+    <span class="n">v_s</span> <span class="o">=</span> <span class="n">u2</span> <span class="o">*</span> <span class="n">sinbeta</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">*</span> <span class="n">cosbeta</span> <span class="o">-</span> <span class="n">vrot</span>
+    <span class="n">w_s</span> <span class="o">=</span> <span class="n">w2</span>
+
+    <span class="n">vpec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u_s</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">v_s</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">w_s</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">u_s</span><span class="p">,</span> <span class="n">v_s</span><span class="p">,</span> <span class="n">w_s</span><span class="p">,</span> <span class="n">vpec</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yue (Cory) Zhao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
