@@ -89,14 +89,38 @@ class SimpleInversion:
 
     @property
     def d_est(self) -> float:
+        """
+        Estimate distance by inverting the parallax.
+
+        Returns
+        -------
+        float
+            The estimated distance in kiloparsecs (kpc).
+        """
         return 1.0 / self.parallax
 
     @property
     def d_est_error(self) -> float:
+        """
+        Estimate the error in the distance estimate.
+
+        Returns
+        -------
+        float
+            The error in the estimated distance.
+        """
         return self.parallax_error / (self.parallax ** 2)
 
     @property
     def parallax_over_error(self) -> float:
+        """
+        Calculate the signal-to-noise ratio of the parallax measurement.
+
+        Returns
+        -------
+        float
+            The signal-to-noise ratio.
+        """
         return self.parallax / self.parallax_error
 
     def sample_distance(
