@@ -383,7 +383,27 @@ class FromLiterature:
     def sample_distance(
             self, n_samples: int = 1000
     ) -> np.ndarray:
-        """Sample distance from the fitted gamma distribution."""
+        """
+        Sample distance from the fitted gamma distribution.
+
+        Parameters
+        ----------
+        n_samples : int, optional
+            Number of random samples to generate, by default 1000
+
+        Returns
+        -------
+        np.ndarray
+            Array of sampled random distances from the fitted gamma
+            distribution.
+
+        Example
+        -------
+        >>> from cobtools.astrometry.distance import FromLiterature
+        >>> model = FromLiterature(x_est=5.0, x_lo=4.0, x_hi=6.0)
+        >>> samples = model.sample_distance(n_samples=100
+        >>> print(samples)
+        """
         gamma_params = self.fit_gamma()
         x_gamma = gamma_params["distribution"]
 
