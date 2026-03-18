@@ -23,6 +23,7 @@
 !_static/
 !_static/**
 !_modules/
+!_modules/**
 !_sources/
 !_sources/**
 !.nojekyll
