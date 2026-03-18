@@ -241,6 +241,30 @@ class FromLiterature:
             self, x_est: float, x_lo: float, x_hi: float,
             conf_level: float = 0.68
     ):
+        """
+        Initialize the FromLiterature model with distance estimates and errors.
+
+        Parameters
+        ----------
+        x_est : float
+            The estimated distance from the literature.
+        x_lo : float
+            The lower limit of the distance estimate from the literature.
+        x_hi : float
+            The upper limit of the distance estimate from the literature.
+        conf_level : float, optional
+            The confidence level associated with the distance estimate,
+            by default 0.68
+
+        Raises
+        ------
+        ValueError
+            If x_lo is not less than x_hi.
+        ValueError
+            If x_est is not between x_lo and x_hi.
+        ValueError
+            If conf_level is not between 0 and 1.
+        """
         self.x_est = x_est
         self.x_lo = x_lo
         self.x_hi = x_hi
@@ -263,17 +287,32 @@ class FromLiterature:
 
     @property
     def x_loerr(self) -> float:
+        """
+        Calculate the lower error of the distance estimate.
+        Returns
+        -------
+        float
+            The lower error of the distance estimate.
+        """
         return self.x_est - self.x_lo
 
     @property
     def x_uperr(self) -> float:
+        """
+        Calculate the upper error of the distance estimate.
+
+        Returns
+        -------
+        float
+            The upper error of the distance estimate.
+        """
         return self.x_hi - self.x_est
 
     @property
     def sigma_0(self) -> float:
         """
-        Averaged error, which could be used as an initial guess for fitting
-        a skewed distribution.
+        Calculate the averaged error, which could be used as an initial guess
+        for fitting a skewed distribution.
         """
         return 0.5 * (self.x_loerr + self.x_uperr)
 
