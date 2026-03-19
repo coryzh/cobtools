@@ -10,25 +10,53 @@ class SingleSourceQuery(ABC):
     """
     Abstract base class for querying the Gaia archive.
 
-    This class defines the interface for querying the Gaia archive. Subclasses
-    must implement the ``query_result`` method to specify how to query the
-    archive for a specific ``source_id``.
+    This class provides a framework for querying the Gaia archive. Subclasses
+    must implement the ``query_str`` property to define the ADQL query string
+    and the ``query_result`` method to retrieve the query results.
 
     Attributes
     ----------
     source_id : int or str
-        The ``source_id`` to query. Must be an integer or string of numbers.
+        The ``source_id`` to query. Must be an integer or a string containing
+        only numeric characters.
     data_release : str
-        The Gaia data release to use (default is "dr3"). Valid options are
-        "dr1", "dr2", "edr3", "dr3", "dr4", and "dr5".
+        The Gaia data release to use. Valid options are "dr1", "dr2", "edr3",
+        "dr3", "dr4", and "dr5". Defaults to "dr3".
+
+    Properties
+    ----------
+    query_str : str
+        Abstract property that defines the ADQL query string for the specified
+        ``source_id``. Must be implemented by subclasses.
+    job : Job
+        Cached property that launches the Gaia query job and returns the
+        ``astroquery.utils.tap.model.job.Job`` object. Handles errors if the
+        query does not complete successfully.
 
     Methods
     -------
-    query_str() -> str
-        Abstract property to return the ADQL query string for the specified
-        ``source_id``.
     query_result() -> Table
-        Abstract method to query the Gaia archive for a specific ``source_id``.
+        Abstract method to retrieve the query results as an
+        ``astropy.table.Table`` object. Must be implemented by subclasses.
+    job : Job
+        Cached property that launches the Gaia query job and returns the
+        ``astroquery.utils.tap.model.job.Job`` object. Handles errors if the
+        query does not complete successfully.
+    query_result() -> Table
+        Abstract method to retrieve the query results as an
+        ``astropy.table.Table`` object.
+
+    Raises
+    ------
+    TypeError
+        If ``source_id`` is not an integer or a string containing only numeric
+        characters.
+    ValueError
+        If ``data_release`` is not one of the valid options ("dr1", "dr2",
+        "edr3", "dr3", "dr4", "dr5").
+    RuntimeError
+        If the Gaia query job does not complete successfully or if there is an
+        error while fetching the query results.
     """
 
     def __init__(self, source_id: int | str, data_release: str = "dr3"):
@@ -97,17 +125,26 @@ class SingleSourceQuery(ABC):
 
 class SingleSourceFullGaiaQuery(SingleSourceQuery):
     """
-    Implementation of SingleSourceQuery for querying the Gaia archive,
-    returning the full set of columns for a given source_id.
+    Concrete implementation of SingleSourceQuery for querying the Gaia archive.
+
+    This class retrieves the full set of columns for a given ``source_id``
+    from the main Gaia source table.
+
+    Properties
+    ----------
+    query_str : str
+        The ADQL query string to retrieve all columns for the specified
+        ``source_id``.
+    job : Job
+        Inherited from ``SingleSourceQuery``. Cached property that launches
+        the Gaia query job and returns the
+        ``astroquery.utils.tap.model.job.Job`` object.
 
     Methods
     -------
-    query_str() -> str
-        Return the ADQL query string to retrieve all columns for the specified
-        ``source_id``.
     query_result() -> Table
-        Query the Gaia archive for a specific ``source_id`` and return the
-        results as an ``astropy.table.Table object``.
+        Inherited from ``SingleSourceQuery``. Retrieves the query results as
+        an ``astropy.table.Table`` object.
     """
 
     @property
@@ -133,19 +170,3 @@ class SingleSourceFullGaiaQuery(SingleSourceQuery):
         ).strip()
 
         return query
-
-    def query_result(self) -> Table:
-        """
-        Query the Gaia archive for the specified ``source_id``.
-
-        Returns
-        -------
-        Table
-            The query results as an ``astropy.table.Table object``.
-        """
-        try:
-            return self.job.get_results()
-        except Exception as e:
-            raise RuntimeError(
-                f"Error occurred while fetching query results: {e}"
-            )
