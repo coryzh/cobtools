@@ -1,3 +1,28 @@
+"""
+kinematics.py
+=============
+
+This module provides a suite of functions for computing Galactic space
+velocities, including galactocentric 3D Cartesian velocities and peculiar
+velocities. The formulation is based on the work of Reid et al. 2009.
+
+Functions
+---------
+
+- **equatorial_to_galactic**: Convert equatorial coordinates (RA, Dec) to
+  Galactic coordinates (l, b).
+
+- **galactic_proper_motion**: Convert equatorial proper motions to Galactic
+  proper motions.
+
+- **galactocentric_cartesian_velocity**: Calculate galactocentric Cartesian
+  velocities (u, v, w) and total space velocities (square root of the
+  quadrature sum of u, v, w) from equatorial coordinates, proper motions,
+  distance, and radial velocity.
+
+- **peculiar_velocity**: Calculate the peculiar velocity and its Cartesian
+  components by subtracting the local Galactic rotation.
+"""
 import numpy as np
 import cobtools.constants as con
 from cobtools.astrometry.rotation_curve import get_rotation_curve
@@ -9,7 +34,9 @@ def equatorial_to_galactic(
         ra: Union[float, ArrayLike], dec: Union[float, ArrayLike]
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Convert equatorial coordinates (RA, Dec) to galactic coordinates (l, b).
+    Convert equatorial coordinates (ra, dec) to galactic coordinates
+    (gal_l, gal_b).
+
     Parameters
     ----------
     ra : float or ArrayLike
@@ -26,15 +53,23 @@ def equatorial_to_galactic(
     Raises
     ------
     ValueError
-        If RA and Dec have different shapes, or if RA is not in [0,
-        360) degrees, or if Dec is not in [-90, 90] degrees.
+        If ra and dec have different shapes, or if ra is not in [0,
+        360) degrees, or if dec is not in [-90, 90] degrees.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import equatorial_to_galactic
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> l, b = equatorial_to_galactic(ra, dec)
+    >>> print(f"Galactic coordinates: l={l:.2f}, b={b:.2f} degrees")
     """
 
     ra = np.array(ra, ndmin=1)
     dec = np.array(dec, ndmin=1)
 
     if np.shape(ra) != np.shape(dec):
-        raise ValueError("RA and Dec must have the same shape.")
+        raise ValueError("ra and dec must have the same shape.")
 
     if np.any((ra < 0) | (ra >= 360)):
         raise ValueError(
@@ -110,11 +145,15 @@ def galactic_proper_motion(
         dt: float = 1.0
 ) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]:
     """
-    This function calculate differences in ra and dec due to PM and convert it
-    to Galactic coordinate. Input ra and dec should be in degrees.
-    Input equatorial PMs should be in units of mas/yr; note that mu_ra_cosdec
-    contain the cos(dec) factor. Input timestep should be in unit of years
-    (default is 1).
+    Calculate galactic proper motion (mu_l, mu_b) from equatorial proper motion
+    (pmra_cosdec, pmdec) and equatorial coordinates (ra, dec).
+
+    The basic idea is to calculate differences in ra and dec due to proper
+    motion and convert it changes in Galactic coordinate.
+
+    ra and dec should be in degrees, and their proper motion components should
+    be in units of mas/yr; note that mu_ra_cosdec contain the cos(dec) factor.
+    Input timestep should be in unit of years (default is 1).
 
     Parameters
     ----------
@@ -146,6 +185,16 @@ def galactic_proper_motion(
     ------
     ValueError
         If the time step dt is not positive.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import galactic_proper_motion
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> pmra_cosdec = 0.1  # mas/yr
+    >>> pmdec = 0.2  # mas/yr
+    >>> mu_l, mu_b = galactic_proper_motion(ra, dec, pmra_cosdec, pmdec)
+    >>> print(f"Galactic proper motion: {mu_l:.2f}, {mu_b:.2f} mas/yr")
     """
 
     if dt <= 0:
@@ -199,8 +248,9 @@ def galactocentric_cartesian_velocity(
         dt: float = 1.0
 ):
     """
-    Convert equatorial coordinates and proper motions to galactocentric
-    Cartesian velocities.
+    Calculate Galactocentric Cartesian velocity components (u1, v1, w1) and
+    the total space velocity (vspace) from equatorial coordinates,
+    proper motions, distance, and radial velocity.
 
     Parameters
     ----------
@@ -232,7 +282,30 @@ def galactocentric_cartesian_velocity(
     -------
     Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
     Union[float, np.ndarray], Union[float, np.ndarray]]
-        Galactocentric Cartesian velocities (vx, vy, vz, vspace) in km/s.
+        Galactocentric Cartesian velocities (u1, v1, w1, vspace) in km/s.
+
+    Raises
+    ------
+    ValueError
+        If ra is not in [0, 360) degrees, or if dec is not in [-90, 90]
+        degrees.
+    ValueError
+        If dt is not a positive number.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import \
+    ... galactocentric_cartesian_velocity
+
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> pmra_cosdec = 0.1  # mas/yr
+    >>> pmdec = 0.2  # mas/yr
+    >>> dist = 0.77  # kpc
+    >>> rv = -300  # km/s
+    >>> u1, v1, w1, vspace = galactocentric_cartesian_velocity(
+    ...     ra, dec, pmra_cosdec, pmdec, dist, rv
+    ... )
     """
 
     ra = np.array(ra)
@@ -323,6 +396,41 @@ def peculiar_velocity(
     dt : float, optional
         Time step in years for which to calculate the proper motion,
         see `galactic_proper_motion`, by default 1.0 (year).
+
+    Returns
+    -------
+    Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
+    Union[float, np.ndarray], Union[float, np.ndarray]]
+        Peculiar velocity components (u_s, v_s, w_s) and the total peculiar
+        velocity (vpec) in km/s. Note that u_s is the component toward the
+        Galactic center, v_s is the component in the direction of Galactic
+        rotation, and w_s is the component toward the North Galactic Pole.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import peculiar_velocity
+    >>> import numpy as np
+    >>> # Single value example
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> pmra_cosdec = 0.1  # mas/yr
+    >>> pmdec = 0.2  # mas/yr
+    >>> dist = 0.77  # kpc
+    >>> rv = -300  # km/s
+    >>> u_s, v_s, w_s, vpec = peculiar_velocity(
+    ...     ra, dec, pmra_cosdec, pmdec, dist, rv
+    ... )
+    >>> # Array broadcasting example
+    >>> ra_array = 10.684  # degrees
+    >>> dec_array = 41.269  # degrees
+    >>> pmra_cosdec_array = np.random.normal(-0.35, 0.08, 100)  # mas/yr
+    >>> pmdec_array = np.random.normal(0.1, 0.05, 100)  # mas/yr
+    >>> dist_array = np.random.normal(1.2, 0.3, 100) # kpc
+    >>> rv_array = 15.0  # km/s
+    >>> u_s_arr, v_s_arr, w_s_arr, vpec_arr = peculiar_velocity(
+    ...     ra_array, dec_array, pmra_cosdec_array, pmdec_array,
+    ...     dist_array, rv_array
+    ... )
     """
 
     gal_l, gal_b = equatorial_to_galactic(ra, dec)
