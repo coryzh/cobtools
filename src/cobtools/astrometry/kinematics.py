@@ -291,6 +291,21 @@ def galactocentric_cartesian_velocity(
         degrees.
     ValueError
         If dt is not a positive number.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import \
+    ... galactocentric_cartesian_velocity
+
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> pmra_cosdec = 0.1  # mas/yr
+    >>> pmdec = 0.2  # mas/yr
+    >>> dist = 0.77  # kpc
+    >>> rv = -300  # km/s
+    >>> u1, v1, w1, vspace = galactocentric_cartesian_velocity(
+    ...     ra, dec, pmra_cosdec, pmdec, dist, rv
+    ... )
     """
 
     ra = np.array(ra)
