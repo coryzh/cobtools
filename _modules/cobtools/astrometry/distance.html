@@ -77,7 +77,7 @@
 <span class="sd">Classes</span>
 <span class="sd">-------</span>
 <span class="sd">- SimpleInversion: A simple model for distance estimation by inverting</span>
-<span class="sd">parallax.</span>
+<span class="sd">  parallax.</span>
 <span class="sd">- FromLiterature: Fits literature values to a gamma distribution.</span>
 <span class="sd">- XRBExponentialPriorModel: A Bayesian model using an exponential prior.</span>
 
@@ -503,17 +503,26 @@
 <div class="viewcode-block" id="XRBExponentialPriorModel">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">XRBExponentialPriorModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class representing distance estimation using a Bayesian method with an</span>
-<span class="sd">    exponential prior representative for X-ray binaries. The prior formualted</span>
-<span class="sd">    as</span>
-<span class="sd">        p(d) ~ d^2 * exp(-d / scale_length),</span>
+<span class="sd">    exponential prior representative for X-ray binaries. The prior is</span>
+<span class="sd">    formulated as:</span>
 
-<span class="sd">    where scale_length is a parameter obtained from fitting to known X-ray</span>
-<span class="sd">    binaries in the literature (Zhao, Y+23).</span>
+<span class="sd">    .. math::</span>
+
+<span class="sd">        p(d) \propto d^2\exp(-d / L),</span>
+
+<span class="sd">    where :math:`L` is the ``scale_length``, a parameter obtained from fitting</span>
+<span class="sd">    to known X-ray binaries in the literature.</span>
 
 <span class="sd">    The likelihood is a Gaussian likelihood centered on 1/d with a standard</span>
-<span class="sd">    deviation equal to the parallax error.</span>
+<span class="sd">    deviation equal to the parallax error, i.e.,</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        p(\varpi | d) \propto \exp\left(</span>
+<span class="sd">            -\frac{1}{2} \frac{(\varpi - 1/d)^2}{\sigma_\varpi^2}</span>
+<span class="sd">        \right),</span>
 
 <span class="sd">    This method can be used for negative parallaxes and low signal-to-noise</span>
 <span class="sd">    ratio parallaxes.</span>
