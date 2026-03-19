@@ -1,3 +1,28 @@
+"""
+kinematics.py
+=============
+
+This module provides a suite of functions for computing Galactic space
+velocities, including galactocentric 3D Cartesian velocities and peculiar
+velocities. The formulation is based on the work of Reid et al. 2009.
+
+Functions
+---------
+
+- **equatorial_to_galactic**: Convert equatorial coordinates (RA, Dec) to
+  Galactic coordinates (l, b).
+
+- **galactic_proper_motion**: Convert equatorial proper motions to Galactic
+  proper motions.
+
+- **galactocentric_cartesian_velocity**: Calculate galactocentric Cartesian
+  velocities (u, v, w) and total space velocities (square root of the
+  quadrature sum of u, v, w) from equatorial coordinates, proper motions,
+  distance, and radial velocity.
+
+- **peculiar_velocity**: Calculate the peculiar velocity and its Cartesian
+  components by subtracting the local Galactic rotation.
+"""
 import numpy as np
 import cobtools.constants as con
 from cobtools.astrometry.rotation_curve import get_rotation_curve
