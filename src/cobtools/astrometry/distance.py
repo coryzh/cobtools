@@ -413,17 +413,26 @@ class FromLiterature:
 
 
 class XRBExponentialPriorModel:
-    """
+    r"""
     A class representing distance estimation using a Bayesian method with an
-    exponential prior representative for X-ray binaries. The prior formualted
-    as
-        p(d) ~ d^2 * exp(-d / scale_length),
+    exponential prior representative for X-ray binaries. The prior is
+    formulated as:
 
-    where scale_length is a parameter obtained from fitting to known X-ray
-    binaries in the literature (Zhao, Y+23).
+    .. math::
+
+        p(d) \propto d^2\exp(-d / L),
+
+    where :math:`L` is the ``scale_length``, a parameter obtained from fitting
+    to known X-ray binaries in the literature.
 
     The likelihood is a Gaussian likelihood centered on 1/d with a standard
-    deviation equal to the parallax error.
+    deviation equal to the parallax error, i.e.,
+
+    .. math::
+
+        p(\varpi | d) \propto \exp\left(
+            -\frac{1}{2} \frac{(\varpi - 1/d)^2}{\sigma_\varpi^2}
+        \right),
 
     This method can be used for negative parallaxes and low signal-to-noise
     ratio parallaxes.
