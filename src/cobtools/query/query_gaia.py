@@ -43,7 +43,7 @@ class SingleSourceQuery(ABC):
         ``astroquery.utils.tap.model.job.Job`` object. Handles errors if the
         query does not complete successfully.
     query_result() -> Table
-        Abstract method to retrieve the query results as an
+        Retrieve the query results as an
         ``astropy.table.Table`` object. Must be implemented by subclasses.
 
     Raises
@@ -105,7 +105,6 @@ class SingleSourceQuery(ABC):
             )
         return job
 
-    @abstractmethod
     def query_result(self) -> Table:
         """
         Query the Gaia archive for the specified ``source_id``.
