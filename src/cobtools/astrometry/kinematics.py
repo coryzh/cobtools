@@ -55,6 +55,14 @@ def equatorial_to_galactic(
     ValueError
         If ra and dec have different shapes, or if ra is not in [0,
         360) degrees, or if dec is not in [-90, 90] degrees.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import equatorial_to_galactic
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> l, b = equatorial_to_galactic(ra, dec)
+    >>> print(f"Galactic coordinates: l={l:.2f}, b={b:.2f} degrees")
     """
 
     ra = np.array(ra, ndmin=1)
