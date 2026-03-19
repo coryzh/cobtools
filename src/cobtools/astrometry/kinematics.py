@@ -34,7 +34,9 @@ def equatorial_to_galactic(
         ra: Union[float, ArrayLike], dec: Union[float, ArrayLike]
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Convert equatorial coordinates (RA, Dec) to galactic coordinates (l, b).
+    Convert equatorial coordinates (ra, dec) to galactic coordinates
+    (gal_l, gal_b).
+
     Parameters
     ----------
     ra : float or ArrayLike
@@ -51,15 +53,15 @@ def equatorial_to_galactic(
     Raises
     ------
     ValueError
-        If RA and Dec have different shapes, or if RA is not in [0,
-        360) degrees, or if Dec is not in [-90, 90] degrees.
+        If ra and dec have different shapes, or if ra is not in [0,
+        360) degrees, or if dec is not in [-90, 90] degrees.
     """
 
     ra = np.array(ra, ndmin=1)
     dec = np.array(dec, ndmin=1)
 
     if np.shape(ra) != np.shape(dec):
-        raise ValueError("RA and Dec must have the same shape.")
+        raise ValueError("ra and dec must have the same shape.")
 
     if np.any((ra < 0) | (ra >= 360)):
         raise ValueError(
@@ -135,11 +137,15 @@ def galactic_proper_motion(
         dt: float = 1.0
 ) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]:
     """
-    This function calculate differences in ra and dec due to PM and convert it
-    to Galactic coordinate. Input ra and dec should be in degrees.
-    Input equatorial PMs should be in units of mas/yr; note that mu_ra_cosdec
-    contain the cos(dec) factor. Input timestep should be in unit of years
-    (default is 1).
+    Calculate galactic proper motion (mu_l, mu_b) from equatorial proper motion
+    (pmra_cosdec, pmdec) and equatorial coordinates (ra, dec).
+
+    The basic idea is to calculate differences in ra and dec due to proper
+    motion and convert it changes in Galactic coordinate.
+
+    ra and dec should be in degrees, and their proper motion components should
+    be in units of mas/yr; note that mu_ra_cosdec contain the cos(dec) factor.
+    Input timestep should be in unit of years (default is 1).
 
     Parameters
     ----------
