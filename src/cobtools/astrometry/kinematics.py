@@ -282,7 +282,15 @@ def galactocentric_cartesian_velocity(
     -------
     Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
     Union[float, np.ndarray], Union[float, np.ndarray]]
-        Galactocentric Cartesian velocities (vx, vy, vz, vspace) in km/s.
+        Galactocentric Cartesian velocities (u1, v1, w1, vspace) in km/s.
+
+    Raises
+    ------
+    ValueError
+        If ra is not in [0, 360) degrees, or if dec is not in [-90, 90]
+        degrees.
+    ValueError
+        If dt is not a positive number.
     """
 
     ra = np.array(ra)
