@@ -4,7 +4,7 @@ This module provides various classes for estimating distances from parallax.
 Classes
 -------
 - SimpleInversion: A simple model for distance estimation by inverting
-parallax.
+  parallax.
 - FromLiterature: Fits literature values to a gamma distribution.
 - XRBExponentialPriorModel: A Bayesian model using an exponential prior.
 
