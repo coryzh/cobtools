@@ -396,6 +396,41 @@ def peculiar_velocity(
     dt : float, optional
         Time step in years for which to calculate the proper motion,
         see `galactic_proper_motion`, by default 1.0 (year).
+
+    Returns
+    -------
+    Tuple[Union[float, np.ndarray], Union[float, np.ndarray],
+    Union[float, np.ndarray], Union[float, np.ndarray]]
+        Peculiar velocity components (u_s, v_s, w_s) and the total peculiar
+        velocity (vpec) in km/s. Note that u_s is the component toward the
+        Galactic center, v_s is the component in the direction of Galactic
+        rotation, and w_s is the component toward the North Galactic Pole.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import peculiar_velocity
+    >>> import numpy as np
+    >>> # Single value example
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> pmra_cosdec = 0.1  # mas/yr
+    >>> pmdec = 0.2  # mas/yr
+    >>> dist = 0.77  # kpc
+    >>> rv = -300  # km/s
+    >>> u_s, v_s, w_s, vpec = peculiar_velocity(
+    ...     ra, dec, pmra_cosdec, pmdec, dist, rv
+    ... )
+    >>> # Array broadcasting example
+    >>> ra_array = 10.684  # degrees
+    >>> dec_array = 41.269  # degrees
+    >>> pmra_cosdec_array = np.random.normal(-0.35, 0.08, 100)  # mas/yr
+    >>> pmdec_array = np.random.normal(0.1, 0.05, 100)  # mas/yr
+    >>> dist_array = np.random.normal(1.2, 0.3, 100) # kpc
+    >>> rv_array = 15.0  # km/s
+    >>> u_s_arr, v_s_arr, w_s_arr, vpec_arr = peculiar_velocity(
+    ...     ra_array, dec_array, pmra_cosdec_array, pmdec_array,
+    ...     dist_array, rv_array
+    ... )
     """
 
     gal_l, gal_b = equatorial_to_galactic(ra, dec)
