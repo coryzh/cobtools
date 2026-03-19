@@ -248,8 +248,9 @@ def galactocentric_cartesian_velocity(
         dt: float = 1.0
 ):
     """
-    Convert equatorial coordinates and proper motions to galactocentric
-    Cartesian velocities.
+    Calculate Galactocentric Cartesian velocity components (u1, v1, w1) and
+    the total space velocity (vspace) from equatorial coordinates,
+    proper motions, distance, and radial velocity.
 
     Parameters
     ----------
