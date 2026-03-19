@@ -44,7 +44,7 @@ class SingleSourceQuery(ABC):
         query does not complete successfully.
     query_result() -> Table
         Abstract method to retrieve the query results as an
-        ``astropy.table.Table`` object.
+        ``astropy.table.Table`` object. Must be implemented by subclasses.
 
     Raises
     ------
