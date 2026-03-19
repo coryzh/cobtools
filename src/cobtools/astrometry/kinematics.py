@@ -177,6 +177,16 @@ def galactic_proper_motion(
     ------
     ValueError
         If the time step dt is not positive.
+
+    Example
+    -------
+    >>> from cobtools.astrometry.kinematics import galactic_proper_motion
+    >>> ra = 10.684  # degrees
+    >>> dec = 41.269  # degrees
+    >>> pmra_cosdec = 0.1  # mas/yr
+    >>> pmdec = 0.2  # mas/yr
+    >>> mu_l, mu_b = galactic_proper_motion(ra, dec, pmra_cosdec, pmdec)
+    >>> print(f"Galactic proper motion: {mu_l:.2f}, {mu_b:.2f} mas/yr")
     """
 
     if dt <= 0:
