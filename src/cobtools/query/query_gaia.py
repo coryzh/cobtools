@@ -60,7 +60,10 @@ class SingleSourceQuery(ABC):
     """
 
     def __init__(self, source_id: int | str, data_release: str = "dr3"):
-        if not isinstance(source_id, (int, str)):
+        if (
+            not isinstance(source_id, (int, str))
+            or (isinstance(source_id, str) and not source_id.isdigit())
+        ):
             raise TypeError("source_id must be an integer or string")
 
         valid_data_releases = {"dr1", "dr2", "edr3", "dr3", "dr4", "dr5"}
@@ -138,12 +141,6 @@ class SingleSourceFullGaiaQuery(SingleSourceQuery):
         Inherited from ``SingleSourceQuery``. Cached property that launches
         the Gaia query job and returns the
         ``astroquery.utils.tap.model.job.Job`` object.
-
-    Methods
-    -------
-    query_result() -> Table
-        Inherited from ``SingleSourceQuery``. Retrieves the query results as
-        an ``astropy.table.Table`` object.
     """
 
     @property
