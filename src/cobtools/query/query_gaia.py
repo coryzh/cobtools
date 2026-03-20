@@ -1,3 +1,46 @@
+"""
+
+
+This module provides wrapper objects around the astroquery.gaia module to
+facilitate querying the Gaia archive in different ways.
+
+
+Classes
+SingleSourceQuery
+    Abstract base class that defines the interface for querying the Gaia
+    archive for a single source. Subclasses must implement the ``query_str``
+    property and can utilize the ``query_result`` method to retrieve results.
+SingleSourceFullGaiaQuery
+    Concrete implementation of ``SingleSourceQuery`` that retrieves all
+    available columns for a given source_id from the Gaia main source table.
+
+Examples
+--------
+Query the Gaia DR3 archive for a specific source:
+
+    >>> query = SingleSourceFullGaiaQuery(
+    ... source_id=123456789, data_release="dr3"
+    ... )
+    >>> results = query.query_result()
+    >>> print(results)
+
+Notes
+-----
+The module requires the astroquery library to be installed and configured with
+access to the Gaia archive. Queries are executed via the Gaia TAP service and
+results are returned as astropy Table objects.
+
+It also uses the functools.cached_property decorator to cache the Gaia job
+object, so Python 3.8 or later is required to use this module.
+
+See Also
+--------
+astroquery.gaia : Gaia archive query interface
+astropy.table.Table : Table data structure for query results
+query_gaia.py
+
+
+"""
 from astroquery.gaia import Gaia
 from astroquery.utils.tap.model.job import Job
 from abc import ABC, abstractmethod
