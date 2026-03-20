@@ -15,3 +15,9 @@ documentation for details.
    :maxdepth: 2
    :caption: Contents:
 
+   cobtools
+   modules
+   cobtools.astrometry
+   cobtools.photometry
+   cobtools.query
+   cobtools.plot_utils

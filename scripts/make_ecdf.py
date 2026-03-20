@@ -3,7 +3,7 @@ import numpy as np
 from cobtools.plot_utils import ecdf
 
 
-def test_plot_ecdf():
+def check_plot_ecdf():
     data = np.random.normal(loc=0, scale=1, size=1000)
     fig, ax = plt.subplots()
     x, y = ecdf.get_ecdf(data)
@@ -14,4 +14,4 @@ def test_plot_ecdf():
 
 
 if __name__ == "__main__":
-    test_plot_ecdf()
+    check_plot_ecdf()

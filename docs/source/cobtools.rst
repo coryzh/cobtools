@@ -22,22 +22,6 @@ cobtools.constants module
    :show-inheritance:
    :undoc-members:
 
-cobtools.io module
-------------------
-
-.. automodule:: cobtools.io
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-cobtools.statistics module
---------------------------
-
-.. automodule:: cobtools.statistics
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 Module contents
 ---------------
 

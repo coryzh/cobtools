@@ -33,3 +33,5 @@ exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_baseurl = "https://coryzh.github.io/cobtools/"
+html_copy_source = True
