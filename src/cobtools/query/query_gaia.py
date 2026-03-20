@@ -48,9 +48,9 @@ from functools import cached_property
 
 class SingleSourceQuery(ABC):
     """
-    :noindex:
-
     Abstract base class for querying the Gaia archive.
+
+    .. :noindex:
 
     This class provides a framework for querying the Gaia archive. Subclasses
     must implement the ``query_str`` property to define the ADQL query string.
@@ -69,24 +69,23 @@ class SingleSourceQuery(ABC):
     Properties
     ----------
     query_str : str
-        :no-index:
+        The ADQL query string for the specified ``source_id``.
 
-        Abstract property that defines the ADQL query string for the specified
-        ``source_id``. Must be implemented by subclasses.
+        :noindex:
+
     job : Job
-        :no-index:
-
         Cached property that launches the Gaia query job and returns the
         ``astroquery.utils.tap.model.job.Job`` object. Handles errors if the
         query does not complete successfully.
 
+        :noindex:
+
     Methods
     -------
     query_result() -> Table
-        :no-index:
+        Retrieve the query results as an ``astropy.table.Table`` object.
 
-        Retrieve the query results as an
-        ``astropy.table.Table`` object. Must be implemented by subclasses.
+        :noindex:
 
     Raises
     ------
