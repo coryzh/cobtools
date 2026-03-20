@@ -62,33 +62,40 @@ class GaiaCMDAxis(plt.Axes):
 
     Example
     -------
-    import matplotlib.pyplot as plt
-    from cobtools.plot_utils.cmd import GaiaCMDAxis
+    .. code-block:: python
 
-    # This will create a Gaia CMD plot with a red point at (0.5, -4.0)
-    fig = plt.figure()
-    ax = GaiaCMDAxis(fig)
-    ax.plot(0.5, -4.0, "ro")
-    plt.show()
+        import matplotlib.pyplot as plt
+        from cobtools.plot_utils.cmd import GaiaCMDAxis
 
-    # To use a more publication-ready style, use the style_context method:
-    with GaiaCMDAxis.style_context():
+        # This creates a Gaia CMD plot with a red point at (0.5, -4.0)
         fig = plt.figure()
         ax = GaiaCMDAxis(fig)
         ax.plot(0.5, -4.0, "ro")
         plt.show()
+
+        # To use a more publication-ready style, use the style_context method:
+        with GaiaCMDAxis.style_context():
+            fig = plt.figure()
+            ax = GaiaCMDAxis(fig)
+            ax.plot(0.5, -4.0, "ro")
+            plt.show()
     """
 
     @staticmethod
     def style_context():
         """
         Return a matplotlib style.context configured for the Gaia CMD style.
-        Usage
-        -----
-        with GaiaCMDAxis._style_context():
-            fig = plt.figure()
-            ax = GaiaCMDAxis(fig)
-            ...
+
+        Example
+        -------
+
+        .. code-block:: python
+
+            with GaiaCMDAxis.style_context():
+                fig = plt.figure()
+                ax = GaiaCMDAxis(fig)
+                ax.plot(0.5, -4.0, "ro")
+                plt.show()
         """
         return style.context(
             resources.files("cobtools") / "data" / "gaia_cmd.mplstyle"

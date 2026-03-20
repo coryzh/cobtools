@@ -21,3 +21,4 @@ documentation for details.
    cobtools.photometry
    cobtools.query
    cobtools.plot_utils
+   cobtools.data_models

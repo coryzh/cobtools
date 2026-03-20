@@ -21,6 +21,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',  # For Google/NumPy-style docstrings
     'sphinx.ext.viewcode',  # Adds links to source code
+    "matplotlib.sphinxext.roles",  # adds the :mpltype: role
 ]
 
 templates_path = ['_templates']
