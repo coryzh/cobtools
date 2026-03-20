@@ -64,3 +64,16 @@ class SourceID:
                 f"data_release must be one of {_VALID_DATA_RELEASES}: "
                 f"{self.data_release}"
             )
+
+    @property
+    def designation(self) -> str:
+        """
+        The Gaia source designation string, which is derived from the
+        ``source_id`` and ``data_release``.
+
+        Returns
+        -------
+        str
+            The Gaia source designation string.
+        """
+        return f"Gaia {self.data_release.upper()} {self.source_id}"

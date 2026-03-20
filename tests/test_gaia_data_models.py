@@ -41,3 +41,7 @@ class TestSourceID:
     def test_invalid_data_release(self):
         with pytest.raises(ValueError, match="data_release must be one of"):
             SourceID(123, data_release="invalid_dr")
+
+    def test_designation(self):
+        test_id = SourceID(123456789, data_release="dr2")
+        assert test_id.designation == "Gaia DR2 123456789"
