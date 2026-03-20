@@ -163,7 +163,7 @@ class SingleSourceQuery(ABC):
         except Exception as e:
             raise RuntimeError(
                 f"Error occurred while fetching query results: {e}"
-            )
+            ) from e
 
 
 class SingleSourceFullGaiaQuery(SingleSourceQuery):
