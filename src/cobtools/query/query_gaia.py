@@ -53,8 +53,9 @@ class SingleSourceQuery(ABC):
     Abstract base class for querying the Gaia archive.
 
     This class provides a framework for querying the Gaia archive. Subclasses
-    must implement the ``query_str`` property to define the ADQL query string
-    and the ``query_result`` method to retrieve the query results.
+    must implement the ``query_str`` property to define the ADQL query string.
+    The ``query_result`` method is implemented in the base class and can be
+    used as-is or overridden by subclasses to customize the behavior.
 
     Attributes
     ----------
