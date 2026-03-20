@@ -29,3 +29,15 @@ class TestSourceID:
     def test_float_source_id(self):
         with pytest.raises(ValueError):
             SourceID(123.456)
+
+    def test_valid_data_release(self):
+        test_id = SourceID(123, data_release="dr2")
+        assert test_id.data_release == "dr2"
+
+    def test_default_data_release(self):
+        test_id = SourceID(123)
+        assert test_id.data_release == "dr3"
+
+    def test_invalid_data_release(self):
+        with pytest.raises(ValueError, match="data_release must be one of"):
+            SourceID(123, data_release="invalid_dr")

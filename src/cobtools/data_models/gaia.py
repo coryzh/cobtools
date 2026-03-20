@@ -14,6 +14,9 @@ from dataclasses import dataclass
 from typing import Union
 
 
+_VALID_DATA_RELEASES = {"dr1", "dr2", "edr3", "dr3", "dr4", "dr5"}
+
+
 @dataclass(frozen=True)
 class SourceID:
     """
@@ -22,16 +25,25 @@ class SourceID:
     Attributes
     ----------
     source_id : Union[int, str]
-        The Gaia source ID, which can be provided as an integer or a string
+        The Gaia ``source_id``, which can be provided as an integer or a string
         representing an integer.
+
+    data_release : str, optional
+        The data release to which the ``source_id`` belongs. Defaults to "dr3".
+
 
     Raises
     ------
     ValueError
         If ``source_id`` is a float or if it cannot be converted to an integer.
+
+    ValueError
+        If ``data_release`` is not one of the valid options ("dr1", "dr2",
+        "edr3", "dr3", "dr4", "dr5").
     """
 
     source_id: Union[int, str]
+    data_release: str = "dr3"
 
     def __post_init__(self) -> None:
         # Ensure the input is not a float
@@ -46,3 +58,9 @@ class SourceID:
                 f"source_id must be an integer or a string representing an "
                 f"integer: {e}"
             ) from e
+
+        if self.data_release not in _VALID_DATA_RELEASES:
+            raise ValueError(
+                f"data_release must be one of {_VALID_DATA_RELEASES}: "
+                f"{self.data_release}"
+            )
