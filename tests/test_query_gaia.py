@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import patch, MagicMock
 from astropy.table import Table
 from cobtools.query.query_gaia import (
     SingleSourceQuery, SingleSourceFullGaiaQuery
@@ -81,12 +82,12 @@ class TestSingleSourceFullGaiaQuery:
         assert "gaiadr2.gaia_source" in query.query_str
         assert f"source_id = {query.source_id}" in query.query_str
 
-    def test_query_result_success(self):
+    @patch("cobtools.query.query_gaia.Gaia.launch_job")
+    def test_query_result_success(self, mock_launch_job):
         """Test query_result returns table successfully."""
-        query = SingleSourceFullGaiaQuery(source_id=4787135780363189504)
-        result = query.query_result()
-
-        expected_table = Table(
+        mock_job = MagicMock()
+        mock_job.get_phase.return_value = 'COMPLETED'
+        mock_job.get_results.return_value = Table(
             names=[
                 "source_id", "ra", "dec", "parallax", "pmra", "pmdec",
                 "phot_g_mean_mag"
@@ -98,8 +99,12 @@ class TestSingleSourceFullGaiaQuery:
                 [14.051228]
             ]
         )
+        mock_launch_job.return_value = mock_job
+
+        query = SingleSourceFullGaiaQuery(source_id=4787135780363189504)
+        result = query.query_result()
 
         assert isinstance(result, Table)
-        for col in expected_table.colnames:
+        for col in mock_job.get_results().colnames:
             assert col in result.colnames
-            assert np.allclose(result[col], expected_table[col])
+            assert np.allclose(result[col], mock_job.get_results()[col])
