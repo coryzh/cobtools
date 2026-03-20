@@ -28,8 +28,8 @@ The module requires the astroquery library to be installed and configured with
 access to the Gaia archive. Queries are executed via the Gaia TAP service and
 results are returned as astropy Table objects.
 
-It also uses the functools.cached_property decorator to cache the Gaia job
-object, so Python 3.8 or later is required to use this module.
+It also uses the functools.cached_property decorator (Python 3.8+) to cache the
+Gaia job object. cobtools depends on Python 3.10+, so this is compatible.
 
 See Also
 --------
