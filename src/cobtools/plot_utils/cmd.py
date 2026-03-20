@@ -91,7 +91,7 @@ class GaiaCMDAxis(plt.Axes):
 
         .. code-block:: python
 
-            with GaiaCMDAxis._style_context():
+            with GaiaCMDAxis.style_context():
                 fig = plt.figure()
                 ax = GaiaCMDAxis(fig)
                 ax.plot(0.5, -4.0, "ro")
