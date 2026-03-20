@@ -17,5 +17,6 @@ Module contents
 ---------------
 
 .. automodule:: cobtools.query
+   :members:
    :show-inheritance:
    :undoc-members:
