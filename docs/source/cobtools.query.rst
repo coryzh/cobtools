@@ -11,11 +11,11 @@ cobtools.query.query\_gaia module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 Module contents
 ---------------
 
 .. automodule:: cobtools.query
-   :members:
    :show-inheritance:
    :undoc-members:
