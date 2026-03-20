@@ -1,13 +1,13 @@
-cobtools.query package
-======================
+cobtools.data\_models package
+=============================
 
 Submodules
 ----------
 
-cobtools.query.query\_gaia module
+cobtools.data\_models.gaia module
 ---------------------------------
 
-.. automodule:: cobtools.query.query_gaia
+.. automodule:: cobtools.data_models.gaia
    :members:
    :show-inheritance:
    :undoc-members:
@@ -16,7 +16,7 @@ cobtools.query.query\_gaia module
 Module contents
 ---------------
 
-.. automodule:: cobtools.query
+.. automodule:: cobtools.data_models
    :members:
    :show-inheritance:
    :undoc-members:

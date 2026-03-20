@@ -8,8 +8,10 @@ Subpackages
    :maxdepth: 4
 
    cobtools.astrometry
+   cobtools.data_models
    cobtools.photometry
    cobtools.plot_utils
+   cobtools.query
 
 Submodules
 ----------
