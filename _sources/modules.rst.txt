@@ -1,7 +1,7 @@
 cobtools
 ========
 
-.. toctree::
-   :maxdepth: 4
-
-   cobtools
+.. automodule:: cobtools
+   :members:
+   :undoc-members:
+   :show-inheritance:

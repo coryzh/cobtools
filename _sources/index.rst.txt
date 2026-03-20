@@ -17,3 +17,7 @@ documentation for details.
 
    cobtools
    modules
+   cobtools.astrometry
+   cobtools.photometry
+   cobtools.query
+   cobtools.plot_utils

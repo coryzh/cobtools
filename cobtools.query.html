@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cobtools.query package &mdash; cobtools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://coryzh.github.io/cobtools/cobtools.query.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="cobtools" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cobtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cobtools.html">cobtools package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">cobtools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobtools.astrometry.html">cobtools.astrometry package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cobtools.photometry.html">cobtools.photometry package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">cobtools.query package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cobtools.query.query_gaia">cobtools.query.query_gaia module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceFullGaiaQuery"><code class="docutils literal notranslate"><span class="pre">SingleSourceFullGaiaQuery</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceFullGaiaQuery.query_str"><code class="docutils literal notranslate"><span class="pre">SingleSourceFullGaiaQuery.query_str</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery.source_id"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.source_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery.data_release"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.data_release</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery.Properties"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.Properties</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery.query_str"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.query_str</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery.job"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.job</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery.query_result"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.query_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.job</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.query_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">SingleSourceQuery.query_str</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cobtools.query">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cobtools.plot_utils.html">cobtools.plot_utils package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cobtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cobtools.query package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cobtools.query.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cobtools-query-package">
+<h1>cobtools.query package<a class="headerlink" href="#cobtools-query-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-cobtools.query.query_gaia">
+<span id="cobtools-query-query-gaia-module"></span><h2>cobtools.query.query_gaia module<a class="headerlink" href="#module-cobtools.query.query_gaia" title="Link to this heading"></a></h2>
+<p>This module provides wrapper objects around the astroquery.gaia module to
+facilitate querying the Gaia archive in different ways.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>SingleSourceQuery</dt><dd><p>Abstract base class that defines the interface for querying the Gaia
+archive for a single source. Subclasses must implement the <code class="docutils literal notranslate"><span class="pre">query_str</span></code>
+property and can utilize the <code class="docutils literal notranslate"><span class="pre">query_result</span></code> method to retrieve results.</p>
+</dd>
+<dt>SingleSourceFullGaiaQuery</dt><dd><p>Concrete implementation of <code class="docutils literal notranslate"><span class="pre">SingleSourceQuery</span></code> that retrieves all
+available columns for a given source_id from the Gaia main source table.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Query the Gaia DR3 archive for a specific source:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">SingleSourceFullGaiaQuery</span><span class="p">(</span>
+<span class="gp">... </span><span class="n">source_id</span><span class="o">=</span><span class="mi">123456789</span><span class="p">,</span> <span class="n">data_release</span><span class="o">=</span><span class="s2">&quot;dr3&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">query_result</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The module requires the astroquery library to be installed and configured with
+access to the Gaia archive. Queries are executed via the Gaia TAP service and
+results are returned as astropy Table objects.</p>
+<p>It also uses the functools.cached_property decorator (Python 3.8+) to cache the
+Gaia job object. cobtools depends on Python 3.10+, so this is compatible.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">astroquery.gaia</span></code></dt><dd><p>Gaia archive query interface</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">astropy.table.Table</span></code></dt><dd><p>Table data structure for query results</p>
+</dd>
+</dl>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">query_gaia.py</span></code></p>
+</div>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceFullGaiaQuery">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.query.query_gaia.</span></span><span class="sig-name descname"><span class="pre">SingleSourceFullGaiaQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dr3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/query/query_gaia.html#SingleSourceFullGaiaQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceFullGaiaQuery" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cobtools.query.query_gaia.SingleSourceQuery" title="cobtools.query.query_gaia.SingleSourceQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleSourceQuery</span></code></a></p>
+<p>Concrete implementation of SingleSourceQuery for querying the Gaia archive.</p>
+<p>This class retrieves the full set of columns for a given <code class="docutils literal notranslate"><span class="pre">source_id</span></code>
+from the main Gaia source table.</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">query_str</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>The ADQL query string to retrieve all columns for the specified
+<code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceFullGaiaQuery.query_str">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">query_str</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceFullGaiaQuery.query_str" title="Link to this definition"></a></dt>
+<dd><p>The ADQL query to retrieve all columns for a given source_id
+from the Gaia archive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The ADQL query string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceQuery">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.query.query_gaia.</span></span><span class="sig-name descname"><span class="pre">SingleSourceQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dr3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/query/query_gaia.html#SingleSourceQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceQuery" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for querying the Gaia archive.</p>
+<p>This class provides a framework for querying the Gaia archive. Subclasses
+must implement the <code class="docutils literal notranslate"><span class="pre">query_str</span></code> property to define the ADQL query string.
+The <code class="docutils literal notranslate"><span class="pre">query_result</span></code> method is implemented in the base class and can be
+used as-is or overridden by subclasses to customize the behavior.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceQuery.source_id">
+<span class="sig-name descname"><span class="pre">source_id</span></span><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceQuery.source_id" title="Link to this definition"></a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">source_id</span></code> to query. Must be an integer or a string containing
+only numeric characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceQuery.data_release">
+<span class="sig-name descname"><span class="pre">data_release</span></span><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceQuery.data_release" title="Link to this definition"></a></dt>
+<dd><p>The Gaia data release to use. Valid options are “dr1”, “dr2”, “edr3”,
+“dr3”, “dr4”, and “dr5”. Defaults to “dr3”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceQuery.Properties">
+<span class="sig-name descname"><span class="pre">Properties</span></span><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceQuery.Properties" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">----------</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceQuery.query_str">
+<span class="sig-name descname"><span class="pre">query_str</span></span><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceQuery.query_str" title="Link to this definition"></a></dt>
+<dd><p>The ADQL query string for the specified <code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Noindex<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceQuery.job">
+<span class="sig-name descname"><span class="pre">job</span></span><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceQuery.job" title="Link to this definition"></a></dt>
+<dd><p>Cached property that launches the Gaia query job and returns the
+<code class="docutils literal notranslate"><span class="pre">astroquery.utils.tap.model.job.Job</span></code> object. Handles errors if the
+query does not complete successfully.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Noindex<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Job</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cobtools.query.query_gaia.SingleSourceQuery.query_result">
+<span class="sig-name descname"><span class="pre">query_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Table</span></span></span><a class="reference internal" href="_modules/cobtools/query/query_gaia.html#SingleSourceQuery.query_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.query.query_gaia.SingleSourceQuery.query_result" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the query results as an <code class="docutils literal notranslate"><span class="pre">astropy.table.Table</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Noindex<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">source_id</span></code> is not an integer or a string containing only numeric
+    characters.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">data_release</span></code> is not one of the valid options (“dr1”, “dr2”,
+    “edr3”, “dr3”, “dr4”, “dr5”).</p></li>
+<li><p><strong>RuntimeError</strong> – If the Gaia query job does not complete successfully or if there is an
+    error while fetching the query results.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">job</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Job</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>The Gaia job object that will be used to execute the query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The astroquery.utils.tap.model.job.Job object representing the
+Gaia query job.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Job</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">query_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Table</span></span></span><a class="reference internal" href="_modules/cobtools/query/query_gaia.html#SingleSourceQuery.query_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Query the Gaia archive for the specified <code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The query results as an <code class="docutils literal notranslate"><span class="pre">astropy.table.Table</span> <span class="pre">object</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Table</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">query_str</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>The ADQL query string to retrieve data for the specified <code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The ADQL query string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cobtools.query">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cobtools.query" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="cobtools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yue (Cory) Zhao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
