@@ -1,11 +1,9 @@
 """
-
-
 This module provides wrapper objects around the astroquery.gaia module to
 facilitate querying the Gaia archive in different ways.
 
-
 Classes
+-------
 SingleSourceQuery
     Abstract base class that defines the interface for querying the Gaia
     archive for a single source. Subclasses must implement the ``query_str``
@@ -38,9 +36,8 @@ See Also
 astroquery.gaia : Gaia archive query interface
 astropy.table.Table : Table data structure for query results
 query_gaia.py
-
-
 """
+
 from astroquery.gaia import Gaia
 from astroquery.utils.tap.model.job import Job
 from abc import ABC, abstractmethod
@@ -51,6 +48,8 @@ from functools import cached_property
 
 class SingleSourceQuery(ABC):
     """
+    .. :noindex:
+
     Abstract base class for querying the Gaia archive.
 
     This class provides a framework for querying the Gaia archive. Subclasses
@@ -69,9 +68,13 @@ class SingleSourceQuery(ABC):
     Properties
     ----------
     query_str : str
+        .. :no-index:
+
         Abstract property that defines the ADQL query string for the specified
         ``source_id``. Must be implemented by subclasses.
     job : Job
+        .. :no-index:
+
         Cached property that launches the Gaia query job and returns the
         ``astroquery.utils.tap.model.job.Job`` object. Handles errors if the
         query does not complete successfully.
@@ -79,13 +82,8 @@ class SingleSourceQuery(ABC):
     Methods
     -------
     query_result() -> Table
-        Abstract method to retrieve the query results as an
-        ``astropy.table.Table`` object. Must be implemented by subclasses.
-    job : Job
-        Cached property that launches the Gaia query job and returns the
-        ``astroquery.utils.tap.model.job.Job`` object. Handles errors if the
-        query does not complete successfully.
-    query_result() -> Table
+        .. :no-index:
+
         Retrieve the query results as an
         ``astropy.table.Table`` object. Must be implemented by subclasses.
 
@@ -175,15 +173,11 @@ class SingleSourceFullGaiaQuery(SingleSourceQuery):
     This class retrieves the full set of columns for a given ``source_id``
     from the main Gaia source table.
 
-    Properties
+    Methods
     ----------
     query_str : str
         The ADQL query string to retrieve all columns for the specified
         ``source_id``.
-    job : Job
-        Inherited from ``SingleSourceQuery``. Cached property that launches
-        the Gaia query job and returns the
-        ``astroquery.utils.tap.model.job.Job`` object.
     """
 
     @property
