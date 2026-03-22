@@ -15,7 +15,7 @@ from cobtools.data_models.band import Band
 
 def magnitude_to_flux(
         mag: Union[float, ArrayLike], band: Band
-) -> np.ndarray:
+) -> Union[float, np.ndarray]:
     """
     Convert magnitude to flux for a given band
 
@@ -28,7 +28,7 @@ def magnitude_to_flux(
 
     Returns
     -------
-    np.ndarray
+    Union[float, np.ndarray]
         Flux(es) in erg/s/cm^2
 
     Raises
@@ -82,5 +82,7 @@ def magnitude_to_flux(
         )
 
     flam = band.zp_flam * band.w_eff * 10 ** (-0.4 * mag)
+    if mag.ndim == 0:
+        return float(flam)
 
     return flam
