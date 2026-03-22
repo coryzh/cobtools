@@ -13,6 +13,15 @@ cobtools.data\_models.gaia module
    :undoc-members:
    :no-index:
 
+cobtools.data\_models.band module
+---------------------------------
+
+.. automodule:: cobtools.data_models.band
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
+
 Module contents
 ---------------
 

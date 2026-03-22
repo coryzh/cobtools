@@ -1,0 +1,25 @@
+{
+    "bands": {
+        "gaia_g": {
+            "name": "gaia_g",
+            "zp_flam": 2.49769e-9,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 4203.61
+        },
+        "gaia_bp": {
+            "name": "gaia_bp",
+            "zp_flam": 4.10926e-9,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 2333.06
+        },
+        "gaia_rp": {
+            "name": "gaia_rp",
+            "zp_flam": 1.23742e-9,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 2842.11
+        }
+    }
+}

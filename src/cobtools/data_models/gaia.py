@@ -20,16 +20,25 @@ _VALID_DATA_RELEASES = {"dr1", "dr2", "edr3", "dr3", "dr4", "dr5"}
 @dataclass(frozen=True)
 class SourceID:
     """
-    Data class representing a Gaia source ID.
+    Data class representing a Gaia ``source_id``.
 
-    Attributes
+    Parameters
     ----------
     source_id : Union[int, str]
-        The Gaia ``source_id``, which can be provided as an integer or a string
-        representing an integer.
+        The Gaia ``source_id`` provided to the constructor. It may be given as
+        an integer or as a string representing an integer; it will be
+        normalized to an integer during initialization.
 
     data_release : str, optional
         The data release to which the ``source_id`` belongs. Defaults to "dr3".
+
+    Attributes
+    ----------
+    source_id : int
+        The normalized Gaia ``source_id`` stored on the instance as an integer.
+
+    data_release : str
+        The validated data release associated with the ``source_id``.
 
 
     Raises
