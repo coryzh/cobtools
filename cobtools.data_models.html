@@ -57,6 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#cobtools-data-models-band-module">cobtools.data_models.band module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-cobtools.data_models">Module contents</a></li>
 </ul>
 </li>
@@ -108,15 +109,24 @@ identifiers and related data.</p>
 <dt class="sig sig-object py">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.data_models.gaia.</span></span><span class="sig-name descname"><span class="pre">SourceID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dr3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/data_models/gaia.html#SourceID"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Data class representing a Gaia source ID.</p>
+<p>Data class representing a Gaia <code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_id</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>str</em><em>]</em>) – The Gaia <code class="docutils literal notranslate"><span class="pre">source_id</span></code> provided to the constructor. It may be given as
+an integer or as a string representing an integer; it will be
+normalized to an integer during initialization.</p></li>
+<li><p><strong>data_release</strong> (<em>str</em><em>, </em><em>optional</em>) – The data release to which the <code class="docutils literal notranslate"><span class="pre">source_id</span></code> belongs. Defaults to “dr3”.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">source_id</span></span></dt>
-<dd><p>The Gaia <code class="docutils literal notranslate"><span class="pre">source_id</span></code>, which can be provided as an integer or a string
-representing an integer.</p>
+<dd><p>The normalized Gaia <code class="docutils literal notranslate"><span class="pre">source_id</span></code> stored on the instance as an integer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[int, str]</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -124,10 +134,10 @@ representing an integer.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">data_release</span></span></dt>
-<dd><p>The data release to which the <code class="docutils literal notranslate"><span class="pre">source_id</span></code> belongs. Defaults to “dr3”.</p>
+<dd><p>The validated data release associated with the <code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str, optional</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -165,6 +175,44 @@ representing an integer.</p>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">source_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="cobtools-data-models-band-module">
+<h2>cobtools.data_models.band module<a class="headerlink" href="#cobtools-data-models-band-module" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.data_models.band.</span></span><span class="sig-name descname"><span class="pre">Band</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/data_models/band.html#Band"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">system</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span></dt>
+<dd><p>Return the photometric system for this band.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">w_eff</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span></dt>
+<dd><p>Return the effective wavelength for this band in Angstroms.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">zp_flam</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span></dt>
+<dd><p>Return the zero-point flux for this band in erg/s/cm^2/AA.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">zp_mag</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span></dt>
+<dd><p>Return the zero-point magnitude for this band.</p>
+</dd></dl>
 
 </dd></dl>
 

@@ -17,6 +17,7 @@
       <script src="_static/documentation_options.js?v=01f34227"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -53,6 +54,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-cobtools.photometry.color_index">cobtools.photometry.color_index module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cobtools.photometry.color_index.bp_rp_to_sptype"><code class="docutils literal notranslate"><span class="pre">bp_rp_to_sptype()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cobtools.photometry.color_index.bp_rp_to_teff"><code class="docutils literal notranslate"><span class="pre">bp_rp_to_teff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cobtools.photometry.flux_conversion">cobtools.photometry.flux_conversion module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cobtools.photometry.flux_conversion.magnitude_to_flux"><code class="docutils literal notranslate"><span class="pre">magnitude_to_flux()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-cobtools.photometry">Module contents</a></li>
@@ -154,6 +160,61 @@ Passing any other value will raise a ValueError.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+</section>
+<section id="module-cobtools.photometry.flux_conversion">
+<span id="cobtools-photometry-flux-conversion-module"></span><h2>cobtools.photometry.flux_conversion module<a class="headerlink" href="#module-cobtools.photometry.flux_conversion" title="Link to this heading"></a></h2>
+<p>Utilities for converting between magnitudes and fluxes for supported
+photometric bands.</p>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">magnitude_to_flux(mag,</span> <span class="pre">band)</span></code>: Convert magnitude values to fluxes for a
+given photometric band.</p></li>
+</ul>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cobtools.photometry.flux_conversion.magnitude_to_flux">
+<span class="sig-prename descclassname"><span class="pre">cobtools.photometry.flux_conversion.</span></span><span class="sig-name descname"><span class="pre">magnitude_to_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Band</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/cobtools/photometry/flux_conversion.html#magnitude_to_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cobtools.photometry.flux_conversion.magnitude_to_flux" title="Link to this definition"></a></dt>
+<dd><p>Convert magnitude to flux for a given band</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mag</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>ArrayLike</em><em>]</em>) – Magnitude(s) to convert</p></li>
+<li><p><strong>band</strong> (<em>Band</em>) – Band for which to convert magnitude to flux. Must be a Band instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flux(es) in erg/s/cm^2</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[float, np.ndarray]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If mag is not a float or array-like of floats, or if it contains
+    non-finite values.</p></li>
+<li><p><strong>TypeError</strong> – If band is not an instance of Band.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The conversion is done using the formula:</p>
+<div class="math notranslate nohighlight">
+\[F = w_{\text{eff}} F_0 10^{-0.4m},\]</div>
+<p>where <span class="math notranslate nohighlight">\(F_0\)</span> is the zero-point flux for the band,
+<span class="math notranslate nohighlight">\(w_{\text{eff}}\)</span> is the effective wavelength, and <span class="math notranslate nohighlight">\(m\)</span> is the
+magnitude. <span class="math notranslate nohighlight">\(F_0\)</span> values are from Gaia Collaboration (2021), A&amp;A, 639,
+A3.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.band</span><span class="w"> </span><span class="kn">import</span> <span class="n">Band</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.photometry.flux_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">magnitude_to_flux</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">band</span> <span class="o">=</span> <span class="n">Band</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;gaia_g&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mag</span> <span class="o">=</span> <span class="mf">15.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flux</span> <span class="o">=</span> <span class="n">magnitude_to_flux</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="n">band</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

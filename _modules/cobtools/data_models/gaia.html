@@ -100,16 +100,25 @@
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SourceID</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class representing a Gaia source ID.</span>
+<span class="sd">    Data class representing a Gaia ``source_id``.</span>
 
-<span class="sd">    Attributes</span>
+<span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    source_id : Union[int, str]</span>
-<span class="sd">        The Gaia ``source_id``, which can be provided as an integer or a string</span>
-<span class="sd">        representing an integer.</span>
+<span class="sd">        The Gaia ``source_id`` provided to the constructor. It may be given as</span>
+<span class="sd">        an integer or as a string representing an integer; it will be</span>
+<span class="sd">        normalized to an integer during initialization.</span>
 
 <span class="sd">    data_release : str, optional</span>
 <span class="sd">        The data release to which the ``source_id`` belongs. Defaults to &quot;dr3&quot;.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    source_id : int</span>
+<span class="sd">        The normalized Gaia ``source_id`` stored on the instance as an integer.</span>
+
+<span class="sd">    data_release : str</span>
+<span class="sd">        The validated data release associated with the ``source_id``.</span>
 
 
 <span class="sd">    Raises</span>
