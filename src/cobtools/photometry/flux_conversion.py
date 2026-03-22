@@ -14,7 +14,7 @@ from cobtools.data_models.band import Band
 
 
 def magnitude_to_flux(
-        mag: Union[float, ArrayLike], band: Band
+    mag: Union[float, ArrayLike], band: Band
 ) -> Union[float, np.ndarray]:
     """
     Convert magnitude to flux for a given band
