@@ -1,3 +1,12 @@
+"""
+Utilities for converting between magnitudes and fluxes for supported
+photometric bands.
+
+Functions
+---------
+- ``magnitude_to_flux(mag, band)``: Convert magnitude values to fluxes for a
+  given photometric band.
+"""
 import numpy as np
 from numpy.typing import ArrayLike
 from typing import Union
@@ -34,11 +43,23 @@ def magnitude_to_flux(
     Notes
     -----
     The conversion is done using the formula:
+
     .. math::
-        F = F_0 * w_eff * 10^{-0.4 * m},
-    where :math:`F_0` is the zero-point flux for the band, :math:`w_eff` is
-    the effective wavelength, and :math:`m` is the magnitude. F0 values are
-    from Gaia Collaboration (2021), A&A, 639, A3.
+        F = w_{\\text{eff}} F_0 10^{-0.4m},
+
+    where :math:`F_0` is the zero-point flux for the band,
+    :math:`w_{\\text{eff}}` is the effective wavelength, and :math:`m` is the
+    magnitude. :math:`F_0` values are from Gaia Collaboration (2021), A&A, 639,
+    A3.
+
+    Examples
+    --------
+    >>> from cobtools.data_models.band import Band
+    >>> from cobtools.photometry.flux_conversion import magnitude_to_flux
+    >>> band = Band(name='gaia_g')
+    >>> mag = 15.0
+    >>> flux = magnitude_to_flux(mag, band)
+
     """
 
     try:
