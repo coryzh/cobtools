@@ -51,3 +51,10 @@ class Band:
     def system(self) -> str:
         """Return the photometric system for this band."""
         return BAND_DATA[self.name]["system"]
+
+    def __repr__(self):
+        return (
+            f"Band(name='{self.name}', zp_flam={self.zp_flam}, "
+            f"zp_mag={self.zp_mag}, w_eff={self.w_eff}, "
+            f"system='{self.system}')"
+        )
