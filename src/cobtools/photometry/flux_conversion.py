@@ -37,8 +37,8 @@ def magnitude_to_flux(
     .. math::
         F = F_0 * w_eff * 10^{-0.4 * m},
     where :math:`F_0` is the zero-point flux for the band, :math:`w_eff` is
-    the effective wavelength, and :math:`m` is the magnitude.
-
+    the effective wavelength, and :math:`m` is the magnitude. F0 values are
+    from Gaia Collaboration (2021), A&A, 639, A3.
     """
 
     try:
