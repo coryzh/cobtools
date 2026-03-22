@@ -35,7 +35,7 @@ def magnitude_to_flux(
     ------
     ValueError
         If mag is not a float or array-like of floats, or if it contains
-        non-finite or non-positive values.
+        non-finite values.
 
     TypeError
         If band is not an instance of Band.
@@ -73,8 +73,8 @@ def magnitude_to_flux(
     if mag.ndim > 1:
         raise ValueError("mag must be a scalar or 1D array.")
 
-    if not np.all(np.isfinite(mag)) or np.any(mag <= 0):
-        raise ValueError("mag must contain finite positive values.")
+    if not np.all(np.isfinite(mag)):
+        raise ValueError("mag must contain finite values.")
 
     if not isinstance(band, Band):
         raise TypeError(
