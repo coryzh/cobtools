@@ -24,7 +24,7 @@ class LightCurve:
     ----------
     time_axis : ArrayLike
         An array of time values in an appropriate time unit (e.g., MJD, JD,
-        seconds).
+        seconds). Must contain at least one data point.
 
     flux : ArrayLike
         Fluxes corresponding to the time axis.
@@ -60,6 +60,19 @@ class LightCurve:
     flux_err: ArrayLike
 
     def __post_init__(self):
+        if len(self.time_axis) == 0:
+            raise ValueError(
+                "Light curve must contains at least one data point."
+            )
+
+        if (
+            len(self.time_axis) != len(self.flux)
+            or len(self.time_axis) != len(self.flux_err)
+        ):
+            raise ValueError(
+                "time_axis, flux, and flux_err must have the same length."
+            )
+
         if not isinstance(self.time_axis, np.ndarray):
             object.__setattr__(self, 'time_axis', np.array(self.time_axis))
         if not isinstance(self.flux, np.ndarray):
@@ -108,12 +121,6 @@ class LightCurve:
         """
         if bin_size is None:
             return
-
-        if len(self.time_axis) == 0:
-            raise ValueError(
-                "Cannot rebin an empty light curve. Ensure the light curve "
-                "contains at least one data point."
-            )
 
         # Create bins
         bins = np.arange(
