@@ -148,9 +148,9 @@ class LasairObject:
 
         Raises
         ------
-        ValueError
+        TypeError
             If the input data does not contain the required fields or if the
-            data format is incorrect.
+            data format is incompatible with the expected dataclass fields.
 
         Example
         -------
