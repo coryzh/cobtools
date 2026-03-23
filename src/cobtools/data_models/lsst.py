@@ -13,8 +13,8 @@ DiaSource
 DiaForcedSource
     A data class representing a single diaForcedSource entry from the LSST
     product.
-    A DiaForcedSource is a forced photometry measurement at the a known
-    position on a difference image.
+    A DiaForcedSource is a forced photometry measurement at a known position on
+    a difference image.
 
 DiaObject
     A data class representing a single diaObject entry from the LSST product.
