@@ -1,3 +1,15 @@
+"""
+A data model for light curves.
+
+Classes
+-------
+LightCurve
+    A data class representing a light curve, which consists of time-series
+    data for flux measurements and their associated uncertainties. The class
+    includes methods for rebinning the light curve into fixed time intervals
+    and for folding the light curve on a specified period.
+"""
+
 from dataclasses import dataclass
 import numpy as np
 from numpy.typing import ArrayLike
@@ -5,6 +17,43 @@ from numpy.typing import ArrayLike
 
 @dataclass
 class LightCurve:
+    """
+    A data class representing a light curve.
+
+    Parameters
+    ----------
+    time_axis : ArrayLike
+        An array of time values in an appropriate time unit (e.g., MJD, JD,
+        seconds).
+
+    flux : ArrayLike
+        Fluxes corresponding to the time axis.
+
+    flux_err : ArrayLike
+        The corresponding uncertainties on the fluxes.
+
+    Attributes
+    ----------
+    time_axis : numpy.ndarray
+        An array of time values in an appropriate time unit (e.g., MJD, JD,
+        seconds).
+
+    flux : numpy.ndarray
+        Fluxes corresponding to the time axis.
+
+    flux_err : numpy.ndarray
+        The corresponding uncertainties on the fluxes.
+
+    Methods
+    -------
+    rebin(bin_size: float)
+        Rebin light curve into time bins of fixed intervals (even binning).
+        This method modifies the light curve in place.
+
+    fold(period: float) -> "LightCurve"
+        Fold the light curve on a given period and return a new LightCurve
+        instance with the folded data.
+    """
     time_axis: ArrayLike
     flux: ArrayLike
     flux_err: ArrayLike
@@ -21,10 +70,13 @@ class LightCurve:
         """
         Regroup light curve data into bins of fixed time intervals.
 
-        Parameters:
-            bin_size (float): Size of each time bin.
+        Parameters
+        ----------
+            bin_size (float): Size of each time bin. The unit should be the
+            same as that of the time_axis. If None, no rebinning is performed.
 
-        Returns:
+        Returns
+        -------
             binned_time (numpy.ndarray): Midpoints of the time bins.
             binned_flux (numpy.ndarray): Average flux in each bin.
             binned_flux_err (numpy.ndarray): Average flux error in each bin.
@@ -62,10 +114,13 @@ class LightCurve:
         """
         Fold the light curve on a given period.
 
-        Parameters:
-            period (float): The period to fold the light curve on.
+        Parameters
+        ----------
+            period (float): The period to fold the light curve on. The unit
+            should be the same as that of the time_axis.
 
-        Returns:
+        Returns
+        -------
             folded_time (numpy.ndarray): Time values folded on the period.
             folded_flux (numpy.ndarray): Corresponding flux values.
             folded_flux_err (numpy.ndarray): Corresponding flux error values.
