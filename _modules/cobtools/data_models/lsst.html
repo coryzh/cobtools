@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cobtools.data_models.lsst &mdash; cobtools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://coryzh.github.io/cobtools/_modules/cobtools/data_models/lsst.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cobtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.html">cobtools package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">cobtools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.astrometry.html">cobtools.astrometry package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.photometry.html">cobtools.photometry package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.query.html">cobtools.query package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.plot_utils.html">cobtools.plot_utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cobtools.data_models.html">cobtools.data_models package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cobtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cobtools.data_models.lsst</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cobtools.data_models.lsst</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Data models defined for the Vera C. Rubin Observatory&#39;s Legacy Survey of Space</span>
+<span class="sd">and Time (LSST, hereafter) data. For more information, see the</span>
+<span class="sd">`Rubin/LSST Alert Product Data Schema &lt;https://sdm-schemas.lsst.io/&gt;`_.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">DiaSource</span>
+<span class="sd">    A data class representing a single diaSource entry from the LSST product.</span>
+<span class="sd">    A DiaSource (Difference Image Analysis Source) is a detection on a</span>
+<span class="sd">    difference image.</span>
+
+<span class="sd">DiaForcedSource</span>
+<span class="sd">    A data class representing a single diaForcedSource entry from the LSST</span>
+<span class="sd">    product.</span>
+<span class="sd">    A DiaForcedSource is a forced photometry measurement at a known position on</span>
+<span class="sd">    a difference image.</span>
+
+<span class="sd">DiaObject</span>
+<span class="sd">    A data class representing a single diaObject entry from the LSST product.</span>
+<span class="sd">    A DiaObject is a cataloged astrophysical object that has been identified as</span>
+<span class="sd">    variable or transient based on time-series analysis of difference images.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+
+<div class="viewcode-block" id="DiaSource">
+<a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst.DiaSource">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DiaSource</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class representing a single diaSource entry from the LSST product.</span>
+
+<span class="sd">    A DiaSource (Difference Image Analysis Source) is a single detection on a</span>
+<span class="sd">    difference image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diaSourceId : int, optional</span>
+<span class="sd">        Unique identifier for the diaSource record. Defaults to None.</span>
+
+<span class="sd">    midpointMjdTai : float, optional</span>
+<span class="sd">        Midpoint of the exposure in Modified Julian Date, in the TAI time</span>
+<span class="sd">        standard. Defaults to None.</span>
+
+<span class="sd">    band : str, optional</span>
+<span class="sd">        Photometric band of the observation. Defaults to None.</span>
+
+<span class="sd">    psfFlux : float, optional</span>
+<span class="sd">        PSF-fit flux measured for the source on the difference image.</span>
+<span class="sd">        Defaults to None.</span>
+
+<span class="sd">    psfFluxErr : float, optional</span>
+<span class="sd">        Uncertainty on the PSF-fit flux measurement. Defaults to None.</span>
+
+<span class="sd">    reliability : float, optional</span>
+<span class="sd">        Reliability score associated with the detection. Defaults to None.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diaSourceId : int or None</span>
+<span class="sd">        Unique identifier for the diaSource record.</span>
+
+<span class="sd">    midpointMjdTai : float or None</span>
+<span class="sd">        Midpoint of the exposure in Modified Julian Date, in the TAI time</span>
+<span class="sd">        standard.</span>
+
+<span class="sd">    band : str or None</span>
+<span class="sd">        Photometric band of the observation.</span>
+
+<span class="sd">    psfFlux : float or None</span>
+<span class="sd">        PSF-fit flux measured for the source on the difference image.</span>
+
+<span class="sd">    psfFluxErr : float or None</span>
+<span class="sd">        Uncertainty on the PSF-fit flux measurement.</span>
+
+<span class="sd">    reliability : float or None</span>
+<span class="sd">        Reliability score associated with the detection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">diaSourceId</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">midpointMjdTai</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">band</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">psfFlux</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">psfFluxErr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">reliability</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DiaForcedSource">
+<a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst.DiaForcedSource">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DiaForcedSource</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class representing a single diaForcedSource entry from the LSST</span>
+<span class="sd">    product.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    midpointMjdTai : float, optional</span>
+<span class="sd">        Midpoint of the exposure in Modified Julian Date, in the TAI time</span>
+<span class="sd">        standard. Defaults to None.</span>
+
+<span class="sd">    band : str, optional</span>
+<span class="sd">        Photometric band of the observation. Defaults to None.</span>
+
+<span class="sd">    psfFlux : float, optional</span>
+<span class="sd">        PSF-fit flux measured for the source on the difference image.</span>
+<span class="sd">        Defaults to None.</span>
+
+<span class="sd">    psfFluxErr : float, optional</span>
+<span class="sd">        Uncertainty on the PSF-fit flux measurement. Defaults to None.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    midpointMjdTai : float or None</span>
+<span class="sd">        Midpoint of the exposure in Modified Julian Date, in the TAI time</span>
+<span class="sd">        standard.</span>
+
+<span class="sd">    band : str or None</span>
+<span class="sd">        Photometric band of the observation.</span>
+
+<span class="sd">    psfFlux : float or None</span>
+<span class="sd">        PSF-fit flux measured for the source on the difference image.</span>
+
+<span class="sd">    psfFluxErr : float or None</span>
+<span class="sd">        Uncertainty on the PSF-fit flux measurement.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">midpointMjdTai</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">band</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">psfFlux</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">psfFluxErr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DiaObject">
+<a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst.DiaObject">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DiaObject</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class representing a single diaObject entry from the LSST product.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diaObjectId : int, optional</span>
+<span class="sd">        Unique identifier for the diaObject record.</span>
+
+<span class="sd">    ra : float, optional</span>
+<span class="sd">        Right Ascension of the object in degrees. Defaults to None.</span>
+
+<span class="sd">    decl : float, optional</span>
+<span class="sd">        Declination of the object in degrees. Defaults to None.</span>
+
+<span class="sd">    firstDiaSourceMjdTai : float, optional</span>
+<span class="sd">        Modified Julian Date (TAI) of the first associated diaSource detection.</span>
+<span class="sd">        Defaults to None.</span>
+
+<span class="sd">    lastDiaSourceMjdTai : float, optional</span>
+<span class="sd">        Modified Julian Date (TAI) of the last associated diaSource detection.</span>
+<span class="sd">        Defaults to None.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diaObjectId : int or None</span>
+<span class="sd">        Unique identifier for the diaObject record.</span>
+
+<span class="sd">    ra : float or None</span>
+<span class="sd">        Right Ascension of the object in degrees.</span>
+
+<span class="sd">    decl : float or None</span>
+<span class="sd">        Declination of the object in degrees.</span>
+
+<span class="sd">    firstDiaSourceMjdTai : float or None</span>
+<span class="sd">        Modified Julian Date (TAI) of the first associated diaSource detection.</span>
+
+<span class="sd">    lastDiaSourceMjdTai : float or None</span>
+<span class="sd">        Modified Julian Date (TAI) of the last associated diaSource detection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">diaObjectId</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">ra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">decl</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">firstDiaSourceMjdTai</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">lastDiaSourceMjdTai</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yue (Cory) Zhao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
