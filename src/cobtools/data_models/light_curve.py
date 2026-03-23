@@ -73,14 +73,13 @@ class LightCurve:
 
         Parameters
         ----------
-            bin_size (float): Size of each time bin. The unit should be the
-            same as that of the time_axis. If None, no rebinning is performed.
+            bin_size : float
+                Size of each time bin. The unit should be the same as that of
+                the time_axis. If None, no rebinning is performed.
 
         Returns
         -------
-            binned_time (numpy.ndarray): Midpoints of the time bins.
-            binned_flux (numpy.ndarray): Average flux in each bin.
-            binned_flux_err (numpy.ndarray): Average flux error in each bin.
+            None: This method modifies the light curve in place.
 
         Example
         -------
