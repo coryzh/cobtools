@@ -75,8 +75,9 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
             )
 
         try:
+            endpoint = getattr(self, "endpoint", None) or self.DEFAULT_ENDPOINT
             return lasair(
-                token=self.auth.token, endpoint=self.DEFAULT_ENDPOINT
+                token=self.auth.token, endpoint=endpoint
             )
         except Exception as e:
             raise BrokerAuthError(
