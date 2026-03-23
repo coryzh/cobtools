@@ -16,6 +16,7 @@ LasairObject
 Reference
 ---------
 .. [1] Lasair documentation: https://lasair-lsst.readthedocs.io/en/main/
+.. [2] Lasair Schema Browser: https://lasair.lsst.ac.uk/schema/
 """
 
 from dataclasses import dataclass, asdict, field
@@ -27,6 +28,11 @@ import pandas as pd
 
 @dataclass
 class LasairData:
+    """
+    A data class representing a data object from the Lasair database, which
+    includes metadata provided by Lasair. Parameter meaning can be found in the
+    Lasair Schema Browser [2]_.
+    """
     nDiaSources: Optional[int] = field(default=None)
     firstDiaSourceMjdTai: Optional[float] = field(default=None)
     lastDiaSourceMjdTai: Optional[float] = field(default=None)
@@ -61,6 +67,51 @@ class LasairData:
 
 @dataclass(frozen=True)
 class LasairObject:
+    """
+    A data class representing a single object from the Lasair database. This
+    class is a wrapper that combines the LSST diaObject and Lasair-derived
+    metadata. It is mainly designed to parse the data retrieved from the Lasair
+    API, which is a nested dictionary. It includes methods for retrieving the
+    light curve data as a pandas DataFrame or as a LightCurve instance.
+
+    Parameters
+    ----------
+    diaObjectId : int
+        Unique identifier for the diaObject record.
+
+    lasairData : LasairData
+        Metadata provided by Lasair for the object.
+
+    diaObject : DiaObject
+        The diaObject record from the LSST product, containing basic
+        information about the object.
+
+    diaSourcesList : List[DiaSource]
+        A list of diaSource records associated with the object, representing
+        individual detections on difference images.
+
+    diaForcedSourcesList : List[DiaForcedSource]
+        A list of diaForcedSource records associated with the object,
+        representing forced photometry measurements at the object's position
+        on difference images.
+
+    Methods
+    -------
+    info() -> str
+        Return a human-readable string summarizing the key information about
+        the LasairObject.
+
+    get_lightcurve_df(option: str, band: str) -> pd.DataFrame
+        Retrieve the light curve data as a pandas DataFrame. The `option`
+        parameter specifies whether to use 'diaSources' or 'diaForcedSources'
+        for the light curve data, and the `band` parameter allows filtering
+        by photometric band.
+
+    get_lightcurve(**kwargs) -> LightCurve
+        Retrieve the light curve data as a LightCurve instance. This method
+        internally calls `get_lightcurve_df` to get the data and then
+        constructs a LightCurve instance from it.
+    """
     diaObjectId: int
     lasairData: LasairData
     diaObject: DiaObject
@@ -87,6 +138,39 @@ class LasairObject:
         """
         Create a LasairObject instance from a nested dictionary
         retrieved from the Lasair API.
+
+        Parameters
+        ----------
+        data : dict
+            The nested dictionary containing the data for a single object as
+            retrieved from the Lasair API.
+
+        Returns
+        -------
+        LasairObject
+            An instance of LasairObject populated with the data from the API.
+
+        Raises
+        ------
+        ValueError
+            If the input data does not contain the required fields or if the
+            data format is incorrect.
+
+        
+        Example
+        -------
+        .. code-block:: python
+            from lasair import lasair_client as lasair
+            from cobtools.data_models.lsst_lasair import LasairObject
+
+            L = lasair(
+                endpoint="https://api.lasair.lsst.ac.uk/api",
+                token="your_api_token"
+                )
+            # Replace objectId with a valid diaObjectId
+
+            api_data = L.object(objectId)
+            lasair_object = LasairObject.from_api_data(api_data)
         """
         # Convert the nested dictionary for diaObject into a DiaObject instance
         if 'diaObject' in data and isinstance(data['diaObject'], dict):
@@ -117,6 +201,40 @@ class LasairObject:
             option: Optional[str] = "diaSources",
             band: Optional[str] = "all"
     ) -> pd.DataFrame:
+        """
+        Retrieve the light curve data as a pandas DataFrame.
+
+        Parameters
+        ----------
+        option : str, optional
+            The type of sources to include in the light curve. Choose
+            'diaSources' or 'diaForcedSources'.
+        band : str, optional
+            The band to filter the data by. Choose 'all', 'u', 'g', 'r', 'i',
+            'z', or 'y'.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame containing the light curve data.
+
+        Raises
+        ------
+        ValueError
+            If the `option` parameter is not 'diaSources' or
+            'diaForcedSources', or if the `band` parameter is not one of the
+            allowed values.
+
+        Example
+        -------
+
+        .. code-block:: python
+            # Get light curve as a DataFrame
+            # Assuming `lasair_object` is an instance of LasairObject
+            lc_df = lasair_object.get_lightcurve_df(
+                option="diaSources", band="g"
+            )
+        """
         if option == "diaSources":
             if len(self.diaSourcesList) == 0:
                 raise ValueError("No diaSources available for this object.")
@@ -150,6 +268,21 @@ class LasairObject:
             return df.reset_index(drop=True)
 
     def get_lightcurve(self, **kwargs) -> LightCurve:
+        """
+        Get the light curve data as a LightCurve instance.
+
+        Parameters
+        ----------
+        **kwargs
+            Keyword arguments to be passed to `get_lightcurve_df`.
+
+        Returns
+        -------
+        LightCurve
+            LightCurve instance containing the light curve data for the object.
+            More details can be found in the documentation of the LightCurve
+            class in `cobtools.data_models.light_curve`.
+        """
         df = self.get_lightcurve_df(**kwargs)
 
         return LightCurve(
