@@ -52,7 +52,7 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
     capabilities = BrokerCapabilities(
         object_lookup=True,
         lightcurve_retrieval=True,
-        image_retrieval=True
+        image_retrieval=False
     )
 
     def _build_client(self):
