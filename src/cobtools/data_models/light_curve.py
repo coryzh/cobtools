@@ -53,6 +53,7 @@ class LightCurve:
     fold(period: float) -> "LightCurve"
         Fold the light curve on a given period and return a new LightCurve
         instance with the folded data.
+
     """
     time_axis: ArrayLike
     flux: ArrayLike
@@ -80,6 +81,23 @@ class LightCurve:
             binned_time (numpy.ndarray): Midpoints of the time bins.
             binned_flux (numpy.ndarray): Average flux in each bin.
             binned_flux_err (numpy.ndarray): Average flux error in each bin.
+
+        Example
+        -------
+        .. code-block:: python
+
+            from cobtools.data_models.light_curve import LightCurve
+            import numpy as np
+
+            # Create a sample light curve
+            time_axis = np.arange(0, 10, 0.1)
+            period = 3.0
+            flux = 10 + 2 * np.sin(2 * np.pi * time_axis / period)
+            flux_err = 0.5 * np.ones_like(flux)
+            lc = LightCurve(time_axis=time_axis, flux=flux, flux_err=flux_err)
+            # Rebin the light curve into 0.5 time units
+            lc.rebin(bin_size=0.5)
+
         """
         if bin_size is None:
             return
@@ -124,6 +142,22 @@ class LightCurve:
             folded_time (numpy.ndarray): Time values folded on the period.
             folded_flux (numpy.ndarray): Corresponding flux values.
             folded_flux_err (numpy.ndarray): Corresponding flux error values.
+
+        Example
+        -------
+        .. code-block:: python
+
+            from cobtools.data_models.light_curve import LightCurve
+            import numpy as np
+            # Create a sample light curve
+            time_axis = np.arange(0, 10, 0.1)
+            period = 3.0
+            flux = 10 + 2 * np.sin(2 * np.pi * time_axis
+            / period)
+            flux_err = 0.5 * np.ones_like(flux)
+            lc = LightCurve(time_axis=time_axis, flux=flux, flux_err=flux_err)
+            # Fold the light curve on the period
+            folded_lc = lc.fold(period=period)
         """
         t0 = self.time_axis.min()
         phase = ((self.time_axis - t0) % period) / period
