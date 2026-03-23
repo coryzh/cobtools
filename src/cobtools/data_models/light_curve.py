@@ -9,9 +9,9 @@ LightCurve
     includes methods for rebinning the light curve into fixed time intervals
     and for folding the light curve on a specified period.
 """
-
-from dataclasses import dataclass
 import numpy as np
+from typing import Optional
+from dataclasses import dataclass
 from numpy.typing import ArrayLike
 
 
@@ -67,13 +67,13 @@ class LightCurve:
         if not isinstance(self.flux_err, np.ndarray):
             object.__setattr__(self, 'flux_err', np.array(self.flux_err))
 
-    def rebin(self, bin_size: float):
+    def rebin(self, bin_size: Optional[float]) -> None:
         """
         Regroup light curve data into bins of fixed time intervals.
 
         Parameters
         ----------
-            bin_size : float
+            bin_size : Optional[float]
                 Size of each time bin. The unit should be the same as that of
                 the time_axis. If None, no rebinning is performed.
 
