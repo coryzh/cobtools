@@ -155,6 +155,10 @@ class LightCurve:
             folded_flux (numpy.ndarray): Corresponding flux values.
             folded_flux_err (numpy.ndarray): Corresponding flux error values.
 
+        Raises
+        ------
+            ValueError
+                If the period is not a positive number.
         Example
         -------
         .. code-block:: python
@@ -171,6 +175,9 @@ class LightCurve:
             # Fold the light curve on the period
             folded_lc = lc.fold(period=period)
         """
+        if period <= 0:
+            raise ValueError("Period must be a positive number.")
+
         t0 = self.time_axis.min()
         phase = ((self.time_axis - t0) % period) / period
 
