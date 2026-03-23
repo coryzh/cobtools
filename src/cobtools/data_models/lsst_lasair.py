@@ -55,7 +55,7 @@ class LasairData:
     peakUtc: Optional[str] = field(default=None)
     peakMag: Optional[float] = field(default=None)
     peakFilter: Optional[str] = field(default=None)
-    sherlock: Optional[dict] = field(default={})
+    sherlock: Optional[dict] = field(default_factory=dict)
     TNS: Optional[dict] = field(default=None)
     annotations: Optional[List[dict]] = field(default=None)
     imageUrls: Optional[List[dict]] = field(default=None)
