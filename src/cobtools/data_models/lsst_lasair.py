@@ -1,22 +1,18 @@
 """
 Data models defined for the Lasair data objects. For more information, see the
-Lasair documentation [1]_.
+`Lasair documentation <https://lasair-lsst.readthedocs.io/en/main/>`_.
 
 Classes
 -------
 LasairData
     A data class representing a data object from the Lasair database, which
-    includes metadata provided by Lasair.
+    includes metadata provided by Lasair. Parameter meaning can be found in
+    the `Lasair Schema Browser <https://lasair.lsst.ac.uk/schema/>`_.
 
 LasairObject
     A data class representing a single object from the Lasair database. This
     class is a wrapper that combines the LSST diaObject and Lasair-derived
     metadata.
-
-Reference
----------
-.. [1] Lasair documentation: https://lasair-lsst.readthedocs.io/en/main/
-.. [2] Lasair Schema Browser: https://lasair.lsst.ac.uk/schema/
 """
 
 from dataclasses import dataclass, asdict, field
@@ -31,7 +27,7 @@ class LasairData:
     """
     A data class representing a data object from the Lasair database, which
     includes metadata provided by Lasair. Parameter meaning can be found in the
-    Lasair Schema Browser [2]_.
+    `Lasair Schema Browser <https://lasair.lsst.ac.uk/schema/>`_.
     """
     nDiaSources: Optional[int] = field(default=None)
     firstDiaSourceMjdTai: Optional[float] = field(default=None)
@@ -159,6 +155,7 @@ class LasairObject:
         Example
         -------
         .. code-block:: python
+
             from lasair import lasair_client as lasair
             from cobtools.data_models.lsst_lasair import LasairObject
 
@@ -228,6 +225,7 @@ class LasairObject:
         -------
 
         .. code-block:: python
+
             # Get light curve as a DataFrame
             # Assuming `lasair_object` is an instance of LasairObject
             lc_df = lasair_object.get_lightcurve_df(

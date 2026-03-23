@@ -1,7 +1,7 @@
 """
 Data models defined for the Vera C. Rubin Observatory's Legacy Survey of Space
-and Time (LSST, hereafter) data. For more information, see the Rubin/LSST Alert
-Product Data Schema [1]_.
+and Time (LSST, hereafter) data. For more information, see the
+`Rubin/LSST Alert Product Data Schema <https://sdm-schemas.lsst.io/>`_.
 
 Classes
 -------
@@ -21,10 +21,6 @@ DiaObject
     A DiaObject is a cataloged astrophysical object that has been identified as
     variable or transient based on time-series analysis of difference images.
 
-Reference
----------
-.. [1] Rubin/LSST Alert Product Data Schema:
-    https://sdm-schemas.lsst.io/
 """
 
 from dataclasses import dataclass, field
