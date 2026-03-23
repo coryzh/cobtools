@@ -1,0 +1,199 @@
+"""
+A data model for light curves.
+
+Classes
+-------
+LightCurve
+    A data class representing a light curve, which consists of time-series
+    data for flux measurements and their associated uncertainties. The class
+    includes methods for rebinning the light curve into fixed time intervals
+    and for folding the light curve on a specified period.
+"""
+import numpy as np
+from typing import Optional
+from dataclasses import dataclass
+from numpy.typing import ArrayLike
+
+
+@dataclass
+class LightCurve:
+    """
+    A data class representing a light curve.
+
+    Parameters
+    ----------
+    time_axis : ArrayLike
+        An array of time values in an appropriate time unit (e.g., MJD, JD,
+        seconds). Must contain at least one data point.
+
+    flux : ArrayLike
+        Fluxes corresponding to the time axis.
+
+    flux_err : ArrayLike
+        The corresponding uncertainties on the fluxes.
+
+    Attributes
+    ----------
+    time_axis : numpy.ndarray
+        An array of time values in an appropriate time unit (e.g., MJD, JD,
+        seconds).
+
+    flux : numpy.ndarray
+        Fluxes corresponding to the time axis.
+
+    flux_err : numpy.ndarray
+        The corresponding uncertainties on the fluxes.
+
+    Methods
+    -------
+    rebin(bin_size: float)
+        Rebin light curve into time bins of fixed intervals (even binning).
+        This method modifies the light curve in place.
+
+    fold(period: float) -> "LightCurve"
+        Fold the light curve on a given period and return a new LightCurve
+        instance with the folded data.
+
+    Raises
+    ------
+    ValueError
+        If the time_axis is empty or if the lengths of time_axis, flux, and
+        flux_err do not match.
+
+    """
+    time_axis: ArrayLike
+    flux: ArrayLike
+    flux_err: ArrayLike
+
+    def __post_init__(self):
+        if len(self.time_axis) == 0:
+            raise ValueError(
+                "Light curve must contain at least one data point."
+            )
+
+        if not (len(self.time_axis) == len(self.flux) == len(self.flux_err)):
+            raise ValueError(
+                "time_axis, flux, and flux_err must have the same length."
+            )
+
+        if not isinstance(self.time_axis, np.ndarray):
+            object.__setattr__(self, 'time_axis', np.array(self.time_axis))
+        if not isinstance(self.flux, np.ndarray):
+            object.__setattr__(self, 'flux', np.array(self.flux))
+        if not isinstance(self.flux_err, np.ndarray):
+            object.__setattr__(self, 'flux_err', np.array(self.flux_err))
+
+    def rebin(self, bin_size: Optional[float]) -> None:
+        """
+        Regroup light curve data into bins of fixed time intervals.
+
+        Parameters
+        ----------
+            bin_size : Optional[float]
+                Size of each time bin. The unit should be the same as that of
+                the time_axis. If None, no rebinning is performed.
+
+        Returns
+        -------
+            None: This method modifies the light curve in place.
+
+        Raises
+        ------
+            ValueError
+                If the bin_size is not positive or if the time_axis is empty.
+
+        Example
+        -------
+        .. code-block:: python
+
+            from cobtools.data_models.light_curve import LightCurve
+            import numpy as np
+
+            # Create a sample light curve
+            time_axis = np.arange(0, 10, 0.1)
+            period = 3.0
+            flux = 10 + 2 * np.sin(2 * np.pi * time_axis / period)
+            flux_err = 0.5 * np.ones_like(flux)
+            lc = LightCurve(time_axis=time_axis, flux=flux, flux_err=flux_err)
+            # Rebin the light curve into 0.5 time units
+            lc.rebin(bin_size=0.5)
+
+        """
+        if bin_size is None:
+            return
+
+        if bin_size <= 0:
+            raise ValueError("bin_size must be a positive number.")
+
+        # Create bins
+        bins = np.arange(
+            self.time_axis.min(), self.time_axis.max() + bin_size, bin_size
+        )
+        bin_indices = np.digitize(self.time_axis, bins) - 1
+
+        # Calculate binned time and flux
+        binned_time = []
+        binned_flux = []
+        binned_flux_err = []
+        for i in range(len(bins) - 1):
+            mask = bin_indices == i
+            if np.any(mask):
+                binned_time.append((bins[i] + bins[i + 1]) / 2)
+                binned_flux.append(np.mean(self.flux[mask]))
+                binned_flux_err.append(
+                    np.sqrt(
+                        np.sum(self.flux_err[mask] ** 2)
+                    ) / len(self.flux[mask])
+                )
+
+        self.time_axis = np.array(binned_time)
+        self.flux = np.array(binned_flux)
+        self.flux_err = np.array(binned_flux_err)
+
+    def fold(self, period: float) -> "LightCurve":
+        """
+        Fold the light curve on a given period.
+
+        Parameters
+        ----------
+            period (float): The period to fold the light curve on. The unit
+            should be the same as that of the time_axis.
+
+        Returns
+        -------
+            folded_time (numpy.ndarray): Time values folded on the period.
+            folded_flux (numpy.ndarray): Corresponding flux values.
+            folded_flux_err (numpy.ndarray): Corresponding flux error values.
+
+        Raises
+        ------
+            ValueError
+                If the period is not a positive number.
+        Example
+        -------
+        .. code-block:: python
+
+            from cobtools.data_models.light_curve import LightCurve
+            import numpy as np
+            # Create a sample light curve
+            time_axis = np.arange(0, 10, 0.1)
+            period = 3.0
+            flux = 10 + 2 * np.sin(2 * np.pi * time_axis
+            / period)
+            flux_err = 0.5 * np.ones_like(flux)
+            lc = LightCurve(time_axis=time_axis, flux=flux, flux_err=flux_err)
+            # Fold the light curve on the period
+            folded_lc = lc.fold(period=period)
+        """
+        if period <= 0:
+            raise ValueError("Period must be a positive number.")
+
+        t0 = self.time_axis.min()
+        phase = ((self.time_axis - t0) % period) / period
+
+        sorted_indices = np.argsort(phase)
+        return LightCurve(
+            time_axis=phase[sorted_indices],
+            flux=self.flux[sorted_indices],
+            flux_err=self.flux_err[sorted_indices]
+        )
