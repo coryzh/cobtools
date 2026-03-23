@@ -156,7 +156,6 @@ class LasairObject:
             If the input data does not contain the required fields or if the
             data format is incorrect.
 
-        
         Example
         -------
         .. code-block:: python
