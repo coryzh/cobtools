@@ -81,6 +81,14 @@ class LightCurve:
         -------
             None: This method modifies the light curve in place.
 
+        Raises
+        ------
+            ValueError
+                If the bin_size is not positive or if the time_axis is empty.
+
+            ValueError
+                If the time_axis is empty.
+
         Example
         -------
         .. code-block:: python
@@ -100,6 +108,12 @@ class LightCurve:
         """
         if bin_size is None:
             return
+
+        if len(self.time_axis) == 0:
+            raise ValueError(
+                "Cannot rebin an empty light curve. Ensure the light curve "
+                "contains at least one data point."
+            )
 
         # Create bins
         bins = np.arange(
