@@ -126,8 +126,9 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
             The ID of the diaObject for which to retrieve the light curve.
 
         diaobject_kwargs : dict, optional
-            Additional keyword arguments for the `.from_api_data` method of the
-            LasairObject class, by default None
+            Additional keyword arguments passed to the
+            :meth:`LasairBrokerClient.get_diaobject` (and ultimately to the
+            underlying Lasair client ``.object(...)`` call), by default None.
 
         lightcurve_kwargs : dict, optional
             Additional keyword arguments for the `get_lightcurve` method of the
