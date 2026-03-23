@@ -22,6 +22,14 @@ cobtools.data\_models.band module
    :undoc-members:
    :no-index:
 
+cobtools.data\_models.light\_curve module
+-----------------------------------------
+.. automodule:: cobtools.data_models.light_curve
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
+
 cobtools.data\_models.lsst module
 ---------------------------------
 
