@@ -193,9 +193,9 @@ class LasairObject:
         return cls(**data)
 
     def get_lightcurve_df(
-            self,
-            option: Optional[str] = "diaSources",
-            band: Optional[str] = "all"
+        self,
+        option: Optional[str] = "diaSources",
+        band: Optional[str] = "all"
     ) -> pd.DataFrame:
         """
         Retrieve the light curve data as a pandas DataFrame.
