@@ -68,7 +68,7 @@ class LightCurve:
     def __post_init__(self):
         if len(self.time_axis) == 0:
             raise ValueError(
-                "Light curve must contains at least one data point."
+                "Light curve must contain at least one data point."
             )
 
         if not (len(self.time_axis) == len(self.flux) == len(self.flux_err)):

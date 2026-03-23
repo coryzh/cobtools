@@ -42,14 +42,6 @@ class TestLightCurveInitialization:
         np.testing.assert_array_equal(lc.flux, np.array(flux))
         np.testing.assert_array_equal(lc.flux_err, np.array(flux_err))
 
-    def test_empty_arrays(self):
-        """Test initialization with empty arrays."""
-        lc = LightCurve(time_axis=[], flux=[], flux_err=[])
-
-        assert len(lc.time_axis) == 0
-        assert len(lc.flux) == 0
-        assert len(lc.flux_err) == 0
-
     def test_single_element(self):
         """Test initialization with single element."""
         lc = LightCurve(time_axis=[1.0], flux=[10.0], flux_err=[1.0])
@@ -58,6 +50,27 @@ class TestLightCurveInitialization:
         assert lc.time_axis[0] == 1.0
         assert lc.flux[0] == 10.0
         assert lc.flux_err[0] == 1.0
+
+    def test_mismatched_lengths(self):
+        """
+            Test that initialization with mismatched lengths raises ValueError.
+        """
+        with pytest.raises(
+            ValueError, match=(
+                "time_axis, flux, and flux_err must have the same length."
+            )
+        ):
+            LightCurve(time_axis=[1.0, 2.0], flux=[10.0], flux_err=[1.0, 2.0])
+
+    def test_empty_time_axis(self):
+        """
+            Test that initialization with empty time_axis raises ValueError.
+        """
+        with pytest.raises(
+            ValueError,
+            match="Light curve must contain at least one data point."
+        ):
+            LightCurve(time_axis=[], flux=[], flux_err=[])
 
 
 class TestLightCurveRebin:
