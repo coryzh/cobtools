@@ -22,6 +22,15 @@ cobtools.data\_models.band module
    :undoc-members:
    :no-index:
 
+cobtools.data\_models.lsst module
+---------------------------------
+
+.. automodule:: cobtools.data_models.lsst
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
+
 Module contents
 ---------------
 
