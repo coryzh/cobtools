@@ -119,8 +119,7 @@ class LightCurve:
                 binned_flux_err.append(
                     np.sqrt(
                         np.sum(self.flux_err[mask] ** 2)
-                        / len(self.flux[mask])
-                    )
+                    ) / len(self.flux[mask])
                 )
 
         self.time_axis = np.array(binned_time)
