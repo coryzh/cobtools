@@ -31,7 +31,7 @@ class TestLasairData:
         assert lasair_data.peakUtc is None
         assert lasair_data.peakMag is None
         assert lasair_data.peakFilter is None
-        assert lasair_data.sherlock is None
+        assert lasair_data.sherlock == {}
         assert lasair_data.TNS is None
         assert lasair_data.annotations is None
         assert lasair_data.imageUrls is None

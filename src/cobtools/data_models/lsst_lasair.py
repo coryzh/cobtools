@@ -169,28 +169,31 @@ class LasairObject:
             lasair_object = LasairObject.from_api_data(api_data)
         """
         # Convert the nested dictionary for diaObject into a DiaObject instance
-        if 'diaObject' in data and isinstance(data['diaObject'], dict):
-            data['diaObject'] = DiaObject(**data['diaObject'])
+        dia_object = data.get('diaObject')
+        if isinstance(dia_object, dict):
+            dia_object = DiaObject(**dia_object)
 
-        if 'lasairData' in data and isinstance(data['lasairData'], dict):
-            data['lasairData'] = LasairData(**data['lasairData'])
+        lasair_data = data.get('lasairData')
+        if isinstance(lasair_data, dict):
+            lasair_data = LasairData(**lasair_data)
 
-        if 'diaSourcesList' in data and isinstance(
-            data['diaSourcesList'], list
-        ):
-            data['diaSourcesList'] = [
-                DiaSource(**source) for source in data['diaSourcesList']
+        dia_sources = data.get('diaSourcesList', [])
+        if isinstance(dia_sources, list):
+            dia_sources = [DiaSource(**source) for source in dia_sources]
+
+        dia_forced_sources = data.get('diaForcedSourcesList', [])
+        if isinstance(dia_forced_sources, list):
+            dia_forced_sources = [
+                DiaForcedSource(**source) for source in dia_forced_sources
             ]
 
-        if 'diaForcedSourcesList' in data and isinstance(
-            data['diaForcedSourcesList'], list
-        ):
-            data['diaForcedSourcesList'] = [
-                DiaForcedSource(**source)
-                for source in data['diaForcedSourcesList']
-            ]
-
-        return cls(**data)
+        return cls(
+            diaObjectId=data['diaObjectId'],
+            lasairData=lasair_data,
+            diaObject=dia_object,
+            diaSourcesList=dia_sources,
+            diaForcedSourcesList=dia_forced_sources
+        )
 
     def get_lightcurve_df(
         self,
