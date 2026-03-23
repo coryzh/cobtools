@@ -39,6 +39,15 @@ cobtools.data\_models.lsst module
    :undoc-members:
    :no-index:
 
+cobtools.data\_models.lsst\_lasair module
+-----------------------------------------
+
+.. automodule:: cobtools.data_models.lsst_lasair
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
+
 Module contents
 ---------------
 
