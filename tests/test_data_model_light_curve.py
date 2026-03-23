@@ -189,12 +189,20 @@ class TestLightCurveFold:
 
         folded = lc.fold(period=2.0)
 
-        # Flux values should be preserved (possibly in different order)
-        assert set(np.round(folded.flux, 10)) == set(
-            np.round(original_flux, 10)
+        # Flux values should be preserved (possibly in different order).
+        # Compare sorted arrays to ignore ordering while preserving
+        # multiplicities.
+        assert np.allclose(
+            np.sort(folded.flux),
+            np.sort(original_flux),
+            rtol=0,
+            atol=1e-10,
         )
-        assert set(np.round(folded.flux_err, 10)) == set(
-            np.round(original_flux_err, 10)
+        assert np.allclose(
+            np.sort(folded.flux_err),
+            np.sort(original_flux_err),
+            rtol=0,
+            atol=1e-10,
         )
 
     def test_fold_sorted_by_phase(self, sample_periodic_light_curve):
