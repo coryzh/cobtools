@@ -19,7 +19,7 @@ from cobtools.query.base import (
     BrokerCapabilities,
     BrokerClient,
     BrokerAuthError,
-    BrokerQueryError
+    BrokerQueryError,
 )
 
 
