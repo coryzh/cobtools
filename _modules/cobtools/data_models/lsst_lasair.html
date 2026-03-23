@@ -257,28 +257,31 @@
 <span class="sd">            lasair_object = LasairObject.from_api_data(api_data)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Convert the nested dictionary for diaObject into a DiaObject instance</span>
-        <span class="k">if</span> <span class="s1">&#39;diaObject&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaObject&#39;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaObject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DiaObject</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaObject&#39;</span><span class="p">])</span>
+        <span class="n">dia_object</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diaObject&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dia_object</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">dia_object</span> <span class="o">=</span> <span class="n">DiaObject</span><span class="p">(</span><span class="o">**</span><span class="n">dia_object</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;lasairData&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lasairData&#39;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lasairData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LasairData</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lasairData&#39;</span><span class="p">])</span>
+        <span class="n">lasair_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lasairData&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lasair_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">lasair_data</span> <span class="o">=</span> <span class="n">LasairData</span><span class="p">(</span><span class="o">**</span><span class="n">lasair_data</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;diaSourcesList&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaSourcesList&#39;</span><span class="p">],</span> <span class="nb">list</span>
-        <span class="p">):</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaSourcesList&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">DiaSource</span><span class="p">(</span><span class="o">**</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaSourcesList&#39;</span><span class="p">]</span>
+        <span class="n">dia_sources</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diaSourcesList&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dia_sources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">dia_sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">DiaSource</span><span class="p">(</span><span class="o">**</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">dia_sources</span><span class="p">]</span>
+
+        <span class="n">dia_forced_sources</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diaForcedSourcesList&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dia_forced_sources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">dia_forced_sources</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">DiaForcedSource</span><span class="p">(</span><span class="o">**</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">dia_forced_sources</span>
             <span class="p">]</span>
 
-        <span class="k">if</span> <span class="s1">&#39;diaForcedSourcesList&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaForcedSourcesList&#39;</span><span class="p">],</span> <span class="nb">list</span>
-        <span class="p">):</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaForcedSourcesList&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">DiaForcedSource</span><span class="p">(</span><span class="o">**</span><span class="n">source</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaForcedSourcesList&#39;</span><span class="p">]</span>
-            <span class="p">]</span>
-
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">diaObjectId</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaObjectId&#39;</span><span class="p">],</span>
+            <span class="n">lasairData</span><span class="o">=</span><span class="n">lasair_data</span><span class="p">,</span>
+            <span class="n">diaObject</span><span class="o">=</span><span class="n">dia_object</span><span class="p">,</span>
+            <span class="n">diaSourcesList</span><span class="o">=</span><span class="n">dia_sources</span><span class="p">,</span>
+            <span class="n">diaForcedSourcesList</span><span class="o">=</span><span class="n">dia_forced_sources</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LasairObject.get_lightcurve_df">
