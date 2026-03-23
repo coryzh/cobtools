@@ -54,6 +54,12 @@ class LightCurve:
         Fold the light curve on a given period and return a new LightCurve
         instance with the folded data.
 
+    Raises
+    ------
+    ValueError
+        If the time_axis is empty or if the lengths of time_axis, flux, and
+        flux_err do not match.
+
     """
     time_axis: ArrayLike
     flux: ArrayLike
@@ -65,10 +71,7 @@ class LightCurve:
                 "Light curve must contains at least one data point."
             )
 
-        if (
-            len(self.time_axis) != len(self.flux)
-            or len(self.time_axis) != len(self.flux_err)
-        ):
+        if not (len(self.time_axis) == len(self.flux) == len(self.flux_err)):
             raise ValueError(
                 "time_axis, flux, and flux_err must have the same length."
             )
@@ -99,9 +102,6 @@ class LightCurve:
             ValueError
                 If the bin_size is not positive or if the time_axis is empty.
 
-            ValueError
-                If the time_axis is empty.
-
         Example
         -------
         .. code-block:: python
@@ -121,6 +121,9 @@ class LightCurve:
         """
         if bin_size is None:
             return
+
+        if bin_size <= 0:
+            raise ValueError("bin_size must be a positive number.")
 
         # Create bins
         bins = np.arange(
