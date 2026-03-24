@@ -61,8 +61,10 @@ class SingleSourceQuery(ABC):
     Parameters
     ----------
     source_id : str | int
-        The ``source_id`` to query. Must be an integer or a string containing
-        only numeric characters.
+        The source_id to query. Accepts an integer, or any value convertible to
+        integer by Python `int(...)` semantics (for example, strings with
+        surrounding whitespace or a leading +). Float inputs are rejected.
+
     data_release : str
         The Gaia data release to use.
 
