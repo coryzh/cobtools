@@ -49,8 +49,7 @@ def magnitude_to_flux(
 
     where :math:`F_0` is the zero-point flux for the band,
     :math:`w_{\\text{eff}}` is the effective wavelength, and :math:`m` is the
-    magnitude. :math:`F_0` values are from Gaia Collaboration (2021), A&A, 639,
-    A3.
+    magnitude. :math:`F_0` values are from various references.
 
     Examples
     --------
@@ -60,6 +59,10 @@ def magnitude_to_flux(
     >>> mag = 15.0
     >>> flux = magnitude_to_flux(mag, band)
 
+    References
+    ----------
+    Gaia Collaboration (2021), A&A, 639, A3.
+    LSST Collaboration (2019), ApJ, 873, 2.
     """
 
     try:

@@ -21,3 +21,13 @@ class TestBand:
             " is not defined in band data."
         ):
             Band(name=invalid_band)
+
+    def test_lsst_bands(self):
+        lsst_bands = [f"lsst_{band}" for band in "ugrizy"]
+        for band_name in lsst_bands:
+            band = Band(name=band_name)
+            assert band.name == BAND_DATA[band_name]["name"]
+            assert band.zp_flam == BAND_DATA[band_name]["zp_flam"]
+            assert band.zp_mag == BAND_DATA[band_name]["zp_mag"]
+            assert band.w_eff == BAND_DATA[band_name]["w_eff"]
+            assert band.system == BAND_DATA[band_name]["system"]

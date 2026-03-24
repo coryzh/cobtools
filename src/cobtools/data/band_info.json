@@ -20,6 +20,48 @@
             "zp_mag": 0.0,
             "system": "vega",
             "w_eff": 2842.11
+        },
+        "lsst_u": {
+            "name": "lsst_u",
+            "zp_flam": 4.51197e-9,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 473.19
+        },
+        "lsst_g": {
+            "name": "lsst_g",
+            "zp_flam": 5.23092e-9,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 1253.26
+        },
+        "lsst_r": {
+            "name": "lsst_r",
+            "zp_flam": 2.45336e-9,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 1206.92
+        },
+        "lsst_i": {
+            "name": "lsst_i",
+            "zp_flam": 1.36121e-9,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 1174.77
+        },
+        "lsst_z": {
+            "name": "lsst_z",
+            "zp_flam": 8.98777e-10,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 997.51
+        },
+        "lsst_y": {
+            "name": "lsst_y",
+            "zp_flam": 6.85638e-10,
+            "zp_mag": 0.0,
+            "system": "vega",
+            "w_eff": 871.83
         }
     }
 }
