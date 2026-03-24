@@ -207,6 +207,34 @@ information.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">source_id</span></span></dt>
+<dd><p>Read-only. The numeric Gaia <code class="docutils literal notranslate"><span class="pre">source_id</span></code>. Forwards to
+<code class="docutils literal notranslate"><span class="pre">self.source_id_obj.source_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Noindex<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">data_release</span></span></dt>
+<dd><p>Read-only. The Gaia data release string (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;dr3&quot;</span></code>). Forwards to
+<code class="docutils literal notranslate"><span class="pre">self.source_id_obj.data_release</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Noindex<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">query_str</span></span></dt>
 <dd><p>The ADQL query string for the specified <code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
 <dl class="field-list simple">
@@ -256,6 +284,22 @@ query does not complete successfully.</p>
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">data_release</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span></dt>
+<dd><p>Backwards-compatible access to the Gaia <code class="docutils literal notranslate"><span class="pre">data_release</span></code> string.</p>
+<p>This read-only property forwards to
+<code class="docutils literal notranslate"><span class="pre">self.source_id_obj.data_release</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The Gaia data release (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;dr3&quot;</span></code>).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">job</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Job</span></span></dt>
 <dd><p>The Gaia job object that will be used to execute the query.</p>
 <dl class="field-list simple">
@@ -293,6 +337,21 @@ Gaia query job.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">source_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span></dt>
+<dd><p>Backwards-compatible access to the numeric Gaia <code class="docutils literal notranslate"><span class="pre">source_id</span></code>.</p>
+<p>This read-only property forwards to <code class="docutils literal notranslate"><span class="pre">self.source_id_obj.source_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The Gaia source identifier.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
