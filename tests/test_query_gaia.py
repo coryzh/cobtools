@@ -19,29 +19,30 @@ class TestSingleSourceQuery:
     def test_init_valid_int_source_id(self):
         """Test initialization with integer source_id."""
         query = SingleSourceFullGaiaQuery(source_id=123456)
-        assert query.source_id == 123456
+        assert query.source_id_obj.source_id == 123456
 
     def test_init_valid_str_source_id(self):
         """Test initialization with string source_id."""
         query = SingleSourceFullGaiaQuery(source_id="123456")
-        assert query.source_id == "123456"
+        # Should be converted to int
+        assert query.source_id_obj.source_id == 123456
 
     def test_init_invalid_source_id_type(self):
         """Test that invalid source_id type raises TypeError."""
         with pytest.raises(
-            TypeError, match="source_id must be an integer or string"
+            ValueError, match="source_id must not be a float"
         ):
             SingleSourceFullGaiaQuery(source_id=12.34)
 
         with pytest.raises(
-            TypeError, match="source_id must be an integer or string"
+            ValueError, match="source_id must be an integer or a string"
         ):
             SingleSourceFullGaiaQuery(source_id="wrong_source_id")
 
     def test_init_default_data_release(self):
         """Test that default data_release is 'dr3'."""
         query = SingleSourceFullGaiaQuery(source_id=123456)
-        assert query.data_release == "dr3"
+        assert query.source_id_obj.data_release == "dr3"
 
     def test_init_custom_data_release(self):
         """Test initialization with custom data_release."""
@@ -49,11 +50,17 @@ class TestSingleSourceQuery:
             query = SingleSourceFullGaiaQuery(
                 source_id=123456, data_release=release
             )
-            assert query.data_release == release
+            assert query.source_id_obj.data_release == release
 
     def test_init_invalid_data_release(self):
         """Test that invalid data_release raises ValueError."""
-        with pytest.raises(ValueError, match="Invalid data release"):
+        with pytest.raises(
+            ValueError,
+            match=(
+                "Invalid source_id or data_release:"
+                " data_release must be one of"
+            )
+        ):
             SingleSourceFullGaiaQuery(source_id=123456, data_release="dr99")
 
 
@@ -71,7 +78,7 @@ class TestSingleSourceFullGaiaQuery:
             FROM
                 gaiadr3.gaia_source
             WHERE
-                source_id = {query.source_id}
+                source_id = {query.source_id_obj.source_id}
             """
         ).strip()
         assert query.query_str == expected
@@ -80,7 +87,9 @@ class TestSingleSourceFullGaiaQuery:
         """Test query_str with different data release."""
         query = SingleSourceFullGaiaQuery(source_id=789, data_release="dr2")
         assert "gaiadr2.gaia_source" in query.query_str
-        assert f"source_id = {query.source_id}" in query.query_str
+        assert (
+            f"source_id = {query.source_id_obj.source_id}" in query.query_str
+        )
 
     @patch("cobtools.query.query_gaia.Gaia.launch_job")
     def test_query_result_success(self, mock_launch_job):
