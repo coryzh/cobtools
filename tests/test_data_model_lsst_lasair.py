@@ -1,4 +1,6 @@
-from cobtools.data_models.lsst_lasair import LasairData
+from cobtools.data_models.lsst_lasair import LasairData, LasairObject
+import json
+import pytest
 
 
 class TestLasairData:
@@ -111,3 +113,30 @@ class TestLasairData:
         lasair_data_2 = LasairData(nDiaSources=3, latestFilter="g")
 
         assert lasair_data_1 == lasair_data_2
+
+
+class TestLasairImageURLs:
+    @pytest.fixture(scope="class")
+    def lasair_data(self):
+        with open("tests/dia_source_data.json", "r") as f:
+            dia_sources_data = json.load(f)
+        return LasairObject.from_api_data(dia_sources_data)
+
+    def test_get_image_urls_valid_input(self, lasair_data):
+        img_urls = lasair_data.image_urls(band="r", img_type="science")
+
+        assert isinstance(img_urls, list)
+        assert all(isinstance(url, str) for url in img_urls)
+        assert all("Science" in url for url in img_urls)
+
+    def test_get_image_urls_invalid_img_type(self, lasair_data):
+        with pytest.raises(
+            ValueError, match="Invalid img_type."
+        ):
+            lasair_data.image_urls(band="r", img_type="invalid_type")
+
+    def test_get_image_urls_invalid_band(self, lasair_data):
+        with pytest.raises(
+            ValueError, match="Invalid band."
+        ):
+            lasair_data.image_urls(band="invalid_band", img_type="science")
