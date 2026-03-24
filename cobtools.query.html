@@ -173,26 +173,24 @@ from the Gaia archive.</p>
 must implement the <code class="docutils literal notranslate"><span class="pre">query_str</span></code> property to define the ADQL query string.
 The <code class="docutils literal notranslate"><span class="pre">query_result</span></code> method is implemented in the base class and can be
 used as-is or overridden by subclasses to customize the behavior.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">source_id</span></span></dt>
-<dd><p>The <code class="docutils literal notranslate"><span class="pre">source_id</span></code> to query. Must be an integer or a string containing
-only numeric characters.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int or str</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_id</strong> (<em>str</em><em> | </em><em>int</em>) – The source_id to query. Accepts an integer, or any value convertible to
+integer by Python <cite>int(…)</cite> semantics (for example, strings with
+surrounding whitespace or a leading +). Float inputs are rejected.</p></li>
+<li><p><strong>data_release</strong> (<em>str</em>) – The Gaia data release to use.</p></li>
+</ul>
 </dd>
 </dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">data_release</span></span></dt>
-<dd><p>The Gaia data release to use. Valid options are “dr1”, “dr2”, “edr3”,
-“dr3”, “dr4”, and “dr5”. Defaults to “dr3”.</p>
+<span class="sig-name descname"><span class="pre">source_id_obj</span></span></dt>
+<dd><p>A SourceID object that encapsulates the source_id and data_release
+information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>SourceID</p>
 </dd>
 </dl>
 </dd></dl>
@@ -248,10 +246,9 @@ query does not complete successfully.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">source_id</span></code> is not an integer or a string containing only numeric
-    characters.</p></li>
-<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">data_release</span></code> is not one of the valid options (“dr1”, “dr2”,
-    “edr3”, “dr3”, “dr4”, “dr5”).</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">source_id</span></code> is not an integer or a string containing only numeric
+    characters. If <code class="docutils literal notranslate"><span class="pre">data_release</span></code> is not one of the valid options
+    (“dr1”, “dr2”, “edr3”, “dr3”, “dr4”, “dr5”).</p></li>
 <li><p><strong>RuntimeError</strong> – If the Gaia query job does not complete successfully or if there is an
     error while fetching the query results.</p></li>
 </ul>

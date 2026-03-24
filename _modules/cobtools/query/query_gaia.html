@@ -122,6 +122,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">astropy.table</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">textwrap</span><span class="w"> </span><span class="kn">import</span> <span class="n">dedent</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.gaia</span><span class="w"> </span><span class="kn">import</span> <span class="n">SourceID</span>
 
 
 <div class="viewcode-block" id="SingleSourceQuery">
@@ -137,14 +138,21 @@
 <span class="sd">    The ``query_result`` method is implemented in the base class and can be</span>
 <span class="sd">    used as-is or overridden by subclasses to customize the behavior.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    source_id : str | int</span>
+<span class="sd">        The source_id to query. Accepts an integer, or any value convertible to</span>
+<span class="sd">        integer by Python `int(...)` semantics (for example, strings with</span>
+<span class="sd">        surrounding whitespace or a leading +). Float inputs are rejected.</span>
+
+<span class="sd">    data_release : str</span>
+<span class="sd">        The Gaia data release to use.</span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    source_id : int or str</span>
-<span class="sd">        The ``source_id`` to query. Must be an integer or a string containing</span>
-<span class="sd">        only numeric characters.</span>
-<span class="sd">    data_release : str</span>
-<span class="sd">        The Gaia data release to use. Valid options are &quot;dr1&quot;, &quot;dr2&quot;, &quot;edr3&quot;,</span>
-<span class="sd">        &quot;dr3&quot;, &quot;dr4&quot;, and &quot;dr5&quot;. Defaults to &quot;dr3&quot;.</span>
+<span class="sd">    source_id_obj : SourceID</span>
+<span class="sd">        A SourceID object that encapsulates the source_id and data_release</span>
+<span class="sd">        information.</span>
 
 <span class="sd">    Properties</span>
 <span class="sd">    ----------</span>
@@ -169,32 +177,22 @@
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If ``source_id`` is not an integer or a string containing only numeric</span>
-<span class="sd">        characters.</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        If ``data_release`` is not one of the valid options (&quot;dr1&quot;, &quot;dr2&quot;,</span>
-<span class="sd">        &quot;edr3&quot;, &quot;dr3&quot;, &quot;dr4&quot;, &quot;dr5&quot;).</span>
+<span class="sd">        If ``source_id`` is not an integer or a string containing only numeric</span>
+<span class="sd">        characters. If ``data_release`` is not one of the valid options</span>
+<span class="sd">        (&quot;dr1&quot;, &quot;dr2&quot;, &quot;edr3&quot;, &quot;dr3&quot;, &quot;dr4&quot;, &quot;dr5&quot;).</span>
 <span class="sd">    RuntimeError</span>
 <span class="sd">        If the Gaia query job does not complete successfully or if there is an</span>
 <span class="sd">        error while fetching the query results.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_release</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dr3&quot;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
-            <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">source_id</span><span class="o">.</span><span class="n">isdigit</span><span class="p">())</span>
-        <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;source_id must be an integer or string&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">source_id_obj</span> <span class="o">=</span> <span class="n">SourceID</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="n">data_release</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid source_id or data_release: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
-        <span class="n">valid_data_releases</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dr1&quot;</span><span class="p">,</span> <span class="s2">&quot;dr2&quot;</span><span class="p">,</span> <span class="s2">&quot;edr3&quot;</span><span class="p">,</span> <span class="s2">&quot;dr3&quot;</span><span class="p">,</span> <span class="s2">&quot;dr4&quot;</span><span class="p">,</span> <span class="s2">&quot;dr5&quot;</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">data_release</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_data_releases</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid data release. Must be one of </span><span class="si">{</span><span class="n">valid_data_releases</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_id</span> <span class="o">=</span> <span class="n">source_id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_release</span> <span class="o">=</span> <span class="n">data_release</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span> <span class="o">=</span> <span class="n">source_id_obj</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
@@ -224,8 +222,8 @@
         <span class="n">phase</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">get_phase</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">phase</span> <span class="o">!=</span> <span class="s1">&#39;COMPLETED&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Query to the </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2"> main table did not complete&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; successfully. Job status: </span><span class="si">{</span><span class="n">phase</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Query to the </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2"> main table &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;did not complete successfully. Job status: </span><span class="si">{</span><span class="n">phase</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">job</span>
 
@@ -240,8 +238,9 @@
 <span class="sd">        Table</span>
 <span class="sd">            The query results as an ``astropy.table.Table object``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span>  <span class="c1"># Access the cached job property</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">get_results</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">job</span><span class="o">.</span><span class="n">get_results</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Error occurred while fetching query results: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -282,9 +281,9 @@
 <span class="s2">            SELECT</span>
 <span class="s2">                *</span>
 <span class="s2">            FROM</span>
-<span class="s2">                gaia</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2">.gaia_source</span>
+<span class="s2">                gaia</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2">.gaia_source</span>
 <span class="s2">            WHERE</span>
-<span class="s2">                source_id = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id</span><span class="si">}</span>
+<span class="s2">                source_id = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">source_id</span><span class="si">}</span>
 <span class="s2">            &quot;&quot;&quot;</span>
         <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
