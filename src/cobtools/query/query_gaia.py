@@ -44,6 +44,7 @@ from abc import ABC, abstractmethod
 from astropy.table import Table
 from textwrap import dedent
 from functools import cached_property
+from cobtools.data_models.gaia import SourceID
 
 
 class SingleSourceQuery(ABC):
@@ -57,14 +58,19 @@ class SingleSourceQuery(ABC):
     The ``query_result`` method is implemented in the base class and can be
     used as-is or overridden by subclasses to customize the behavior.
 
-    Attributes
+    Parameters
     ----------
-    source_id : int or str
+    source_id : str | int
         The ``source_id`` to query. Must be an integer or a string containing
         only numeric characters.
     data_release : str
-        The Gaia data release to use. Valid options are "dr1", "dr2", "edr3",
-        "dr3", "dr4", and "dr5". Defaults to "dr3".
+        The Gaia data release to use.
+
+    Attributes
+    ----------
+    source_id_obj : SourceID
+        A SourceID object tha encapsulates the source_id and data_release
+        information.
 
     Properties
     ----------
@@ -89,32 +95,22 @@ class SingleSourceQuery(ABC):
 
     Raises
     ------
-    TypeError
-        If ``source_id`` is not an integer or a string containing only numeric
-        characters.
     ValueError
-        If ``data_release`` is not one of the valid options ("dr1", "dr2",
-        "edr3", "dr3", "dr4", "dr5").
+        If ``source_id`` is not an integer or a string containing only numeric
+        characters. If ``data_release`` is not one of the valid options
+        ("dr1", "dr2", "edr3", "dr3", "dr4", "dr5").
     RuntimeError
         If the Gaia query job does not complete successfully or if there is an
         error while fetching the query results.
     """
 
     def __init__(self, source_id: int | str, data_release: str = "dr3"):
-        if (
-            not isinstance(source_id, (int, str))
-            or (isinstance(source_id, str) and not source_id.isdigit())
-        ):
-            raise TypeError("source_id must be an integer or string")
+        try:
+            source_id_obj = SourceID(source_id, data_release)
+        except ValueError as e:
+            raise ValueError(f"Invalid source_id or data_release: {e}") from e
 
-        valid_data_releases = {"dr1", "dr2", "edr3", "dr3", "dr4", "dr5"}
-        if data_release not in valid_data_releases:
-            raise ValueError(
-                f"Invalid data release. Must be one of {valid_data_releases}"
-            )
-
-        self.source_id = source_id
-        self.data_release = data_release
+        self.source_id_obj = source_id_obj
 
     @property
     @abstractmethod
@@ -144,8 +140,8 @@ class SingleSourceQuery(ABC):
         phase = job.get_phase()
         if phase != 'COMPLETED':
             raise RuntimeError(
-                f"Query to the {self.data_release} main table did not complete"
-                f" successfully. Job status: {phase}."
+                f"Query to the {self.source_id_obj.data_release} main table "
+                f"did not complete successfully. Job status: {phase}."
             )
         return job
 
@@ -158,8 +154,9 @@ class SingleSourceQuery(ABC):
         Table
             The query results as an ``astropy.table.Table object``.
         """
+        job = self.job  # Access the cached job property
         try:
-            return self.job.get_results()
+            return job.get_results()
         except Exception as e:
             raise RuntimeError(
                 f"Error occurred while fetching query results: {e}"
@@ -196,9 +193,9 @@ class SingleSourceFullGaiaQuery(SingleSourceQuery):
             SELECT
                 *
             FROM
-                gaia{self.data_release}.gaia_source
+                gaia{self.source_id_obj.data_release}.gaia_source
             WHERE
-                source_id = {self.source_id}
+                source_id = {self.source_id_obj.source_id}
             """
         ).strip()
 
