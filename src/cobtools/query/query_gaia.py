@@ -76,6 +76,18 @@ class SingleSourceQuery(ABC):
 
     Properties
     ----------
+    source_id : int
+        Read-only. The numeric Gaia ``source_id``. Forwards to
+        ``self.source_id_obj.source_id``.
+
+        :noindex:
+
+    data_release : str
+        Read-only. The Gaia data release string (e.g. ``"dr3"``). Forwards to
+        ``self.source_id_obj.data_release``.
+
+        :noindex:
+
     query_str : str
         The ADQL query string for the specified ``source_id``.
 
@@ -115,6 +127,35 @@ class SingleSourceQuery(ABC):
         self.source_id_obj = source_id_obj
 
     @property
+    def source_id(self) -> int:
+        """
+        Backwards-compatible access to the numeric Gaia ``source_id``.
+
+        This read-only property forwards to ``self.source_id_obj.source_id``.
+
+        Returns
+        -------
+        int
+            The Gaia source identifier.
+        """
+        return self.source_id_obj.source_id
+
+    @property
+    def data_release(self) -> str:
+        """
+        Backwards-compatible access to the Gaia ``data_release`` string.
+
+        This read-only property forwards to
+        ``self.source_id_obj.data_release``.
+
+        Returns
+        -------
+        str
+            The Gaia data release (e.g. ``"dr3"``).
+        """
+        return self.source_id_obj.data_release
+
+    @property
     @abstractmethod
     def query_str(self) -> str:
         """
@@ -140,7 +181,7 @@ class SingleSourceQuery(ABC):
         """
         job = Gaia.launch_job(self.query_str)
         phase = job.get_phase()
-        if phase != 'COMPLETED':
+        if phase != "COMPLETED":
             raise RuntimeError(
                 f"Query to the {self.source_id_obj.data_release} main table "
                 f"did not complete successfully. Job status: {phase}."
@@ -190,15 +231,13 @@ class SingleSourceFullGaiaQuery(SingleSourceQuery):
         str
             The ADQL query string.
         """
-        query = dedent(
-            f"""
+        query = dedent(f"""
             SELECT
                 *
             FROM
                 gaia{self.source_id_obj.data_release}.gaia_source
             WHERE
                 source_id = {self.source_id_obj.source_id}
-            """
-        ).strip()
+            """).strip()
 
         return query
