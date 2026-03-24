@@ -71,7 +71,7 @@ class SingleSourceQuery(ABC):
     Attributes
     ----------
     source_id_obj : SourceID
-        A SourceID object tha encapsulates the source_id and data_release
+        A SourceID object that encapsulates the source_id and data_release
         information.
 
     Properties
