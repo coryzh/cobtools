@@ -205,8 +205,7 @@ given photometric band.</p></li>
 \[F = w_{\text{eff}} F_0 10^{-0.4m},\]</div>
 <p>where <span class="math notranslate nohighlight">\(F_0\)</span> is the zero-point flux for the band,
 <span class="math notranslate nohighlight">\(w_{\text{eff}}\)</span> is the effective wavelength, and <span class="math notranslate nohighlight">\(m\)</span> is the
-magnitude. <span class="math notranslate nohighlight">\(F_0\)</span> values are from Gaia Collaboration (2021), A&amp;A, 639,
-A3.</p>
+magnitude. <span class="math notranslate nohighlight">\(F_0\)</span> values are from various references.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.band</span><span class="w"> </span><span class="kn">import</span> <span class="n">Band</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.photometry.flux_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">magnitude_to_flux</span>
@@ -215,6 +214,9 @@ A3.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flux</span> <span class="o">=</span> <span class="n">magnitude_to_flux</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="n">band</span><span class="p">)</span>
 </pre></div>
 </div>
+<p class="rubric">References</p>
+<p>Gaia Collaboration (2021), A&amp;A, 639, A3.
+LSST Collaboration (2019), ApJ, 873, 2.</p>
 </dd></dl>
 
 </section>
