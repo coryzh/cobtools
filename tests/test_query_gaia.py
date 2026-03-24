@@ -28,7 +28,7 @@ class TestSingleSourceQuery:
         assert query.source_id_obj.source_id == 123456
 
     def test_init_invalid_source_id_type(self):
-        """Test that invalid source_id type raises TypeError."""
+        """Test that invalid source_id type raises ValueError."""
         with pytest.raises(
             ValueError, match="source_id must not be a float"
         ):
