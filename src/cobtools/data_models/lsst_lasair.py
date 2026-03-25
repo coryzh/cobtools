@@ -19,7 +19,9 @@ from dataclasses import dataclass, asdict, field
 from cobtools.data_models.light_curve import LightCurve
 from cobtools.data_models.lsst import DiaObject, DiaSource, DiaForcedSource
 from typing import List, Optional
+from pathlib import Path
 import pandas as pd
+import json
 
 
 _BASE_IMAGE_URL = 'https://lasair.lsst.ac.uk/fits/'
@@ -110,6 +112,13 @@ class LasairObject:
         Retrieve the light curve data as a LightCurve instance. This method
         internally calls `get_lightcurve_df` to get the data and then
         constructs a LightCurve instance from it.
+
+    image_urls(img_type: str, band: str) -> List[str]
+        Retrieve the URLs of images associated with the Lasair object for a
+        specific band and image type (Science, Template, or Difference).
+
+    to_json(file_path: str | Path) -> None
+        Save the LasairObject instance to a JSON file at the specified path.
     """
     diaObjectId: int
     lasairData: LasairData
@@ -159,6 +168,8 @@ class LasairObject:
         -------
         .. code-block:: python
 
+            # Example use of LasairObject to parse the nested dictionary from
+            # the Lasair API
             from lasair import lasair_client as lasair
             from cobtools.data_models.lsst_lasair import LasairObject
 
@@ -329,3 +340,16 @@ class LasairObject:
         ]
 
         return img_urls
+
+    def to_json(self, file_path: str | Path) -> None:
+        """
+        Save the LasairObject instance to a JSON file.
+
+        Parameters
+        ----------
+        file_path : str or Path
+            The path to the JSON file where the LasairObject data will be
+            saved. Could be a string or a pathlib.Path object.
+        """
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(asdict(self), f, indent=4)

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from cobtools.data_models.lsst_lasair import LasairData, LasairObject
 import json
 import pytest
@@ -113,6 +115,47 @@ class TestLasairData:
         lasair_data_2 = LasairData(nDiaSources=3, latestFilter="g")
 
         assert lasair_data_1 == lasair_data_2
+
+
+class TestLasairObjectToJson:
+    @pytest.fixture(scope="class")
+    def lasair_object(self):
+        with open("tests/dia_source_data.json", "r") as f:
+            dia_sources_data = json.load(f)
+        return LasairObject.from_api_data(dia_sources_data)
+
+    def test_to_json_creates_file(self, lasair_object, tmp_path):
+        output_file = tmp_path / "output.json"
+        lasair_object.to_json(output_file)
+
+        assert output_file.exists()
+
+    def test_to_json_valid_json_content(self, lasair_object, tmp_path):
+        output_file = tmp_path / "output.json"
+        lasair_object.to_json(output_file)
+
+        with open(output_file, encoding="utf-8") as f:
+            data = json.load(f)
+
+        assert data["diaObjectId"] == lasair_object.diaObjectId
+
+    def test_to_json_accepts_str_path(self, lasair_object, tmp_path):
+        output_file = str(tmp_path / "output_str.json")
+        lasair_object.to_json(output_file)
+
+        with open(output_file, encoding="utf-8") as f:
+            data = json.load(f)
+
+        assert data["diaObjectId"] == lasair_object.diaObjectId
+
+    def test_to_json_accepts_path_object(self, lasair_object, tmp_path):
+        output_file = Path(tmp_path) / "output_path.json"
+        lasair_object.to_json(output_file)
+
+        with open(output_file, encoding="utf-8") as f:
+            data = json.load(f)
+
+        assert data["diaObjectId"] == lasair_object.diaObjectId
 
 
 class TestLasairImageURLs:
