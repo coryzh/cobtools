@@ -100,6 +100,9 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 
+<span class="n">_BASE_IMAGE_URL</span> <span class="o">=</span> <span class="s1">&#39;https://lasair.lsst.ac.uk/fits/&#39;</span>
+
+
 <div class="viewcode-block" id="LasairData">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairData">[docs]</a>
 <span class="nd">@dataclass</span>
@@ -384,6 +387,45 @@
             <span class="n">flux</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;psfFlux&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
             <span class="n">flux_err</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;psfFluxErr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LasairObject.image_urls">
+<a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.image_urls">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">band</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the URLs of images associated with the Lasair object for a</span>
+<span class="sd">        specific band. Each image is associated with a diaSource in the</span>
+<span class="sd">        specified band.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        img_type : str</span>
+<span class="sd">            The type of image to retrieve. Choose &#39;Science&#39;, &#39;Template&#39;, or</span>
+<span class="sd">            &quot;Difference&quot;. Case-insensitive.</span>
+
+<span class="sd">        band : str</span>
+<span class="sd">            The band for which to retrieve image URLs. Choose &#39;u&#39;, &#39;g&#39;,</span>
+<span class="sd">            &#39;r&#39;, &#39;i&#39;, &#39;z&#39;, &#39;y&#39;, or &#39;all&#39; for all bands.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            A list of image URLs for the specified band and image type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">img_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;science&quot;</span><span class="p">,</span> <span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="s2">&quot;difference&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid img_type. Choose &#39;Science&#39;, &#39;Template&#39;, or &quot;</span>
+                <span class="s2">&quot;&#39;Difference&#39;; case-insensitive.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">df_sources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_lightcurve_df</span><span class="p">(</span><span class="n">option</span><span class="o">=</span><span class="s2">&quot;diaSources&quot;</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">band</span><span class="p">)</span>
+
+        <span class="n">img_urls</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_BASE_IMAGE_URL</span><span class="si">}{</span><span class="n">ids</span><span class="si">}</span><span class="s2">_cutout</span><span class="si">{</span><span class="n">img_type</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">ids</span> <span class="ow">in</span> <span class="n">df_sources</span><span class="p">[</span><span class="s1">&#39;diaSourceId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">img_urls</span></div>
 </div>
 
 </pre></div>

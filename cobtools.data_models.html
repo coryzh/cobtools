@@ -1069,6 +1069,30 @@ class in <cite>cobtools.data_models.light_curve</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">image_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cobtools/data_models/lsst_lasair.html#LasairObject.image_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieve the URLs of images associated with the Lasair object for a
+specific band. Each image is associated with a diaSource in the
+specified band.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img_type</strong> (<em>str</em>) – The type of image to retrieve. Choose ‘Science’, ‘Template’, or
+“Difference”. Case-insensitive.</p></li>
+<li><p><strong>band</strong> (<em>str</em>) – The band for which to retrieve image URLs. Choose ‘u’, ‘g’,
+‘r’, ‘i’, ‘z’, ‘y’, or ‘all’ for all bands.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of image URLs for the specified band and image type.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/cobtools/data_models/lsst_lasair.html#LasairObject.info"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd></dd></dl>
 
