@@ -302,13 +302,13 @@ class LasairObject:
 
         Parameters
         ----------
-        band : str
-            The band for which to retrieve image URLs. Choose 'all', 'u', 'g',
-            'r', 'i', 'z', or 'y'.
-
         img_type : str
             The type of image to retrieve. Choose 'Science', 'Template', or
             "Difference". Case-insensitive.
+
+        band : str
+            The band for which to retrieve image URLs. Choose 'u', 'g',
+            'r', 'i', 'z', 'y', or 'all' for all bands.
 
         Returns
         -------
