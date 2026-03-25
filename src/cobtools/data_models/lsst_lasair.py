@@ -19,7 +19,9 @@ from dataclasses import dataclass, asdict, field
 from cobtools.data_models.light_curve import LightCurve
 from cobtools.data_models.lsst import DiaObject, DiaSource, DiaForcedSource
 from typing import List, Optional
+from pathlib import Path
 import pandas as pd
+import json
 
 
 _BASE_IMAGE_URL = 'https://lasair.lsst.ac.uk/fits/'
@@ -329,3 +331,16 @@ class LasairObject:
         ]
 
         return img_urls
+
+    def to_json(self, file_path: str | Path) -> None:
+        """
+        Save the LasairObject instance to a JSON file.
+
+        Parameters
+        ----------
+        file_path : str | Path
+            The path to the JSON file where the LasairObject data will be
+            saved. Could be a string or a pathlib.Path object.
+        """
+        with open(file_path, 'w') as f:
+            json.dump(asdict(self), f, indent=4)
