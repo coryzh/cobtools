@@ -1,0 +1,10 @@
+cobtools.io package
+===================
+
+Module contents
+---------------
+
+.. automodule:: cobtools.io
+   :members:
+   :show-inheritance:
+   :undoc-members:

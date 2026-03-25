@@ -956,6 +956,19 @@ internally calls <cite>get_lightcurve_df</cite> to get the data and then
 constructs a LightCurve instance from it.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">image_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cobtools/data_models/lsst_lasair.html#LasairObject.image_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Retrieve the URLs of images associated with the Lasair object for a
+specific band and image type (Science, Template, or Difference).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cobtools/data_models/lsst_lasair.html#LasairObject.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Save the LasairObject instance to a JSON file at the specified path.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">diaForcedSourcesList</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DiaForcedSource</span><span class="p"><span class="pre">]</span></span></span></dt>
@@ -998,7 +1011,9 @@ retrieved from the Lasair API.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lasair</span><span class="w"> </span><span class="kn">import</span> <span class="n">lasair_client</span> <span class="k">as</span> <span class="n">lasair</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example use of LasairObject to parse the nested dictionary from</span>
+<span class="c1"># the Lasair API</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lasair</span><span class="w"> </span><span class="kn">import</span> <span class="n">lasair_client</span> <span class="k">as</span> <span class="n">lasair</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.lsst_lasair</span><span class="w"> </span><span class="kn">import</span> <span class="n">LasairObject</span>
 
 <span class="n">L</span> <span class="o">=</span> <span class="n">lasair</span><span class="p">(</span>
@@ -1100,6 +1115,18 @@ specified band.</p>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">lasairData</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">LasairData</span></span></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cobtools/data_models/lsst_lasair.html#LasairObject.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Save the LasairObject instance to a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em><em> or </em><em>Path</em>) – The path to the JSON file where the LasairObject data will be
+saved. Could be a string or a pathlib.Path object.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

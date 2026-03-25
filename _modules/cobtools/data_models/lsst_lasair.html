@@ -97,7 +97,9 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.light_curve</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightCurve</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.lsst</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiaObject</span><span class="p">,</span> <span class="n">DiaSource</span><span class="p">,</span> <span class="n">DiaForcedSource</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
 
 <span class="n">_BASE_IMAGE_URL</span> <span class="o">=</span> <span class="s1">&#39;https://lasair.lsst.ac.uk/fits/&#39;</span>
@@ -193,6 +195,13 @@
 <span class="sd">        Retrieve the light curve data as a LightCurve instance. This method</span>
 <span class="sd">        internally calls `get_lightcurve_df` to get the data and then</span>
 <span class="sd">        constructs a LightCurve instance from it.</span>
+
+<span class="sd">    image_urls(img_type: str, band: str) -&gt; List[str]</span>
+<span class="sd">        Retrieve the URLs of images associated with the Lasair object for a</span>
+<span class="sd">        specific band and image type (Science, Template, or Difference).</span>
+
+<span class="sd">    to_json(file_path: str | Path) -&gt; None</span>
+<span class="sd">        Save the LasairObject instance to a JSON file at the specified path.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">diaObjectId</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">lasairData</span><span class="p">:</span> <span class="n">LasairData</span>
@@ -247,6 +256,8 @@
 <span class="sd">        -------</span>
 <span class="sd">        .. code-block:: python</span>
 
+<span class="sd">            # Example use of LasairObject to parse the nested dictionary from</span>
+<span class="sd">            # the Lasair API</span>
 <span class="sd">            from lasair import lasair_client as lasair</span>
 <span class="sd">            from cobtools.data_models.lsst_lasair import LasairObject</span>
 
@@ -426,6 +437,22 @@
         <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">img_urls</span></div>
+
+
+<div class="viewcode-block" id="LasairObject.to_json">
+<a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.to_json">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the LasairObject instance to a JSON file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str or Path</span>
+<span class="sd">            The path to the JSON file where the LasairObject data will be</span>
+<span class="sd">            saved. Could be a string or a pathlib.Path object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
