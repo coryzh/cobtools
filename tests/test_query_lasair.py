@@ -11,8 +11,10 @@ from unittest.mock import MagicMock, patch
 
 from cobtools.query.base import BrokerAuth, BrokerAuthError, BrokerQueryError
 from cobtools.query.query_lasair import LasairBrokerClient
-from cobtools.data_models.lsst_lasair import LasairObject, _BASE_IMAGE_URL
+from cobtools.data_models.lsst_lasair import LasairObject
 from cobtools.data_models.light_curve import LightCurve
+
+_BASE_IMAGE_URL = 'https://lasair.lsst.ac.uk/fits/'
 
 
 # ---------------------------------------------------------------------------
@@ -278,7 +280,7 @@ class TestGetImageURLs:
         assert all(isinstance(url, str) for url in urls)
         assert all("Science" in url for url in urls)
         assert all(_BASE_IMAGE_URL in url for url in urls)
-
+    
     def test_get_image_urls_invalid_image_type(
             self, auth, real_lasair_payload
     ):
