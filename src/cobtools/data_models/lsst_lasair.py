@@ -112,6 +112,13 @@ class LasairObject:
         Retrieve the light curve data as a LightCurve instance. This method
         internally calls `get_lightcurve_df` to get the data and then
         constructs a LightCurve instance from it.
+
+    image_urls(img_type: str, band: str) -> List[str]
+        Retrieve the URLs of images associated with the Lasair object for a
+        specific band and image type (Science, Template, or Difference).
+
+    to_json(file_path: str | Path) -> None
+        Save the LasairObject instance to a JSON file at the specified path.
     """
     diaObjectId: int
     lasairData: LasairData
