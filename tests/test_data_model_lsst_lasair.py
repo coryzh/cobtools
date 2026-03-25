@@ -4,6 +4,7 @@ from cobtools.data_models.lsst_lasair import LasairData, LasairObject
 import json
 import pytest
 
+
 class TestLasairData:
     def test_defaults_to_none(self):
         lasair_data = LasairData()
