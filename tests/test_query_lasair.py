@@ -280,7 +280,7 @@ class TestGetImageURLs:
         assert all(isinstance(url, str) for url in urls)
         assert all("Science" in url for url in urls)
         assert all(_BASE_IMAGE_URL in url for url in urls)
-    
+
     def test_get_image_urls_invalid_image_type(
             self, auth, real_lasair_payload
     ):
