@@ -167,7 +167,8 @@ class LasairObject:
         Example
         -------
         .. code-block:: python
-
+            # Example use of LasairObject to parse the nested dictionary from
+            # the Lasair API
             from lasair import lasair_client as lasair
             from cobtools.data_models.lsst_lasair import LasairObject
 
