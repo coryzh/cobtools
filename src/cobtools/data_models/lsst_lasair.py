@@ -350,5 +350,5 @@ class LasairObject:
             The path to the JSON file where the LasairObject data will be
             saved. Could be a string or a pathlib.Path object.
         """
-        with open(file_path, 'w') as f:
+        with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(asdict(self), f, indent=4)
