@@ -171,7 +171,8 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
 
         band : str
             The photometric band for which to retrieve images
-            must be one of "u", "g", "r", "i", "z", "y".
+            must be one of "u", "g", "r", "i", "z", "y", or "all" for all
+            bands.
 
         kwargs : dict
             Additional keyword arguments passed to the official Lasair client
