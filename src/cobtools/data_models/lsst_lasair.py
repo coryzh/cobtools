@@ -22,6 +22,9 @@ from typing import List, Optional
 import pandas as pd
 
 
+_BASE_IMAGE_URL = 'https://lasair.lsst.ac.uk/fits/'
+
+
 @dataclass
 class LasairData:
     """
@@ -290,3 +293,39 @@ class LasairObject:
             flux=df["psfFlux"].to_numpy(),
             flux_err=df["psfFluxErr"].to_numpy()
         )
+
+    def image_urls(self, img_type: str, band: str) -> List[str]:
+        """
+        Retrieve the URLs of images associated with the Lasair object for a
+        specific band. Each image is associated with a diaSource in the
+        specified band.
+
+        Parameters
+        ----------
+        img_type : str
+            The type of image to retrieve. Choose 'Science', 'Template', or
+            "Difference". Case-insensitive.
+
+        band : str
+            The band for which to retrieve image URLs. Choose 'u', 'g',
+            'r', 'i', 'z', 'y', or 'all' for all bands.
+
+        Returns
+        -------
+        List[str]
+            A list of image URLs for the specified band and image type.
+        """
+        if img_type.lower() not in ["science", "template", "difference"]:
+            raise ValueError(
+                "Invalid img_type. Choose 'Science', 'Template', or "
+                "'Difference'; case-insensitive."
+            )
+
+        df_sources = self.get_lightcurve_df(option="diaSources", band=band)
+
+        img_urls = [
+            f"{_BASE_IMAGE_URL}{ids}_cutout{img_type.capitalize()}"
+            for ids in df_sources['diaSourceId'].astype(str).tolist()
+        ]
+
+        return img_urls
