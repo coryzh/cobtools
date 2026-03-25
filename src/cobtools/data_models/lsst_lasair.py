@@ -167,6 +167,7 @@ class LasairObject:
         Example
         -------
         .. code-block:: python
+
             # Example use of LasairObject to parse the nested dictionary from
             # the Lasair API
             from lasair import lasair_client as lasair
@@ -346,7 +347,7 @@ class LasairObject:
 
         Parameters
         ----------
-        file_path : str | Path
+        file_path : str or Path
             The path to the JSON file where the LasairObject data will be
             saved. Could be a string or a pathlib.Path object.
         """
