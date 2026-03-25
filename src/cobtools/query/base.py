@@ -94,10 +94,14 @@ class BrokerCapabilities:
 
     image_retrieval : bool
         Whether the broker supports retrieving images.
+
+    tap_service : bool
+        Whether the broker supports TAP service.
     """
     object_lookup: bool = False
     lightcurve_retrieval: bool = False
     image_retrieval: bool = False
+    tap_service: bool = False
 
 
 class BrokerError(RuntimeError):
