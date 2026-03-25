@@ -190,7 +190,11 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
         try:
             lasair_object = self.get_diaobject(diaobject_id, **kwargs)
             return lasair_object.image_urls(img_type=img_type, band=band)
+        except BrokerQueryError:
+            # Re-raise BrokerQueryError unchanged
+            raise
         except Exception as e:
+            # Wrap other exceptions in BrokerQueryError
             raise BrokerQueryError(
                 "Failed to retrieve image URLs for diaObject with ID "
                 f"{diaobject_id}: {e}"
