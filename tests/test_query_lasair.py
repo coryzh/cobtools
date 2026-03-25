@@ -67,7 +67,7 @@ class TestLasairBrokerClientCapabilities:
         broker = LasairBrokerClient(auth=auth)
         assert broker.capabilities.object_lookup is True
         assert broker.capabilities.lightcurve_retrieval is True
-        assert broker.capabilities.image_retrieval is False
+        assert broker.capabilities.image_retrieval is True
 
     def test_default_endpoint_class_attribute(self):
         assert (
