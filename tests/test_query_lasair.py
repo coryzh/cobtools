@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 
 from cobtools.query.base import BrokerAuth, BrokerAuthError, BrokerQueryError
 from cobtools.query.query_lasair import LasairBrokerClient
-from cobtools.data_models.lsst_lasair import LasairObject
+from cobtools.data_models.lsst_lasair import LasairObject, _BASE_IMAGE_URL
 from cobtools.data_models.light_curve import LightCurve
 
 
@@ -257,3 +257,56 @@ class TestRealLasairPayload:
             result = broker.get_lightcurve(42)
 
         assert isinstance(result, LightCurve)
+
+
+class TestGetImageURLs:
+    def test_get_image_urls_valid_image_type(self, auth, real_lasair_payload):
+        mock_sdk = MagicMock()
+        mock_sdk.object.return_value = copy.deepcopy(real_lasair_payload)
+
+        broker = LasairBrokerClient(auth=auth)
+        with patch(
+            "cobtools.query.query_lasair.lasair", return_value=mock_sdk
+        ):
+            urls = broker.get_image_urls(
+                diaobject_id=313963359482937364,
+                img_type="science",
+                band="g"
+            )
+
+        assert isinstance(urls, list)
+        assert all(isinstance(url, str) for url in urls)
+        assert all("Science" in url for url in urls)
+        assert all(_BASE_IMAGE_URL in url for url in urls)
+
+    def test_get_image_urls_invalid_image_type(
+            self, auth, real_lasair_payload
+    ):
+        mock_sdk = MagicMock()
+        mock_sdk.object.return_value = copy.deepcopy(real_lasair_payload)
+
+        broker = LasairBrokerClient(auth=auth)
+        with patch(
+            "cobtools.query.query_lasair.lasair", return_value=mock_sdk
+        ):
+            with pytest.raises(BrokerQueryError, match="Invalid img_type"):
+                broker.get_image_urls(
+                    diaobject_id=313963359482937364,
+                    img_type="invalid_type",
+                    band="g"
+                )
+
+    def test_get_image_urls_invalid_band(self, auth, real_lasair_payload):
+        mock_sdk = MagicMock()
+        mock_sdk.object.return_value = copy.deepcopy(real_lasair_payload)
+
+        broker = LasairBrokerClient(auth=auth)
+        with patch(
+            "cobtools.query.query_lasair.lasair", return_value=mock_sdk
+        ):
+            with pytest.raises(BrokerQueryError, match="Invalid band"):
+                broker.get_image_urls(
+                    diaobject_id=313963359482937364,
+                    img_type="science",
+                    band="invalid_band"
+                )

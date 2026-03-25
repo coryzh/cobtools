@@ -52,7 +52,7 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
     capabilities = BrokerCapabilities(
         object_lookup=True,
         lightcurve_retrieval=True,
-        image_retrieval=False
+        image_retrieval=True
     )
 
     def _build_client(self):
@@ -93,6 +93,10 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
         diaobject_id : int
             The ID of the diaObject to retrieve.
 
+        kwargs : dict
+            Additional keyword arguments passed to the official Lasair client.
+            See the Lasair API documentation for supported parameters.
+
         Returns
         -------
         LasairObject
@@ -102,6 +106,11 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
         ------
         BrokerQueryError
             If the retrieval of the diaObject fails.
+
+        Notes
+        -----
+        Lasair API documentation:
+        https://lasair-lsst.readthedocs.io/en/main/core_functions/client.html
         """
 
         try:
@@ -144,3 +153,45 @@ class LasairBrokerClient(BrokerClient[LasairObject]):
 
         lasair_object = self.get_diaobject(diaobject_id, **diaobject_kwargs)
         return lasair_object.get_lightcurve(**lightcurve_kwargs)
+
+    def get_image_urls(
+            self, diaobject_id: int, img_type: str, band: str, **kwargs
+    ) -> list[str]:
+        """
+        Retrieve image URLs for a given diaObject ID.
+
+        Parameters
+        ----------
+        diaobject_id : int
+            The ID of the diaObject for which to retrieve image URLs.
+
+        img_type : str
+            The type of images to retrieve, must be one of "science",
+            "template", "difference". Case-insensitive.
+
+        band : str
+            The photometric band for which to retrieve images
+            must be one of "u", "g", "r", "i", "z", "y".
+
+        kwargs : dict
+            Additional keyword arguments passed to the official Lasair client
+            when retrieving the diaObject.
+
+        Returns
+        -------
+        list[str]
+            A list of image URLs associated with the diaObject.
+
+        Raises
+        ------
+        BrokerQueryError
+            If the retrieval of the diaObject or its image URLs fails.
+        """
+        try:
+            lasair_object = self.get_diaobject(diaobject_id, **kwargs)
+            return lasair_object.image_urls(img_type=img_type, band=band)
+        except Exception as e:
+            raise BrokerQueryError(
+                "Failed to retrieve image URLs for diaObject with ID "
+                f"{diaobject_id}: {e}"
+            ) from e
