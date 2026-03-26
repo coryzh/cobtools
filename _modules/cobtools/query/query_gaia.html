@@ -330,6 +330,57 @@
 
 
 
+<div class="viewcode-block" id="SingleSourceUsefulInfoQuery">
+<a class="viewcode-back" href="../../../cobtools.query.html#cobtools.query.query_gaia.SingleSourceUsefulInfoQuery">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SingleSourceUsefulInfoQuery</span><span class="p">(</span><span class="n">SingleSourceQuery</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Concrete implementation of SingleSourceQuery for querying a subset of</span>
+<span class="sd">    useful columns from the Gaia main table.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    source_id : str or int</span>
+<span class="sd">        The source_id to query. See `SourceID` for valid formats.</span>
+
+<span class="sd">    data_release : str</span>
+<span class="sd">        The Gaia data release to query. See `SourceID` for valid options.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    query_str : str</span>
+<span class="sd">        The ADQL query string to retrieve a specific subset of useful columns</span>
+<span class="sd">        for the specified ``source_id`` from the Gaia main table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">query_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SELECT</span>
+<span class="s2">                source_id,</span>
+<span class="s2">                ra,</span>
+<span class="s2">                dec,</span>
+<span class="s2">                phot_g_mean_mag,</span>
+<span class="s2">                parallax,</span>
+<span class="s2">                parallax_error,</span>
+<span class="s2">                pmra,</span>
+<span class="s2">                pmra_error,</span>
+<span class="s2">                pmdec,</span>
+<span class="s2">                pmdec_error,</span>
+<span class="s2">                radial_velocity,</span>
+<span class="s2">                radial_velocity_error,</span>
+<span class="s2">                ruwe,</span>
+<span class="s2">                astrometric_excess_noise,</span>
+<span class="s2">                astrometric_excess_noise_sig,</span>
+<span class="s2">                bp_rp,</span>
+<span class="s2">                non_single_star,</span>
+<span class="s2">                mh_gspphot</span>
+<span class="s2">            FROM gaia</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2">.gaia_source</span>
+<span class="s2">            WHERE source_id = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">source_id</span><span class="si">}</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">query</span></div>
+
+
+
 <div class="viewcode-block" id="SingleSourceNSSQuery">
 <a class="viewcode-back" href="../../../cobtools.query.html#cobtools.query.query_gaia.SingleSourceNSSQuery">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SingleSourceNSSQuery</span><span class="p">(</span><span class="n">SingleSourceQuery</span><span class="p">):</span>
