@@ -25,13 +25,13 @@ import click
     ),
 )
 def query_useful_info(source_id: int, dr: str):
-    from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
     """
     Retrieve useful information about a Gaia source.
 
     Queries the Gaia archive for the specified source_id and data release
     (--dr), and displays the results in a formatted table.
     """
+    from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
 
     try:
         query = SingleSourceUsefulInfoQuery(
