@@ -37,6 +37,9 @@ dev = [
     "sphinx-rtd-theme"
 ]
 
+[project.scripts]
+gaia_single_source = "cobtools.cli.gaia.query_single_source:query_useful_info"
+
 [tool.black]
 line-length = 79
 
