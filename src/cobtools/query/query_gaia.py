@@ -256,8 +256,8 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
     data_release : str
         The Gaia data release to query. See `SourceID` for valid options.
 
-    Methods
-    -------
+    Properties
+    ----------
     query_str : str
         The ADQL query string to retrieve a specific subset of useful columns
         for the specified ``source_id`` from the Gaia main table.
@@ -266,18 +266,26 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
     def query_str(self) -> str:
         query = dedent(f"""
             SELECT
-                source_id, ra, dec, l, b, phot_g_mean_mag, parallax,
-                parallax_error, pmra, pmra_error, pmdec, pmdec_error,
-                radial_velocity, radial_velocity_error, ruwe,
-                astrometric_excess_noise, astrometric_excess_noise_sig,
-                bp_rp, non_single_star, mh_gspphot,
-                ag_gspphot, ebpminrp_gspphot, in_qso_candidates,
-                in_galaxy_candidates, in_andromeda_survey, has_xp_continuous,
-                has_epoch_photometry, has_epoch_rv
-            FROM
-                gaia{self.source_id_obj.data_release}.gaia_source
-            WHERE
-                source_id = {self.source_id_obj.source_id}
+                source_id,
+                ra,
+                dec,
+                phot_g_mean_mag,
+                parallax,
+                parallax_error,
+                pmra,
+                pmra_error,
+                pmdec,
+                pmdec_error,
+                radial_velocity,
+                radial_velocity_error,
+                ruwe,
+                astrometric_excess_noise,
+                astrometric_excess_noise_sig,
+                bp_rp,
+                non_single_star,
+                mh_gspphot
+            FROM gaia{self.source_id_obj.data_release}.gaia_source
+            WHERE source_id = {self.source_id_obj.source_id}
             """).strip()
 
         return query

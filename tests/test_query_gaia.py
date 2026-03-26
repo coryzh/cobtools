@@ -1,3 +1,4 @@
+import re
 import pytest
 from unittest.mock import patch, MagicMock
 from astropy.table import Table
@@ -206,13 +207,20 @@ class TestSingleSourceUsefulInfoQuery:
 
         assert query.query_str == expected_query
     def test_query_str_select_clause(self):
-        """Test that SELECT clause contains specific columns."""
+        """Test that SELECT clause contains expected columns as whole words."""
         query = SingleSourceUsefulInfoQuery(source_id=123456)
         query_str = query.query_str
-        assert "SELECT" in query_str
-        assert "source_id" in query_str
-        assert "FROM" in query_str
-        assert "WHERE" in query_str
+        expected_columns = [
+            "source_id", "ra", "dec", "phot_g_mean_mag",
+            "parallax", "parallax_error", "pmra", "pmra_error",
+            "pmdec", "pmdec_error", "radial_velocity", "radial_velocity_error",
+            "ruwe", "astrometric_excess_noise", "astrometric_excess_noise_sig",
+            "bp_rp", "non_single_star", "mh_gspphot",
+        ]
+        for col in expected_columns:
+            assert re.search(rf"\b{re.escape(col)}\b", query_str), (
+                f"Column '{col}' not found as a whole word in query_str"
+            )
 
     @patch("cobtools.query.query_gaia.Gaia.launch_job")
     def test_query_result_success(self, mock_launch_job):
@@ -224,8 +232,6 @@ class TestSingleSourceUsefulInfoQuery:
                 "source_id",
                 "ra",
                 "dec",
-                "l",
-                "b",
                 "phot_g_mean_mag",
                 "parallax",
                 "parallax_error",
@@ -241,22 +247,12 @@ class TestSingleSourceUsefulInfoQuery:
                 "bp_rp",
                 "non_single_star",
                 "mh_gspphot",
-                "ag_gspphot",
-                "ebpminrp_gspphot",
-                "in_qso_candidates",
-                "in_galaxy_candidates",
-                "in_andromeda_survey",
-                "has_xp_continuous",
-                "has_epoch_photometry",
-                "has_epoch_rv",
             ],
             data=[
                 [4787135780363189504],
                 [71.75571839171829],
                 [-46.59034574895981],
                 [14.051228],
-                [0.38555175893640115],
-                [0.05],
                 [17.106916182108442],
                 [0.02],
                 [17.156456857994684],
@@ -271,14 +267,6 @@ class TestSingleSourceUsefulInfoQuery:
                 [-0.15],
                 [False],
                 [1.5],
-                [0.1],
-                [0.05],
-                [False],
-                [False],
-                [False],
-                [True],
-                [True],
-                [False],
             ],
         )
         mock_launch_job.return_value = mock_job
