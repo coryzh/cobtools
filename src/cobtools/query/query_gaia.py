@@ -320,3 +320,24 @@ class SingleSourceNSSQuery(SingleSourceQuery):
             """).strip()
 
         return query
+
+    @cached_property
+    def job(self) -> Job:
+        """
+        The Gaia job object that will be used to execute the query.
+
+        Returns
+        -------
+        Job
+            The astroquery.utils.tap.model.job.Job object representing the
+            Gaia query job.
+        """
+        job = Gaia.launch_job(self.query_str)
+        phase = job.get_phase()
+        if phase != "COMPLETED":
+            raise RuntimeError(
+                f"Query to the {self.source_id_obj.data_release} NSS table "
+                f"'{self.table_name}' did not complete successfully. "
+                f"Job status: {phase}."
+            )
+        return job
