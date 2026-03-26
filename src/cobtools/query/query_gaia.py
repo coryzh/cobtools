@@ -241,3 +241,103 @@ class SingleSourceFullGaiaQuery(SingleSourceQuery):
             """).strip()
 
         return query
+
+
+class SingleSourceNSSQuery(SingleSourceQuery):
+    """
+    Concrete implementation of SingleSourceQuery for querying the Gaia
+    Non-Single Star (NSS) catalogs.
+
+    This class retrieves all columns for a given ``source_id`` from the
+    specified NSS catalog. Currently, `data_release` is restricted to "dr3"
+    since the NSS catalogs are only available in DR3.
+
+    Parameters
+    ----------
+    source_id : str or int
+        The source_id to query.
+
+    data_release : str
+        Must be "dr3" for NSS queries since the NSS catalogs are only available
+        in DR3.
+
+    table_name : str
+        The specific NSS catalog table to query. Valid options are:
+        - "nss_two_body_orbit"
+        - "nss_acceleration"
+        - "nss_non_linear_spectro"
+
+    Methods
+    ----------
+    query_str : str
+        The ADQL query string to retrieve all columns for the specified
+        ``source_id`` from the Gaia NSS catalog.
+    """
+
+    _VALID_TABLES = [
+        "nss_two_body_orbit", "nss_acceleration", "nss_non_linear_spectro"
+    ]
+
+    def __init__(
+        self,
+        source_id: int | str,
+        data_release: str = "dr3",
+        table_name: str = "nss_two_body_orbit",
+    ):
+        if data_release != "dr3":
+            raise ValueError(
+                "Currently, only data_release='dr3' is supported "
+                "for NSS queries since the NSS catalogs are only "
+                "available in DR3."
+            )
+        if table_name not in self._VALID_TABLES:
+            raise ValueError(
+                f"Invalid table_name: {table_name}. "
+                f"Valid options are: {', '.join(self._VALID_TABLES)}."
+            )
+
+        super().__init__(source_id, data_release)
+        self.table_name = table_name
+
+    @property
+    def query_str(self) -> str:
+        """
+        The ADQL query to retrieve all columns for a given source_id from the
+        Gaia NSS catalog.
+
+        Returns
+        -------
+        str
+            The ADQL query string.
+        """
+        query = dedent(f"""
+            SELECT
+                *
+            FROM
+                gaia{self.source_id_obj.data_release}.{self.table_name}
+            WHERE
+                source_id = {self.source_id_obj.source_id}
+            """).strip()
+
+        return query
+
+    @cached_property
+    def job(self) -> Job:
+        """
+        The Gaia job object that will be used to execute the query.
+
+        Returns
+        -------
+        Job
+            The astroquery.utils.tap.model.job.Job object representing the
+            Gaia query job.
+        """
+        job = Gaia.launch_job(self.query_str)
+        phase = job.get_phase()
+        if phase != "COMPLETED":
+            raise RuntimeError(
+                f"Query to the {self.source_id_obj.data_release} NSS table "
+                f"'{self.table_name}' did not complete successfully. "
+                f"Job status: {phase}."
+            )
+        return job
