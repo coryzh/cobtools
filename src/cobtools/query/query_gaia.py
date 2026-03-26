@@ -274,8 +274,10 @@ class SingleSourceNSSQuery(SingleSourceQuery):
         ``source_id`` from the Gaia NSS catalog.
     """
     def __init__(
-            self, source_id: int | str, data_release: str = "dr3",
-            table_name: str = "nss_two_body_orbit"
+        self,
+        source_id: int | str,
+        data_release: str = "dr3",
+        table_name: str = "nss_two_body_orbit",
     ):
         if data_release != "dr3":
             raise ValueError(
