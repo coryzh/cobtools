@@ -115,7 +115,9 @@ def display_result(result) -> None:
     )
 
     def fmt_bool(val):
-        return "True" if val else "False"
+        if pd.isna(val):
+            return "False"
+        return "True" if bool(val) else "False"
 
     title_width = 17
     rows = [
