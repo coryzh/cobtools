@@ -243,6 +243,54 @@ class SingleSourceFullGaiaQuery(SingleSourceQuery):
         return query
 
 
+class SingleSourceUsefulInfoQuery(SingleSourceQuery):
+    """
+    Concrete implementation of SingleSourceQuery for querying a subset of
+    useful columns from the Gaia main table.
+
+    Parameters
+    ----------
+    source_id : str or int
+        The source_id to query. See `SourceID` for valid formats.
+
+    data_release : str
+        The Gaia data release to query. See `SourceID` for valid options.
+
+    Properties
+    ----------
+    query_str : str
+        The ADQL query string to retrieve a specific subset of useful columns
+        for the specified ``source_id`` from the Gaia main table.
+    """
+    @property
+    def query_str(self) -> str:
+        query = dedent(f"""
+            SELECT
+                source_id,
+                ra,
+                dec,
+                phot_g_mean_mag,
+                parallax,
+                parallax_error,
+                pmra,
+                pmra_error,
+                pmdec,
+                pmdec_error,
+                radial_velocity,
+                radial_velocity_error,
+                ruwe,
+                astrometric_excess_noise,
+                astrometric_excess_noise_sig,
+                bp_rp,
+                non_single_star,
+                mh_gspphot
+            FROM gaia{self.source_id_obj.data_release}.gaia_source
+            WHERE source_id = {self.source_id_obj.source_id}
+            """).strip()
+
+        return query
+
+
 class SingleSourceNSSQuery(SingleSourceQuery):
     """
     Concrete implementation of SingleSourceQuery for querying the Gaia
