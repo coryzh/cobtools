@@ -166,6 +166,67 @@ from the Gaia archive.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.query.query_gaia.</span></span><span class="sig-name descname"><span class="pre">SingleSourceNSSQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dr3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'nss_two_body_orbit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/query/query_gaia.html#SingleSourceNSSQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleSourceQuery</span></code></p>
+<p>Concrete implementation of SingleSourceQuery for querying the Gaia
+Non-Single Star (NSS) catalogs.</p>
+<p>This class retrieves all columns for a given <code class="docutils literal notranslate"><span class="pre">source_id</span></code> from the
+specified NSS catalog. Currently, <cite>data_release</cite> is restricted to “dr3”
+since the NSS catalogs are only available in DR3.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_id</strong> (<em>str</em><em> or </em><em>int</em>) – The source_id to query.</p></li>
+<li><p><strong>data_release</strong> (<em>str</em>) – Must be “dr3” for NSS queries since the NSS catalogs are only available
+in DR3.</p></li>
+<li><p><strong>table_name</strong> (<em>str</em>) – The specific NSS catalog table to query. Valid options are:
+- “nss_two_body_orbit”
+- “nss_acceleration”
+- “nss_non_linear_spectro”</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">query_str</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>The ADQL query string to retrieve all columns for the specified
+<code class="docutils literal notranslate"><span class="pre">source_id</span></code> from the Gaia NSS catalog.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">job</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Job</span></span></dt>
+<dd><p>The Gaia job object that will be used to execute the query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The astroquery.utils.tap.model.job.Job object representing the
+Gaia query job.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Job</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">query_str</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span></dt>
+<dd><p>The ADQL query to retrieve all columns for a given source_id from the
+Gaia NSS catalog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The ADQL query string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cobtools.query.query_gaia.</span></span><span class="sig-name descname"><span class="pre">SingleSourceQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dr3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cobtools/query/query_gaia.html#SingleSourceQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Abstract base class for querying the Gaia archive.</p>
