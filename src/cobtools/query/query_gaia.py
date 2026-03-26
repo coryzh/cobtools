@@ -271,8 +271,8 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
                 radial_velocity, radial_velocity_error, ruwe,
                 astrometric_excess_noise, astrometric_excess_noise_sig,
                 phot_g_mean_mag, bp_rp, non_single_star, mh_gspphot,
-                ag_gspphot, ebpminrp_gspphot, in_qso_candidate,
-                in_galaxy_candidate, in_andromeda_survey, has_xp_continuous,
+                ag_gspphot, ebpminrp_gspphot, in_qso_candidates,
+                in_galaxy_candidates, in_andromeda_survey, has_xp_continuous,
                 has_epoch_photometry, has_epoch_rv
             FROM
                 gaia{self.source_id_obj.data_release}.gaia_source
