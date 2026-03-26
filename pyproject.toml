@@ -24,7 +24,8 @@ dependencies = [
     "emcee>=3.1.6",
     "pandas>=2.2.1",
     "astroquery>=0.4.10",
-    "lasair>=0.1.2"
+    "lasair>=0.1.2",
+    "click>=8.0.0"
 ]
 
 [project.optional-dependencies]
