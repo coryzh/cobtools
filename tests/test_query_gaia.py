@@ -149,12 +149,22 @@ class TestSingleSourceNSSQuery:
 
     def test_query_str_format(self):
         """
-        Test that query_str is correctly formatted with schema, table, and source_id.
+        Test that query_str is correctly formatted with schema, table, and
+        source_id.
         """
+
         source_id = 12345
         query = SingleSourceNSSQuery(source_id=source_id)
-        expected = f"SELECT * FROM gaiadr3.{query.table_name} WHERE source_id = {source_id}"
+        expected = dedent(f"""
+            SELECT
+                *
+            FROM
+                gaiadr3.{query.table_name}
+            WHERE
+                source_id = {source_id}
+        """).strip()
         assert query.query_str == expected
+
     def test_invalid_table_name(self):
         """
         Test that initializing SingleSourceNSSQuery with an invalid table name
