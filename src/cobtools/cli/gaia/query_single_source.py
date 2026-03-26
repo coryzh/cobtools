@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import click
 import pandas as pd
 from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
