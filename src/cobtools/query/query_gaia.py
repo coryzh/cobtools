@@ -270,7 +270,7 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
                 parallax_error, pmra, pmra_error, pmdec, pmdec_error,
                 radial_velocity, radial_velocity_error, ruwe,
                 astrometric_excess_noise, astrometric_excess_noise_sig,
-                phot_g_mean_mag, bp_rp, non_single_star, mh_gspphot,
+                bp_rp, non_single_star, mh_gspphot,
                 ag_gspphot, ebpminrp_gspphot, in_qso_candidates,
                 in_galaxy_candidates, in_andromeda_survey, has_xp_continuous,
                 has_epoch_photometry, has_epoch_rv
