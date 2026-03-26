@@ -269,6 +269,8 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
                 source_id,
                 ra,
                 dec,
+                l,
+                b,
                 phot_g_mean_mag,
                 parallax,
                 parallax_error,
@@ -283,7 +285,15 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
                 astrometric_excess_noise_sig,
                 bp_rp,
                 non_single_star,
-                mh_gspphot
+                mh_gspphot,
+                ag_gspphot,
+                ebpminrp_gspphot,
+                in_qso_candidates,
+                in_galaxy_candidates,
+                has_xp_continuous,
+                has_epoch_photometry,
+                has_rvs,
+                has_epoch_rv
             FROM gaia{self.source_id_obj.data_release}.gaia_source
             WHERE source_id = {self.source_id_obj.source_id}
             """).strip()
