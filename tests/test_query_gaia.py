@@ -206,6 +206,7 @@ class TestSingleSourceUsefulInfoQuery:
         ).strip()
 
         assert query.query_str == expected_query
+
     def test_query_str_select_clause(self):
         """Test that SELECT clause contains expected columns as whole words."""
         query = SingleSourceUsefulInfoQuery(source_id=123456)
