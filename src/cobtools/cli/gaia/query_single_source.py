@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
 
 import click
-import pandas as pd
-from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
-from cobtools.photometry.color_index import bp_rp_to_sptype
-from astropy.table import Table
 
 
-@click.command()
-@click.argument("source_id", type=int)
+@click.command(
+    context_settings={"help_option_names": ["-h", "--help"]},
+    help="Retrieve and display a subset of columns about a Gaia source.\n\n"
+         "This command queries the Gaia archive for the specified source_id "
+         "and data release (--dr), and displays the results in a formatted "
+         "table."
+)
+@click.argument(
+    "source_id", type=int, metavar="source_id"
+)
 @click.option(
     "--dr",
     default="dr3",
     show_default=True,
+    type=str,
+    metavar="Data Release",
     help=(
         "Gaia data release to query. Current valid options are 'dr2', 'edr3',"
         " and 'dr3'. This will be extended to include 'dr4', and 'dr5'."
     ),
 )
 def query_useful_info(source_id: int, dr: str):
+    from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
     """
     Retrieve useful information about a Gaia source.
 
@@ -32,7 +39,7 @@ def query_useful_info(source_id: int, dr: str):
         )
         result = query.query_result()
         if len(result) == 0:
-            click.echo(f"No results found for SOURCE_ID {source_id} in {dr}.")
+            click.echo(f"No results found for {source_id} in {dr}.")
             return
 
         display_result(result)
@@ -72,6 +79,8 @@ def get_spectral_type(bp_rp: float, kind: str, mh: float = 0.0):
     str
         The spectral type string, or "NA (kind)" if an error occurs.
     """
+    from cobtools.photometry.color_index import bp_rp_to_sptype
+
     try:
         sptype = bp_rp_to_sptype(bp_rp=bp_rp, mh=mh, kind=kind)
         return f"{sptype} ({kind})"
@@ -79,15 +88,17 @@ def get_spectral_type(bp_rp: float, kind: str, mh: float = 0.0):
         return f"NA ({kind})"
 
 
-def display_result(result: Table) -> None:
+def display_result(result) -> None:
     """
-    Display the query result in a formatted table.
+    Display the query in a formatted table.
 
     Parameters
     ----------
     result : Table
         The query result to display.
     """
+
+    import pandas as pd
 
     df = result.to_pandas()
     row = df.iloc[0]
