@@ -2,7 +2,10 @@ import pytest
 from unittest.mock import patch, MagicMock
 from astropy.table import Table
 from cobtools.query.query_gaia import (
-    SingleSourceQuery, SingleSourceFullGaiaQuery, SingleSourceNSSQuery
+    SingleSourceQuery,
+    SingleSourceFullGaiaQuery,
+    SingleSourceNSSQuery,
+    SingleSourceUsefulInfoQuery,
 )
 from textwrap import dedent
 import numpy as np
@@ -134,6 +137,152 @@ class TestSingleSourceFullGaiaQuery:
         for col in mock_job.get_results().colnames:
             assert col in result.colnames
             assert np.allclose(result[col], mock_job.get_results()[col])
+
+
+class TestSingleSourceUsefulInfoQuery:
+    """Tests for SingleSourceUsefulInfoQuery implementation."""
+
+    def test_query_str_format(self):
+        """Test that query_str generates correct ADQL query."""
+        query = SingleSourceUsefulInfoQuery(
+            source_id=123456, data_release="dr3"
+        )
+        assert "gaiadr3.gaia_source" in query.query_str
+        assert (
+            f"source_id = {query.source_id_obj.source_id}" in query.query_str
+        )
+
+        # Check that all expected columns are in the query
+        expected_columns = [
+            "source_id", "ra", "dec", "phot_g_mean_mag", "parallax",
+            "parallax_error", "pmra", "pmra_error", "pmdec", "pmdec_error",
+            "radial_velocity", "radial_velocity_error", "ruwe",
+            "astrometric_excess_noise", "astrometric_excess_noise_sig",
+            "bp_rp", "non_single_star", "mh_gspphot"
+        ]
+        for col in expected_columns:
+            assert col in query.query_str
+
+    def test_query_str_with_different_release(self):
+        """Test query_str with different data release."""
+        query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr2")
+        assert "gaiadr2.gaia_source" in query.query_str
+        assert (
+            f"source_id = {query.source_id_obj.source_id}" in query.query_str
+        )
+
+    def test_query_str_select_clause(self):
+        """Test that SELECT clause contains specific columns."""
+        query = SingleSourceUsefulInfoQuery(source_id=123456)
+        query_str = query.query_str
+        assert "SELECT" in query_str
+        assert "source_id" in query_str
+        assert "FROM" in query_str
+        assert "WHERE" in query_str
+
+    @patch("cobtools.query.query_gaia.Gaia.launch_job")
+    def test_query_result_success(self, mock_launch_job):
+        """Test query_result returns table successfully."""
+        mock_job = MagicMock()
+        mock_job.get_phase.return_value = "COMPLETED"
+        mock_job.get_results.return_value = Table(
+            names=[
+                "source_id",
+                "ra",
+                "dec",
+                "l",
+                "b",
+                "phot_g_mean_mag",
+                "parallax",
+                "parallax_error",
+                "pmra",
+                "pmra_error",
+                "pmdec",
+                "pmdec_error",
+                "radial_velocity",
+                "radial_velocity_error",
+                "ruwe",
+                "astrometric_excess_noise",
+                "astrometric_excess_noise_sig",
+                "bp_rp",
+                "non_single_star",
+                "mh_gspphot",
+                "ag_gspphot",
+                "ebpminrp_gspphot",
+                "in_qso_candidate",
+                "in_galaxy_candidate",
+                "in_andromeda_survey",
+                "has_xp_continuous",
+                "has_epoch_photometry",
+                "has_epoch_rv",
+            ],
+            data=[
+                [4787135780363189504],
+                [71.75571839171829],
+                [-46.59034574895981],
+                [14.051228],
+                [0.38555175893640115],
+                [0.05],
+                [17.106916182108442],
+                [0.02],
+                [17.156456857994684],
+                [0.02],
+                [5.5],
+                [1.2],
+                [1.08],
+                [0.02],
+                [1.5],
+                [0.65],
+                [0.0],
+                [-0.15],
+                [False],
+                [1.5],
+                [0.1],
+                [0.05],
+                [False],
+                [False],
+                [False],
+                [True],
+                [True],
+                [False],
+            ],
+        )
+        mock_launch_job.return_value = mock_job
+
+        query = SingleSourceUsefulInfoQuery(source_id=4787135780363189504)
+        result = query.query_result()
+
+        assert isinstance(result, Table)
+        for col in mock_job.get_results().colnames:
+            assert col in result.colnames
+            if result[col].dtype.kind == 'f':
+                assert np.allclose(result[col], mock_job.get_results()[col])
+            else:
+                assert np.array_equal(result[col], mock_job.get_results()[col])
+        mock_launch_job.return_value = mock_job
+
+    def test_init_valid_int_source_id(self):
+        """Test initialization with integer source_id."""
+        query = SingleSourceUsefulInfoQuery(source_id=123456)
+        assert query.source_id_obj.source_id == 123456
+
+    def test_init_valid_str_source_id(self):
+        """Test initialization with string source_id."""
+        query = SingleSourceUsefulInfoQuery(source_id="123456")
+        assert query.source_id_obj.source_id == 123456
+
+    def test_init_default_data_release(self):
+        """Test that default data_release is 'dr3'."""
+        query = SingleSourceUsefulInfoQuery(source_id=123456)
+        assert query.source_id_obj.data_release == "dr3"
+
+    def test_init_custom_data_release(self):
+        """Test initialization with custom data_release."""
+        for release in ["dr1", "dr2", "edr3", "dr4", "dr5"]:
+            query = SingleSourceUsefulInfoQuery(
+                source_id=123456, data_release=release
+            )
+            assert query.source_id_obj.data_release == release
 
 
 class TestSingleSourceNSSQuery:
