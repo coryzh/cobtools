@@ -293,7 +293,6 @@ class TestSingleSourceUsefulInfoQuery:
                 assert np.allclose(result[col], mock_job.get_results()[col])
             else:
                 assert np.array_equal(result[col], mock_job.get_results()[col])
-        mock_launch_job.return_value = mock_job
 
     def test_init_valid_int_source_id(self):
         """Test initialization with integer source_id."""
