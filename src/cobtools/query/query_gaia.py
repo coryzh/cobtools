@@ -273,6 +273,11 @@ class SingleSourceNSSQuery(SingleSourceQuery):
         The ADQL query string to retrieve all columns for the specified
         ``source_id`` from the Gaia NSS catalog.
     """
+
+    _VALID_TABLES = [
+        "nss_two_body_orbit", "nss_acceleration", "nss_non_linear_spectro"
+    ]
+
     def __init__(
         self,
         source_id: int | str,
@@ -285,13 +290,10 @@ class SingleSourceNSSQuery(SingleSourceQuery):
                 "for NSS queries since the NSS catalogs are only "
                 "available in DR3."
             )
-        valid_tables = [
-            "nss_two_body_orbit", "nss_acceleration", "nss_non_linear_spectro"
-        ]
-        if table_name not in valid_tables:
+        if table_name not in self._VALID_TABLES:
             raise ValueError(
                 f"Invalid table_name: {table_name}. "
-                f"Valid options are: {', '.join(valid_tables)}."
+                f"Valid options are: {', '.join(self._VALID_TABLES)}."
             )
 
         super().__init__(source_id, data_release)
