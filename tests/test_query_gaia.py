@@ -147,30 +147,64 @@ class TestSingleSourceUsefulInfoQuery:
         query = SingleSourceUsefulInfoQuery(
             source_id=123456, data_release="dr3"
         )
-        assert "gaiadr3.gaia_source" in query.query_str
-        assert (
-            f"source_id = {query.source_id_obj.source_id}" in query.query_str
-        )
+        expected_query = dedent(
+            f"""
+            SELECT
+                source_id,
+                ra,
+                dec,
+                phot_g_mean_mag,
+                parallax,
+                parallax_error,
+                pmra,
+                pmra_error,
+                pmdec,
+                pmdec_error,
+                radial_velocity,
+                radial_velocity_error,
+                ruwe,
+                astrometric_excess_noise,
+                astrometric_excess_noise_sig,
+                bp_rp,
+                non_single_star,
+                mh_gspphot
+            FROM gaiadr3.gaia_source
+            WHERE source_id = {query.source_id_obj.source_id}
+            """
+        ).strip()
 
-        # Check that all expected columns are in the query
-        expected_columns = [
-            "source_id", "ra", "dec", "phot_g_mean_mag", "parallax",
-            "parallax_error", "pmra", "pmra_error", "pmdec", "pmdec_error",
-            "radial_velocity", "radial_velocity_error", "ruwe",
-            "astrometric_excess_noise", "astrometric_excess_noise_sig",
-            "bp_rp", "non_single_star", "mh_gspphot"
-        ]
-        for col in expected_columns:
-            assert col in query.query_str
+        assert query.query_str == expected_query
 
     def test_query_str_with_different_release(self):
         """Test query_str with different data release."""
         query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr2")
-        assert "gaiadr2.gaia_source" in query.query_str
-        assert (
-            f"source_id = {query.source_id_obj.source_id}" in query.query_str
-        )
+        expected_query = dedent(
+            f"""
+            SELECT
+                source_id,
+                ra,
+                dec,
+                phot_g_mean_mag,
+                parallax,
+                parallax_error,
+                pmra,
+                pmra_error,
+                pmdec,
+                pmdec_error,
+                radial_velocity,
+                radial_velocity_error,
+                ruwe,
+                astrometric_excess_noise,
+                astrometric_excess_noise_sig,
+                bp_rp,
+                non_single_star,
+                mh_gspphot
+            FROM gaiadr2.gaia_source
+            WHERE source_id = {query.source_id_obj.source_id}
+            """
+        ).strip()
 
+        assert query.query_str == expected_query
     def test_query_str_select_clause(self):
         """Test that SELECT clause contains specific columns."""
         query = SingleSourceUsefulInfoQuery(source_id=123456)
