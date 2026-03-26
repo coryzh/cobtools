@@ -138,7 +138,6 @@ class TestSingleSourceFullGaiaQuery:
 
 class TestSingleSourceNSSQuery:
     """Tests for SingleSourceNSSQuery implementation."""
-    # Placeholder for future tests of the SingleSourceNSSQuery class
     def test_valid_initialization(self):
         """
         Test that SingleSourceNSSQuery can be initialized with valid source_id.
