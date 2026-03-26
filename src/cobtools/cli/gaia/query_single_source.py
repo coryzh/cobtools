@@ -38,9 +38,11 @@ def query_useful_info(source_id: int, dr: str):
     except ValueError as e:
         click.echo(f"Error: {e}")
         return
+
     except RuntimeError as e:
         click.echo(f"Runtime error: {e}")
         return
+
     except Exception as e:
         click.echo(f"An unexpected error occurred: {e}")
         return
