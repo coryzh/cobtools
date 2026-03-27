@@ -154,6 +154,8 @@ class TestSingleSourceUsefulInfoQuery:
                 source_id,
                 ra,
                 dec,
+                l,
+                b,
                 phot_g_mean_mag,
                 parallax,
                 parallax_error,
@@ -168,7 +170,15 @@ class TestSingleSourceUsefulInfoQuery:
                 astrometric_excess_noise_sig,
                 bp_rp,
                 non_single_star,
-                mh_gspphot
+                mh_gspphot,
+                ag_gspphot,
+                ebpminrp_gspphot,
+                in_qso_candidates,
+                in_galaxy_candidates,
+                has_xp_continuous,
+                has_epoch_photometry,
+                has_rvs,
+                has_epoch_rv
             FROM gaiadr3.gaia_source
             WHERE source_id = {query.source_id_obj.source_id}
             """
@@ -185,6 +195,8 @@ class TestSingleSourceUsefulInfoQuery:
                 source_id,
                 ra,
                 dec,
+                l,
+                b,
                 phot_g_mean_mag,
                 parallax,
                 parallax_error,
@@ -199,7 +211,15 @@ class TestSingleSourceUsefulInfoQuery:
                 astrometric_excess_noise_sig,
                 bp_rp,
                 non_single_star,
-                mh_gspphot
+                mh_gspphot,
+                ag_gspphot,
+                ebpminrp_gspphot,
+                in_qso_candidates,
+                in_galaxy_candidates,
+                has_xp_continuous,
+                has_epoch_photometry,
+                has_rvs,
+                has_epoch_rv
             FROM gaiadr2.gaia_source
             WHERE source_id = {query.source_id_obj.source_id}
             """
@@ -230,45 +250,25 @@ class TestSingleSourceUsefulInfoQuery:
         mock_job.get_phase.return_value = "COMPLETED"
         mock_job.get_results.return_value = Table(
             names=[
-                "source_id",
-                "ra",
-                "dec",
-                "phot_g_mean_mag",
-                "parallax",
-                "parallax_error",
-                "pmra",
-                "pmra_error",
-                "pmdec",
-                "pmdec_error",
-                "radial_velocity",
-                "radial_velocity_error",
-                "ruwe",
-                "astrometric_excess_noise",
-                "astrometric_excess_noise_sig",
-                "bp_rp",
-                "non_single_star",
-                "mh_gspphot",
+                "source_id", "ra", "dec", "l", "b", "phot_g_mean_mag",
+                "parallax", "parallax_error", "pmra", "pmra_error", "pmdec",
+                "pmdec_error", "radial_velocity", "radial_velocity_error",
+                "ruwe", "astrometric_excess_noise",
+                "astrometric_excess_noise_sig", "bp_rp", "non_single_star",
+                "mh_gspphot", "ag_gspphot", "ebpminrp_gspphot",
+                "in_qso_candidates", "in_galaxy_candidates",
+                "has_xp_continuous", "has_rvs", "has_epoch_rv",
+                "has_epoch_photometry",
             ],
             data=[
-                [4787135780363189504],
-                [71.75571839171829],
-                [-46.59034574895981],
-                [14.051228],
-                [17.106916182108442],
-                [0.02],
-                [17.156456857994684],
-                [0.02],
-                [5.5],
-                [1.2],
-                [1.08],
-                [0.02],
-                [1.5],
-                [0.65],
-                [0.0],
-                [-0.15],
-                [False],
-                [1.5],
-            ],
+                [4787135780363189504], [71.75571839171829],
+                [-46.59034574895981], [252.40951383438264],
+                [-40.33113316616744], [14.051228], [0.38555175893640115],
+                [0.02], [17.106916182108442], [0.02], [17.156456857994684],
+                [0.02], [-50.0], [0.02], [1.5], [0.65], [0.0], [-0.15],
+                [0], [0.65], [0.0], [-0.15], [False], [False], [True],
+                [True], [False], [False],
+            ]
         )
         mock_launch_job.return_value = mock_job
 
