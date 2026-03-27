@@ -80,3 +80,24 @@ class TestGaiaUsefulInfoCache:
 
     def test_cache_file_path_includes_data_release(self, cache):
         assert "dr3" in cache.cache_file_path.name
+
+    def test_get_source_returns_none_for_empty_cache(self, cache):
+        assert cache.load() is None
+        assert cache.get_source(1) is None
+
+    def test_get_source_returns_none_for_missing_source_id(self, cache):
+        cache.save(make_row(1))
+        assert 1 in cache.load().index
+        assert cache.get_source(2) is None
+
+    def test_get_source_returns_dataframe_for_existing_source_id(self, cache):
+        cache.save(make_row(114514))
+        assert cache.load() is not None
+        assert 114514 in cache.load().index
+        result = cache.get_source(114514)
+        assert result is not None
+        assert isinstance(result, pd.DataFrame)
+        assert result.index.name == "source_id"
+        assert 114514 in result.index
+        assert result.loc[114514, "ra"] == 10.0
+        assert result.loc[114514, "dec"] == 20.0

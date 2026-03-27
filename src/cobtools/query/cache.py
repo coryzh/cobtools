@@ -25,6 +25,10 @@ class Cache(ABC):
     def save(self, data: ...) -> None:
         pass
 
+    @abstractmethod
+    def get_source(self, source_id: int | str) -> pd.DataFrame | None:
+        pass
+
 
 class GaiaUsefulInfoCache(Cache):
     def __init__(self, dr: str, max_rows: int = 1000):
@@ -64,3 +68,10 @@ class GaiaUsefulInfoCache(Cache):
             data.to_csv(self.cache_file_path, mode="a", header=False)
         else:
             data.to_csv(self.cache_file_path)
+
+    def get_source(self, source_id):
+        existing = self.load()
+        if existing is None or source_id not in existing.index:
+            return None
+
+        return existing.loc[[source_id]]
