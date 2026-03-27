@@ -358,6 +358,8 @@
 <span class="s2">                source_id,</span>
 <span class="s2">                ra,</span>
 <span class="s2">                dec,</span>
+<span class="s2">                l,</span>
+<span class="s2">                b,</span>
 <span class="s2">                phot_g_mean_mag,</span>
 <span class="s2">                parallax,</span>
 <span class="s2">                parallax_error,</span>
@@ -372,7 +374,15 @@
 <span class="s2">                astrometric_excess_noise_sig,</span>
 <span class="s2">                bp_rp,</span>
 <span class="s2">                non_single_star,</span>
-<span class="s2">                mh_gspphot</span>
+<span class="s2">                mh_gspphot,</span>
+<span class="s2">                ag_gspphot,</span>
+<span class="s2">                ebpminrp_gspphot,</span>
+<span class="s2">                in_qso_candidates,</span>
+<span class="s2">                in_galaxy_candidates,</span>
+<span class="s2">                has_xp_continuous,</span>
+<span class="s2">                has_epoch_photometry,</span>
+<span class="s2">                has_rvs,</span>
+<span class="s2">                has_epoch_rv</span>
 <span class="s2">            FROM gaia</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2">.gaia_source</span>
 <span class="s2">            WHERE source_id = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">source_id</span><span class="si">}</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>

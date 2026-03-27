@@ -1,0 +1,18 @@
+cobtools.cli package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   cobtools.cli.gaia
+
+Module contents
+---------------
+
+.. automodule:: cobtools.cli
+   :members:
+   :show-inheritance:
+   :undoc-members:

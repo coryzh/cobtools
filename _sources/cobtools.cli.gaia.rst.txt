@@ -1,0 +1,21 @@
+cobtools.cli.gaia package
+=========================
+
+Submodules
+----------
+
+cobtools.cli.gaia.query\_single\_source module
+----------------------------------------------
+
+.. automodule:: cobtools.cli.gaia.query_single_source
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: cobtools.cli.gaia
+   :members:
+   :show-inheritance:
+   :undoc-members:
