@@ -115,7 +115,7 @@ This project makes use of the following libraries.
 - [astropy](https://www.astropy.org/index.html)
 - [lasair](https://lasair-lsst.readthedocs.io/en/develop/core_functions/client.html)
 - [matplotlib](https://matplotlib.org/)
-- [numPy](https://numpy.org/)
+- [NumPy](https://numpy.org/)
 - [pandas](https://pandas.pydata.org/)
 - [scipy](https://docs.scipy.org/doc/scipy/)
 - [platformdirs](https://platformdirs.readthedocs.io/en/latest/)
