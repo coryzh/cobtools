@@ -45,13 +45,18 @@ def query_useful_info(source_id: int, dr: str, no_cache: bool = False) -> None:
 
     cache = GaiaUsefulInfoCache(dr=dr) if not no_cache else None
     if cache:
-        cache_result = cache.get_source(source_id)
-        if cache_result is not None:
-            from astropy.table import Table
-            result = Table.from_pandas(cache_result.reset_index())
-            display_result(result)
-            return
-
+        from astropy.table import Table
+        try:
+            cache_result = cache.get_source(source_id)
+            if cache_result is not None:
+                result = Table.from_pandas(cache_result.reset_index())
+                display_result(result)
+                return
+        except Exception as e:
+            click.echo(
+                f"Warning: Failed to read from cache for source_id {source_id}"
+                f" in {dr}. Proceeding with query. Error: {e}"
+            )
     try:
         from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
         query = SingleSourceUsefulInfoQuery(
