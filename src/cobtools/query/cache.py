@@ -1,12 +1,14 @@
 import platformdirs
 import pandas as pd
 from pathlib import Path
+from typing import Generic, TypeVar, Optional
 from abc import ABC, abstractmethod
 
 _ROOT_CACHE_DIR: Path = Path(platformdirs.user_cache_dir("cobtools"))
+T = TypeVar("T")
 
 
-class Cache(ABC):
+class Cache(ABC, Generic[T]):
     @property
     @abstractmethod
     def cache_dir(self) -> Path:
@@ -18,19 +20,19 @@ class Cache(ABC):
         pass
 
     @abstractmethod
-    def load(self) -> ...:
+    def load(self) -> Optional[T]:
         pass
 
     @abstractmethod
-    def save(self, data: ...) -> None:
+    def save(self, data: T) -> None:
         pass
 
     @abstractmethod
-    def get_source(self, source_id: int | str) -> pd.DataFrame | None:
+    def get_source(self, source_id: int | str) -> Optional[pd.DataFrame]:
         pass
 
 
-class GaiaUsefulInfoCache(Cache):
+class GaiaUsefulInfoCache(Cache[pd.DataFrame]):
     def __init__(self, dr: str, max_rows: int = 1000):
         if max_rows <= 1:
             raise ValueError("max_rows must be greater than 1")
@@ -75,7 +77,7 @@ class GaiaUsefulInfoCache(Cache):
         else:
             data.to_csv(self.cache_file_path)
 
-    def get_source(self, source_id):
+    def get_source(self, source_id) -> Optional[pd.DataFrame]:
         existing = self.load()
         if existing is None or source_id not in existing.index:
             return None
