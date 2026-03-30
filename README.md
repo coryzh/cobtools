@@ -112,7 +112,7 @@ Development was assisted by [GitHub Copilot](https://github.com/features/copilot
 
 This project makes use of the following libraries.
 - [astroquery](https://astroquery.readthedocs.io/)
-- [asropy](https://www.astropy.org/index.html)
+- [astropy](https://www.astropy.org/index.html)
 - [lasair](https://lasair-lsst.readthedocs.io/en/develop/core_functions/client.html)
 - [matplotlib](https://matplotlib.org/)
 - [numPy](https://numpy.org/)
