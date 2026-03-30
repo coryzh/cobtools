@@ -38,7 +38,7 @@ in my research.
 
 It is recommended to install `cobtools` in a dedicated virtual environment to avoid dependency conflicts with other packages.
 
-Using `env` to create a virtual environment named `cobtools-env`:
+Using `venv` to create a virtual environment named `cobtools-env`:
 
 ```bash
 python3.11 -m venv cobtools-env
