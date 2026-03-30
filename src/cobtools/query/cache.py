@@ -56,6 +56,9 @@ class GaiaUsefulInfoCache(Cache):
     def save(self, data: pd.DataFrame) -> None:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
+        if data.empty:
+            return
+
         data = data.set_index("source_id")
 
         if self.cache_file_path.exists():
