@@ -24,16 +24,36 @@ import click
         " and 'dr3'. This will be extended to include 'dr4', and 'dr5'."
     ),
 )
-def query_useful_info(source_id: int, dr: str):
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    default=False,
+    help=(
+        "Disable caching (read and write) of query results. By default, "
+        "results are cached to avoid duplicated queries in the same data "
+        "release."
+    ),
+)
+def query_useful_info(source_id: int, dr: str, no_cache: bool = False) -> None:
     """
     Retrieve useful information about a Gaia source.
 
     Queries the Gaia archive for the specified source_id and data release
     (--dr), and displays the results in a formatted table.
     """
-    from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
+    from cobtools.query.cache import GaiaUsefulInfoCache
+
+    cache = GaiaUsefulInfoCache(dr=dr) if not no_cache else None
+    if cache:
+        cache_result = cache.get_source(source_id)
+        if cache_result is not None:
+            from astropy.table import Table
+            result = Table.from_pandas(cache_result.reset_index())
+            display_result(result)
+            return
 
     try:
+        from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
         query = SingleSourceUsefulInfoQuery(
             source_id=source_id, data_release=dr
         )
@@ -41,8 +61,10 @@ def query_useful_info(source_id: int, dr: str):
         if len(result) == 0:
             click.echo(f"No results found for {source_id} in {dr}.")
             return
-
         display_result(result)
+
+        if not no_cache:
+            cache.save(result.to_pandas())
 
     except ValueError as e:
         click.echo(f"Error: {e}")
