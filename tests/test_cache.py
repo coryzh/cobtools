@@ -22,6 +22,19 @@ def cache(tmp_path, monkeypatch):
 
 
 class TestGaiaUsefulInfoCache:
+    def test_init_with_invalid_max_rows(self):
+        with pytest.raises(
+            ValueError, match="max_rows must be greater than 1"
+        ):
+            GaiaUsefulInfoCache(dr="dr3", max_rows=1)
+        with pytest.raises(
+            ValueError, match="max_rows must be greater than 1"
+        ):
+            GaiaUsefulInfoCache(dr="dr3", max_rows=0)
+        with pytest.raises(
+            ValueError, match="max_rows must be greater than 1"
+        ):
+            GaiaUsefulInfoCache(dr="dr3", max_rows=-5)
 
     def test_load_returns_none_when_no_cache_file(self, cache):
         assert cache.load() is None
