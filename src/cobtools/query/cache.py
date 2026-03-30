@@ -41,7 +41,7 @@ class GaiaUsefulInfoCache(Cache):
     @property
     def cache_dir(self) -> Path:
         return (
-            Path(platformdirs.user_cache_dir("cobtools")) / "gaia_useful_info"
+            _ROOT_CACHE_DIR / "gaia_useful_info"
         )
 
     @property
