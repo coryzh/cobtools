@@ -32,6 +32,9 @@ class Cache(ABC):
 
 class GaiaUsefulInfoCache(Cache):
     def __init__(self, dr: str, max_rows: int = 1000):
+        if max_rows <= 1:
+            raise ValueError("max_rows must be greater than 1")
+
         self.dr = dr
         self.max_rows = max_rows
 
