@@ -68,8 +68,14 @@ def query_useful_info(source_id: int, dr: str, no_cache: bool = False) -> None:
             return
         display_result(result)
 
-        if not no_cache:
-            cache.save(result.to_pandas())
+        if cache is not None:
+            try:
+                cache.save(result.to_pandas())
+            except Exception as e:
+                click.echo(
+                    f"Warning: failed to write query result to cache: {e}",
+                    err=True,
+                )
 
     except ValueError as e:
         click.echo(f"Error: {e}")
