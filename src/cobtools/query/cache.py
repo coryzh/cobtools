@@ -53,7 +53,7 @@ class GaiaUsefulInfoCache(Cache[pd.DataFrame]):
             / f"gaia_single_source_useful_info_{self.dr}.csv"
         )
 
-    def load(self) -> pd.DataFrame:
+    def load(self) -> pd.DataFrame | None:
         if not self.cache_file_path.exists():
             return None
         return pd.read_csv(self.cache_file_path, index_col="source_id")
