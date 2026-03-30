@@ -18,8 +18,7 @@ in my research.
     - `gaia_single_source`: A CLI tool to get a subset of columns given a single `source_id`.
 
 - Plotting
-    - Gaia CMD plotter: customised `matplotlib.Axes` with a pre-plotted background.
-    of scatter.
+    - Gaia CMD plotter: customised `matplotlib.Axes` with a pre-plotted background of scatter.
     - ECDF plotter: A helper function for plotting the empirical cumulative distribution function (ECDF) of a given data array.
 
 ## Installation
@@ -48,7 +47,7 @@ source cobtools-env/bin/activate
 
 Alternatively, you can use `conda`:
 ```bash
-python create -n cobtools-env python=3.11
+conda create -n cobtools-env python=3.11
 conda activate cobtools-env
 ```
 
@@ -64,26 +63,9 @@ Then, install the package in editable mode:
 pip install -e .
 ```
 
-Then, install the package in editable mode:
-
-```bash
-pip install -e .
-```
-
-The "editable" mode (indicated by the `-e` flag) means that changes to the source code will be immediately reflected in the installed package.
-
-To verify the package is installed correctly, open a Python shell and import the package:
-
-```python
-python
->>> import cobtools
->>> print(cobtools.__version__)
-```
-
 The "editable" mode (indicated by the `-e` flag) means that changes to the source code will immediately reflect in the installed package.
 
-To verify the package is installed correctly open a Python shell and import the package
-
+To verify the package is installed correctly, open a Python shell and import the package:
 
 ```python
 python
@@ -121,8 +103,9 @@ We welcome contributions! To contribute:
 2. Create a new branch for your feature or bugfix.
 3. Write your code and add tests.
 4. Submit a pull request.
-
 Please ensure your code follows the existing style and passes all tests.
+
+If you find any issues or have suggestions for improvements, please [open an issue](https://github.com/coryzh/cobtools/issues) with a clear description of the problem or feature request.
 
 ## Acknowledgments
 Development was assisted by [GitHub Copilot](https://github.com/features/copilot).
