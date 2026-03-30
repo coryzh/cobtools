@@ -114,3 +114,19 @@ class TestGaiaUsefulInfoCache:
         assert 114514 in result.index
         assert result.loc[114514, "ra"] == 10.0
         assert result.loc[114514, "dec"] == 20.0
+
+    def test_save_empty_dataframe_does_not_create_file(self, cache):
+        empty_df = pd.DataFrame(columns=["source_id", "ra", "dec"])
+        cache.save(empty_df)
+        assert not cache.cache_file_path.exists()
+
+    def test_save_empty_dataframe_with_existing_cache(self, cache):
+        cache.save(make_row(1))
+        assert cache.cache_file_path.exists()
+
+        empty_df = pd.DataFrame(columns=["source_id", "ra", "dec"])
+        cache.save(empty_df)
+
+        df = cache.load()
+        assert len(df) == 1
+        assert 1 in df.index
