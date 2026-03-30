@@ -74,7 +74,7 @@ python
 ```
 
 ## Documentation
-The API documentation is available [here](coryzh.github.io/cobtools).
+The API documentation is available [here](https://coryzh.github.io/cobtools).
 
 To build the documentation locally, navigate to the `docs/` folder and run:
 ```bash
