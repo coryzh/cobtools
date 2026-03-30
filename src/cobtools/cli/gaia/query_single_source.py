@@ -24,16 +24,41 @@ import click
         " and 'dr3'. This will be extended to include 'dr4', and 'dr5'."
     ),
 )
-def query_useful_info(source_id: int, dr: str):
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    default=False,
+    help=(
+        "Disable caching (read and write) of query results. By default, "
+        "results are cached to avoid duplicated queries in the same data "
+        "release."
+    ),
+)
+def query_useful_info(source_id: int, dr: str, no_cache: bool = False) -> None:
     """
     Retrieve useful information about a Gaia source.
 
     Queries the Gaia archive for the specified source_id and data release
     (--dr), and displays the results in a formatted table.
     """
-    from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
+    from cobtools.query.cache import GaiaUsefulInfoCache
 
+    cache = GaiaUsefulInfoCache(dr=dr) if not no_cache else None
+    if cache:
+        from astropy.table import Table
+        try:
+            cache_result = cache.get_source(source_id)
+            if cache_result is not None:
+                result = Table.from_pandas(cache_result.reset_index())
+                display_result(result)
+                return
+        except Exception as e:
+            click.echo(
+                f"Warning: Failed to read from cache for source_id {source_id}"
+                f" in {dr}. Proceeding with query. Error: {e}"
+            )
     try:
+        from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
         query = SingleSourceUsefulInfoQuery(
             source_id=source_id, data_release=dr
         )
@@ -41,8 +66,16 @@ def query_useful_info(source_id: int, dr: str):
         if len(result) == 0:
             click.echo(f"No results found for {source_id} in {dr}.")
             return
-
         display_result(result)
+
+        if cache is not None:
+            try:
+                cache.save(result.to_pandas())
+            except Exception as e:
+                click.echo(
+                    f"Warning: failed to write query result to cache: {e}",
+                    err=True,
+                )
 
     except ValueError as e:
         click.echo(f"Error: {e}")
