@@ -15,6 +15,7 @@ in my research.
 - Data API wrappers
     - Lasair LSST API wrapper: A wrapper client to query and parse the raw API data
     - Gaia query: Wrapper around the `astroquery.Gaia` module for getting Gaia data for individual sources.
+    - `gaia_single_source`: A CLI tool to get a subset of columns given a single `source_id`.
 
 - Plotting
     - Gaia CMD plotter: customised `matplotlib.Axes` with a pre-plotted background.
@@ -22,6 +23,35 @@ in my research.
     - ECDF plotter: A helper function for plotting the empirical cumulative distribution function (ECDF) of a given data array.
 
 ## Installation
+`cobtools` requires Python >= 3.10 and the following packages:
+
+| Package | Minimum Version |
+|---------|----------------|
+| `numpy` | 2.0.0 |
+| `matplotlib` | 3.9.2 |
+| `scipy` | 1.14.1 |
+| `emcee` | 3.1.6 |
+| `pandas` | 2.2.1 |
+| `astroquery` | 0.4.10 |
+| `lasair` | 0.1.2 |
+| `click` | 8.0.0 |
+| `platformdirs` | 4.3.6 |
+
+It is recommended to install `cobtools` in a dedicated virtual environment to avoid dependency conflicts with other packages.
+
+Using `env` to create a virtual environment named `cobtools-env`:
+
+```bash
+python3.11 -m venv cobtools-env
+source cobtools-env/bin/activate
+```
+
+Alternatively, you can use `conda`:
+```bash
+python create -n cobtools-env python=3.11
+conda activate cobtools-env
+```
+
 To install, first, clone the repository to your machine:
 
 ```bash
@@ -95,7 +125,9 @@ We welcome contributions! To contribute:
 Please ensure your code follows the existing style and passes all tests.
 
 ## Acknowledgments
-This project makes use of the following libraries:
+Development was assisted by [GitHub Copilot](https://github.com/features/copilot).
+
+This project makes use of the following libraries.
 - [astroquery](https://astroquery.readthedocs.io/)
 - [asropy](https://www.astropy.org/index.html)
 - [lasair](https://lasair-lsst.readthedocs.io/en/develop/core_functions/client.html)
@@ -103,3 +135,4 @@ This project makes use of the following libraries:
 - [numPy](https://numpy.org/)
 - [pandas](https://pandas.pydata.org/)
 - [scipy](https://docs.scipy.org/doc/scipy/)
+- [platformdirs](https://platformdirs.readthedocs.io/en/latest/)
