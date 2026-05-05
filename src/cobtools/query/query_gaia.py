@@ -285,6 +285,16 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
                 "has_epoch_rv"
         ]
     }
+
+    def __init__(self, source_id: int | str, data_release: str = "dr3"):
+        if data_release not in self._COLUMN_SETS:
+            raise ValueError(
+                f"Unsupported data_release: {data_release} for "
+                "single-source useful info query. Valid options are: "
+                f"{', '.join(self._COLUMN_SETS.keys())}."
+            )
+        super().__init__(source_id, data_release)
+
     @property
     def query_str(self) -> str:
         query = dedent(f"""
