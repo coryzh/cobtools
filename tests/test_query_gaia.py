@@ -148,37 +148,21 @@ class TestSingleSourceUsefulInfoQuery:
         query = SingleSourceUsefulInfoQuery(
             source_id=123456, data_release="dr3"
         )
+        expected_columns = [
+            "source_id", "ra", "dec", "l", "b", "phot_g_mean_mag",
+            "parallax", "parallax_error", "pmra", "pmra_error", "pmdec",
+            "pmdec_error", "radial_velocity", "radial_velocity_error",
+            "ruwe", "astrometric_excess_noise",
+            "astrometric_excess_noise_sig", "bp_rp", "non_single_star",
+            "mh_gspphot", "ag_gspphot", "ebpminrp_gspphot",
+            "in_qso_candidates", "in_galaxy_candidates",
+            "has_xp_continuous", "has_epoch_photometry", "has_rvs",
+            "has_epoch_rv"
+        ]
         expected_query = dedent(
             f"""
             SELECT
-                source_id,
-                ra,
-                dec,
-                l,
-                b,
-                phot_g_mean_mag,
-                parallax,
-                parallax_error,
-                pmra,
-                pmra_error,
-                pmdec,
-                pmdec_error,
-                radial_velocity,
-                radial_velocity_error,
-                ruwe,
-                astrometric_excess_noise,
-                astrometric_excess_noise_sig,
-                bp_rp,
-                non_single_star,
-                mh_gspphot,
-                ag_gspphot,
-                ebpminrp_gspphot,
-                in_qso_candidates,
-                in_galaxy_candidates,
-                has_xp_continuous,
-                has_epoch_photometry,
-                has_rvs,
-                has_epoch_rv
+                {', '.join(expected_columns)}
             FROM gaiadr3.gaia_source
             WHERE source_id = {query.source_id_obj.source_id}
             """
@@ -186,40 +170,33 @@ class TestSingleSourceUsefulInfoQuery:
 
         assert query.query_str == expected_query
 
+    def test_invalid_data_release(self):
+        """
+        Test that invalid data_release raises for single-source useful info
+        query.
+        """
+        dr = "dr4"
+        with pytest.raises(
+            ValueError,
+            match=(
+                f"Unsupported data_release: {dr} for "
+                "single-source useful info query."
+            ),
+        ):
+            SingleSourceUsefulInfoQuery(source_id=123456, data_release=dr)
+
     def test_query_str_with_different_release(self):
         """Test query_str with different data release."""
         query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr2")
+        expected_columns = [
+            "source_id", "ra", "dec", "l", "b", "phot_g_mean_mag", "parallax",
+            "parallax_error", "pmra", "pmra_error", "pmdec", "pmdec_error",
+            "radial_velocity", "radial_velocity_error", "bp_rp"
+        ]
         expected_query = dedent(
             f"""
             SELECT
-                source_id,
-                ra,
-                dec,
-                l,
-                b,
-                phot_g_mean_mag,
-                parallax,
-                parallax_error,
-                pmra,
-                pmra_error,
-                pmdec,
-                pmdec_error,
-                radial_velocity,
-                radial_velocity_error,
-                ruwe,
-                astrometric_excess_noise,
-                astrometric_excess_noise_sig,
-                bp_rp,
-                non_single_star,
-                mh_gspphot,
-                ag_gspphot,
-                ebpminrp_gspphot,
-                in_qso_candidates,
-                in_galaxy_candidates,
-                has_xp_continuous,
-                has_epoch_photometry,
-                has_rvs,
-                has_epoch_rv
+                {', '.join(expected_columns)}
             FROM gaiadr2.gaia_source
             WHERE source_id = {query.source_id_obj.source_id}
             """
@@ -300,7 +277,7 @@ class TestSingleSourceUsefulInfoQuery:
 
     def test_init_custom_data_release(self):
         """Test initialization with custom data_release."""
-        for release in ["dr1", "dr2", "edr3", "dr4", "dr5"]:
+        for release in ["dr1", "dr2", "dr3"]:
             query = SingleSourceUsefulInfoQuery(
                 source_id=123456, data_release=release
             )
