@@ -297,36 +297,10 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
 
     @property
     def query_str(self) -> str:
+        columns = self._COLUMN_SETS.get(self.data_release)
         query = dedent(f"""
             SELECT
-                source_id,
-                ra,
-                dec,
-                l,
-                b,
-                phot_g_mean_mag,
-                parallax,
-                parallax_error,
-                pmra,
-                pmra_error,
-                pmdec,
-                pmdec_error,
-                radial_velocity,
-                radial_velocity_error,
-                ruwe,
-                astrometric_excess_noise,
-                astrometric_excess_noise_sig,
-                bp_rp,
-                non_single_star,
-                mh_gspphot,
-                ag_gspphot,
-                ebpminrp_gspphot,
-                in_qso_candidates,
-                in_galaxy_candidates,
-                has_xp_continuous,
-                has_epoch_photometry,
-                has_rvs,
-                has_epoch_rv
+                {", ".join(columns)}
             FROM gaia{self.source_id_obj.data_release}.gaia_source
             WHERE source_id = {self.source_id_obj.source_id}
             """).strip()
