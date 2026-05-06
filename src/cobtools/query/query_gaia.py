@@ -254,7 +254,8 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
         The source_id to query. See `SourceID` for valid formats.
 
     data_release : str
-        The Gaia data release to query. See `SourceID` for valid options.
+        The Gaia data release to query. Currently supports "dr1", "dr2", and
+        "dr3". The set of columns depends on the data release.
 
     Properties
     ----------
@@ -262,38 +263,45 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
         The ADQL query string to retrieve a specific subset of useful columns
         for the specified ``source_id`` from the Gaia main table.
     """
+    _COLUMN_SETS = {
+        "dr1": [
+            "source_id", "ra", "dec", "l", "b", "phot_g_mean_mag", "parallax",
+            "parallax_error", "pmra", "pmra_error", "pmdec", "pmdec_error"
+        ],
+
+        "dr2": [
+            "source_id", "ra", "dec", "l", "b", "phot_g_mean_mag", "parallax",
+            "parallax_error", "pmra", "pmra_error", "pmdec", "pmdec_error",
+            "radial_velocity", "radial_velocity_error", "bp_rp"
+        ],
+        "dr3": [
+            "source_id", "ra", "dec", "l", "b", "phot_g_mean_mag",
+            "parallax", "parallax_error", "pmra", "pmra_error", "pmdec",
+            "pmdec_error", "radial_velocity", "radial_velocity_error",
+            "ruwe", "astrometric_excess_noise",
+            "astrometric_excess_noise_sig", "bp_rp", "non_single_star",
+            "mh_gspphot", "ag_gspphot", "ebpminrp_gspphot",
+            "in_qso_candidates", "in_galaxy_candidates",
+            "has_xp_continuous", "has_epoch_photometry", "has_rvs",
+            "has_epoch_rv"
+        ]
+    }
+
+    def __init__(self, source_id: int | str, data_release: str = "dr3"):
+        if data_release not in self._COLUMN_SETS:
+            raise ValueError(
+                f"Unsupported data_release: {data_release} for "
+                "single-source useful info query. Valid options are: "
+                f"{', '.join(self._COLUMN_SETS.keys())}."
+            )
+        super().__init__(source_id, data_release)
+
     @property
     def query_str(self) -> str:
+        columns = self._COLUMN_SETS[self.data_release]
         query = dedent(f"""
             SELECT
-                source_id,
-                ra,
-                dec,
-                l,
-                b,
-                phot_g_mean_mag,
-                parallax,
-                parallax_error,
-                pmra,
-                pmra_error,
-                pmdec,
-                pmdec_error,
-                radial_velocity,
-                radial_velocity_error,
-                ruwe,
-                astrometric_excess_noise,
-                astrometric_excess_noise_sig,
-                bp_rp,
-                non_single_star,
-                mh_gspphot,
-                ag_gspphot,
-                ebpminrp_gspphot,
-                in_qso_candidates,
-                in_galaxy_candidates,
-                has_xp_continuous,
-                has_epoch_photometry,
-                has_rvs,
-                has_epoch_rv
+                {", ".join(columns)}
             FROM gaia{self.source_id_obj.data_release}.gaia_source
             WHERE source_id = {self.source_id_obj.source_id}
             """).strip()
