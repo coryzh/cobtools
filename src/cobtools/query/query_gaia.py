@@ -254,7 +254,8 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
         The source_id to query. See `SourceID` for valid formats.
 
     data_release : str
-        The Gaia data release to query. See `SourceID` for valid options.
+        The Gaia data release to query. Currently supports "dr1", "dr2", and
+        "dr3". The set of columns depends on the data release.
 
     Properties
     ----------
