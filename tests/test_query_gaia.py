@@ -185,7 +185,7 @@ class TestSingleSourceUsefulInfoQuery:
         ):
             SingleSourceUsefulInfoQuery(source_id=123456, data_release=dr)
 
-    def test_query_str_with_different_release(self):
+    def test_query_str_dr2(self):
         """Test query_str with different data release."""
         query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr2")
         expected_columns = [
@@ -198,6 +198,24 @@ class TestSingleSourceUsefulInfoQuery:
             SELECT
                 {', '.join(expected_columns)}
             FROM gaiadr2.gaia_source
+            WHERE source_id = {query.source_id_obj.source_id}
+            """
+        ).strip()
+
+        assert query.query_str == expected_query
+    
+    def test_query_str_dr1(self):
+        """Test query_str with different data release."""
+        query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr1")
+        expected_columns = [
+            "source_id", "ra", "dec", "l", "b", "phot_g_mean_mag", "parallax",
+            "parallax_error", "pmra", "pmra_error", "pmdec", "pmdec_error"
+        ]
+        expected_query = dedent(
+            f"""
+            SELECT
+                {', '.join(expected_columns)}
+            FROM gaiadr1.gaia_source
             WHERE source_id = {query.source_id_obj.source_id}
             """
         ).strip()
