@@ -429,7 +429,8 @@ useful columns from the Gaia main table.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>source_id</strong> (<em>str</em><em> or </em><em>int</em>) – The source_id to query. See <cite>SourceID</cite> for valid formats.</p></li>
-<li><p><strong>data_release</strong> (<em>str</em>) – The Gaia data release to query. See <cite>SourceID</cite> for valid options.</p></li>
+<li><p><strong>data_release</strong> (<em>str</em>) – The Gaia data release to query. Currently supports “dr1”, “dr2”, and
+“dr3”. The set of columns depends on the data release.</p></li>
 <li><p><strong>Properties</strong></p></li>
 <li><p><strong>----------</strong></p></li>
 <li><p><strong>query_str</strong> (<em>str</em>) – The ADQL query string to retrieve a specific subset of useful columns

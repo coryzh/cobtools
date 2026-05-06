@@ -343,7 +343,8 @@
 <span class="sd">        The source_id to query. See `SourceID` for valid formats.</span>
 
 <span class="sd">    data_release : str</span>
-<span class="sd">        The Gaia data release to query. See `SourceID` for valid options.</span>
+<span class="sd">        The Gaia data release to query. Currently supports &quot;dr1&quot;, &quot;dr2&quot;, and</span>
+<span class="sd">        &quot;dr3&quot;. The set of columns depends on the data release.</span>
 
 <span class="sd">    Properties</span>
 <span class="sd">    ----------</span>
@@ -351,38 +352,45 @@
 <span class="sd">        The ADQL query string to retrieve a specific subset of useful columns</span>
 <span class="sd">        for the specified ``source_id`` from the Gaia main table.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_COLUMN_SETS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;dr1&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;source_id&quot;</span><span class="p">,</span> <span class="s2">&quot;ra&quot;</span><span class="p">,</span> <span class="s2">&quot;dec&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;phot_g_mean_mag&quot;</span><span class="p">,</span> <span class="s2">&quot;parallax&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parallax_error&quot;</span><span class="p">,</span> <span class="s2">&quot;pmra&quot;</span><span class="p">,</span> <span class="s2">&quot;pmra_error&quot;</span><span class="p">,</span> <span class="s2">&quot;pmdec&quot;</span><span class="p">,</span> <span class="s2">&quot;pmdec_error&quot;</span>
+        <span class="p">],</span>
+
+        <span class="s2">&quot;dr2&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;source_id&quot;</span><span class="p">,</span> <span class="s2">&quot;ra&quot;</span><span class="p">,</span> <span class="s2">&quot;dec&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;phot_g_mean_mag&quot;</span><span class="p">,</span> <span class="s2">&quot;parallax&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parallax_error&quot;</span><span class="p">,</span> <span class="s2">&quot;pmra&quot;</span><span class="p">,</span> <span class="s2">&quot;pmra_error&quot;</span><span class="p">,</span> <span class="s2">&quot;pmdec&quot;</span><span class="p">,</span> <span class="s2">&quot;pmdec_error&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;radial_velocity&quot;</span><span class="p">,</span> <span class="s2">&quot;radial_velocity_error&quot;</span><span class="p">,</span> <span class="s2">&quot;bp_rp&quot;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;dr3&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;source_id&quot;</span><span class="p">,</span> <span class="s2">&quot;ra&quot;</span><span class="p">,</span> <span class="s2">&quot;dec&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;phot_g_mean_mag&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parallax&quot;</span><span class="p">,</span> <span class="s2">&quot;parallax_error&quot;</span><span class="p">,</span> <span class="s2">&quot;pmra&quot;</span><span class="p">,</span> <span class="s2">&quot;pmra_error&quot;</span><span class="p">,</span> <span class="s2">&quot;pmdec&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pmdec_error&quot;</span><span class="p">,</span> <span class="s2">&quot;radial_velocity&quot;</span><span class="p">,</span> <span class="s2">&quot;radial_velocity_error&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ruwe&quot;</span><span class="p">,</span> <span class="s2">&quot;astrometric_excess_noise&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;astrometric_excess_noise_sig&quot;</span><span class="p">,</span> <span class="s2">&quot;bp_rp&quot;</span><span class="p">,</span> <span class="s2">&quot;non_single_star&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mh_gspphot&quot;</span><span class="p">,</span> <span class="s2">&quot;ag_gspphot&quot;</span><span class="p">,</span> <span class="s2">&quot;ebpminrp_gspphot&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;in_qso_candidates&quot;</span><span class="p">,</span> <span class="s2">&quot;in_galaxy_candidates&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;has_xp_continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;has_epoch_photometry&quot;</span><span class="p">,</span> <span class="s2">&quot;has_rvs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;has_epoch_rv&quot;</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_release</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dr3&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">data_release</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_COLUMN_SETS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unsupported data_release: </span><span class="si">{</span><span class="n">data_release</span><span class="si">}</span><span class="s2"> for &quot;</span>
+                <span class="s2">&quot;single-source useful info query. Valid options are: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_COLUMN_SETS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="n">data_release</span><span class="p">)</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">query_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_COLUMN_SETS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data_release</span><span class="p">]</span>
         <span class="n">query</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            SELECT</span>
-<span class="s2">                source_id,</span>
-<span class="s2">                ra,</span>
-<span class="s2">                dec,</span>
-<span class="s2">                l,</span>
-<span class="s2">                b,</span>
-<span class="s2">                phot_g_mean_mag,</span>
-<span class="s2">                parallax,</span>
-<span class="s2">                parallax_error,</span>
-<span class="s2">                pmra,</span>
-<span class="s2">                pmra_error,</span>
-<span class="s2">                pmdec,</span>
-<span class="s2">                pmdec_error,</span>
-<span class="s2">                radial_velocity,</span>
-<span class="s2">                radial_velocity_error,</span>
-<span class="s2">                ruwe,</span>
-<span class="s2">                astrometric_excess_noise,</span>
-<span class="s2">                astrometric_excess_noise_sig,</span>
-<span class="s2">                bp_rp,</span>
-<span class="s2">                non_single_star,</span>
-<span class="s2">                mh_gspphot,</span>
-<span class="s2">                ag_gspphot,</span>
-<span class="s2">                ebpminrp_gspphot,</span>
-<span class="s2">                in_qso_candidates,</span>
-<span class="s2">                in_galaxy_candidates,</span>
-<span class="s2">                has_xp_continuous,</span>
-<span class="s2">                has_epoch_photometry,</span>
-<span class="s2">                has_rvs,</span>
-<span class="s2">                has_epoch_rv</span>
+<span class="s2">                </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span>
 <span class="s2">            FROM gaia</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2">.gaia_source</span>
 <span class="s2">            WHERE source_id = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id_obj</span><span class="o">.</span><span class="n">source_id</span><span class="si">}</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
