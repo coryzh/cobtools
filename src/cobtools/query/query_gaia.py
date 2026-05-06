@@ -298,7 +298,7 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
 
     @property
     def query_str(self) -> str:
-        columns = self._COLUMN_SETS.get(self.data_release)
+        columns = self._COLUMN_SETS[self.data_release]
         query = dedent(f"""
             SELECT
                 {", ".join(columns)}
