@@ -102,16 +102,13 @@ def make_figure(cumulative: bool = False) -> Tuple[plt.Axes, plt.Figure]:
     plt.style.use("modernstix")
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 
-    # ax.set_xscale("log")
-
-    ax.set_xlabel("Inferred kick velocity (km/s)")
+    ax.set_xlabel("Inferred natal kick (km/s)")
     if cumulative:
         ax.set_ylabel("CDF")
         ax.set_ylim(0, 1.0)
     else:
         ax.set_ylabel("PDF")
 
-    # ax.set_xlim(0, None)
     return ax, fig
 
 
@@ -140,7 +137,6 @@ def add_distribution_to_plot(
         Additional keyword arguments passed to ax.plot().
     """
     model = row["model"]
-    label = row["type"]
 
     if model == "two_maxwellian":
         y = two_maxwellian(
@@ -155,11 +151,11 @@ def add_distribution_to_plot(
     else:
         raise ValueError(f"Unknown model: {model!r}")
 
-    ax.plot(x, y, label=label, **kwargs)
+    ax.plot(x, y, **kwargs)
 
 
 def plot_nk_distributions(
-        cumulative: bool = False, x_max: float = 1000.0
+        cumulative: bool = False, x_max: float = 800.0
 ) -> Tuple[plt.Figure, plt.Axes]:
     """
     Plot natal kick velocity distributions from all references in the
@@ -170,7 +166,7 @@ def plot_nk_distributions(
     cumulative : bool, optional
         If True, plot CDFs instead of PDFs. Default is False.
     x_max : float, optional
-        Upper limit of the x-axis in km/s. Default is 1000.
+        Upper limit of the x-axis in km/s. Default is 800.
 
     Returns
     -------
@@ -185,14 +181,13 @@ def plot_nk_distributions(
     n = len(df)
     cmap = plt.get_cmap("tab10")  # or any other colormap
     lc = [cmap(i / n) for i in range(n)]
-
+    ls = ["-", "--", "-.", ":"] * (n // 4 + 1)  # Repeat line styles if needed
     for i, row in df.iterrows():
+        label_text = f"{row['type']} ({row['ref']})"
         add_distribution_to_plot(
             ax, x, row, cumulative=cumulative, linewidth=2.5, alpha=0.8,
-            color=lc[i]
+            color=lc[i], ls=ls[i], label=label_text
         )
-
-    # ax.set_xlim(0.01, x_max)
 
     ax.legend()
 
