@@ -1,0 +1,4 @@
+type,model,param1,param2,param3,ref
+BH-COB,two_maxwellian,26.1,87.4,0.5,Zhao et al. 2023
+NS-COB,two_maxwellian,20.9,112.7,0.4,Zhao et al. 2023
+INS,lognormal,6.38,1.01,,Disberg & Mandel 2025
