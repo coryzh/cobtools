@@ -192,8 +192,3 @@ def plot_nk_distributions(
     ax.legend()
 
     return fig, ax
-
-
-if __name__ == "__main__":
-    fig, ax = plot_nk_distributions(cumulative=False)
-    plt.show()
