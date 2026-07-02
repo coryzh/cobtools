@@ -125,7 +125,9 @@ def make_figure(cumulative: bool = False) -> Tuple[plt.Figure, plt.Axes]:
     ax : matplotlib.axes.Axes
         The created axes object.
     """
-    plt.style.use("modernstix")
+    plt.style.use(
+        resources.files("cobtools") / "data" / "gaia_cmd.mplstyle"
+    )
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 
     ax.set_xlabel("Inferred natal kick (km/s)")
@@ -214,9 +216,11 @@ def plot_nk_distributions(
             color=lc[i], ls=ls[i], label=label_text
         )
 
+    ax.set_xlim(0, 1000)
+
     if cumulative:
-        ax.legend(loc="upper right")
-    else:
         ax.legend(loc="lower right")
+    else:
+        ax.legend(loc="upper right")
 
     return fig, ax
