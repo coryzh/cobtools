@@ -1,13 +1,13 @@
 import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
 
 from cobtools.plot_utils import nk_proxy_distributions as nk
-
-matplotlib.use("Agg")
-
 
 @pytest.fixture(autouse=True)
 def close_all_figures():
