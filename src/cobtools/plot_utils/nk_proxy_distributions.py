@@ -37,7 +37,20 @@ def two_maxwellian(
     -------
     pdf : array-like
         The computed PDF values corresponding to the input `x`.
+
+    Raises
+    ------
+    ValueError
+        If `sigma1` or `sigma2` are not positive, or if `w` is not in the range
+        [0, 1].
     """
+    if sigma1 <= 0 or sigma2 <= 0:
+        raise ValueError(
+            "sigma1 and sigma2 must be positive for Maxwellian distribution."
+        )
+
+    if w < 0 or w > 1:
+        raise ValueError("Weight w must be in the range [0, 1].")
 
     if cumulative:
         return (
@@ -74,7 +87,18 @@ def lognormal(
     -------
     pdf : array-like
         The computed PDF values corresponding to the input `x`.
+
+    Raises
+    ------
+    ValueError
+        If `mu` or `sigma` are not positive.
     """
+
+    if mu <= 0 or sigma <= 0:
+        raise ValueError(
+            "mu and sigma must be positive for velocity distribution."
+        )
+
     if cumulative:
         return lognorm.cdf(x, s=sigma, scale=np.exp(mu))
     else:
@@ -90,7 +114,7 @@ def _load_data() -> pd.DataFrame:
     return df
 
 
-def make_figure(cumulative: bool = False) -> Tuple[plt.Axes, plt.Figure]:
+def make_figure(cumulative: bool = False) -> Tuple[plt.Figure, plt.Axes]:
     """
     Create a matplotlib figure for plotting the velocity distribution.
 
@@ -98,6 +122,8 @@ def make_figure(cumulative: bool = False) -> Tuple[plt.Axes, plt.Figure]:
     -------
     fig : matplotlib.figure.Figure
         The created figure object.
+    ax : matplotlib.axes.Axes
+        The created axes object.
     """
     plt.style.use("modernstix")
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
@@ -109,7 +135,7 @@ def make_figure(cumulative: bool = False) -> Tuple[plt.Axes, plt.Figure]:
     else:
         ax.set_ylabel("PDF")
 
-    return ax, fig
+    return fig, ax
 
 
 def add_distribution_to_plot(
@@ -155,7 +181,7 @@ def add_distribution_to_plot(
 
 
 def plot_nk_distributions(
-        cumulative: bool = False, x_max: float = 800.0
+        cumulative: bool = False
 ) -> Tuple[plt.Figure, plt.Axes]:
     """
     Plot natal kick velocity distributions from all references in the
@@ -165,8 +191,6 @@ def plot_nk_distributions(
     ----------
     cumulative : bool, optional
         If True, plot CDFs instead of PDFs. Default is False.
-    x_max : float, optional
-        Upper limit of the x-axis in km/s. Default is 800.
 
     Returns
     -------
@@ -176,9 +200,10 @@ def plot_nk_distributions(
         The axes with the plotted distributions.
     """
     df = _load_data()
-    ax, fig = make_figure(cumulative=cumulative)
-    x = np.linspace(0, x_max, 1000)
+    fig, ax = make_figure(cumulative=cumulative)
+    x = np.linspace(0, 1000, 2000)
     n = len(df)
+
     cmap = plt.get_cmap("tab10")  # or any other colormap
     lc = [cmap(i / n) for i in range(n)]
     ls = ["-", "--", "-.", ":"] * (n // 4 + 1)  # Repeat line styles if needed
@@ -189,6 +214,9 @@ def plot_nk_distributions(
             color=lc[i], ls=ls[i], label=label_text
         )
 
-    ax.legend()
+    if cumulative:
+        ax.legend(loc="upper right")
+    else:
+        ax.legend(loc="lower right")
 
     return fig, ax
