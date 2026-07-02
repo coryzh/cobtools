@@ -205,6 +205,10 @@ def plot_nk_distributions(
     fig, ax = make_figure(cumulative=cumulative)
     x = np.linspace(0, 1000, 2000)
     n = len(df)
+    if n == 0:
+        raise ValueError(
+            "No natal kick distribution data found in the parameter file."
+        )
 
     cmap = plt.get_cmap("tab10")  # or any other colormap
     lc = [cmap(i / n) for i in range(n)]
