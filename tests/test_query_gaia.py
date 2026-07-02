@@ -203,7 +203,7 @@ class TestSingleSourceUsefulInfoQuery:
         ).strip()
 
         assert query.query_str == expected_query
-    
+
     def test_query_str_dr1(self):
         """Test query_str with different data release."""
         query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr1")
