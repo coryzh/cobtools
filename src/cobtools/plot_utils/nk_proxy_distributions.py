@@ -185,7 +185,7 @@ def plot_nk_distributions(
     for i, row in df.iterrows():
         label_text = f"{row['type']} ({row['ref']})"
         add_distribution_to_plot(
-            ax, x, row, cumulative=cumulative, linewidth=2.5, alpha=0.8,
+            ax, x, row, cumulative=cumulative, linewidth=3.0, alpha=0.8,
             color=lc[i], ls=ls[i], label=label_text
         )
 
