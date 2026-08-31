@@ -30,3 +30,10 @@ import click
         "exponential prior for X-ray binaries (e.g., Zhao et al. 2023)."
     )
 )
+def estimate_distance() -> None:
+    """placeholder function for the estimate_distance command."""
+    pass
+
+
+if __name__ == "__main__":
+    estimate_distance()
