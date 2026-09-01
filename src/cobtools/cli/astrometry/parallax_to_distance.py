@@ -32,14 +32,33 @@ import numpy as np
         "exponential prior for X-ray binaries (e.g., Zhao et al. 2023)."
     )
 )
+@click.option(
+    "--conf",
+    default=0.68,
+    show_default=True,
+    type=float,
+    help=(
+        "Confidence level for the output distance uncertainty in decimal "
+        "form, which should be a value between 0 and 1. The default is 0.68, "
+        r"i.e., 68% confidence level, the lower and upper errors will be "
+        "calculated at the 16th and 84th percentiles of the sampled "
+        "distribution, and the point estimate will be the median."
+    )
+)
 def estimate_distance(
-    parallax: float, parallax_error: float, method: str
+    parallax: float, parallax_error: float, method: str, conf: float
 ) -> None:
     """placeholder function for the estimate_distance command."""
     from cobtools.astrometry.distance import (
         SimpleInversion,
         XRBExponentialPriorModel
     )
+    if conf <= 0 or conf >= 1:
+        raise click.UsageError(
+            f"Invalid confidence level '{conf}'. "
+            "It should be a value between 0 and 1."
+        )
+
     if method == "inv":
         if parallax < 0 or parallax / parallax_error < 5:
             click.secho(
