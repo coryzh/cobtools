@@ -75,15 +75,16 @@ def estimate_distance(
         If the confidence level is not between 0 and 1, or if the method is
         not recognized.
     """
-    from cobtools.astrometry.distance import (
-        SimpleInversion,
-        XRBExponentialPriorModel
-    )
     if conf <= 0 or conf >= 1:
         raise click.UsageError(
             f"Invalid confidence level '{conf}'. "
             "It should be a value between 0 and 1."
         )
+
+    from cobtools.astrometry.distance import (
+        SimpleInversion,
+        XRBExponentialPriorModel
+    )
 
     if method == "inv":
         if parallax < 0 or parallax / parallax_error < 5:
