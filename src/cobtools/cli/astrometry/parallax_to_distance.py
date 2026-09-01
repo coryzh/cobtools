@@ -2,10 +2,9 @@
 
 import click
 import numpy as np
-from typing import Tuple
 
 METHOD_LABELS = {
-    "inv": "Inverted Parallax",
+    "inv": "Inverted parallax",
     "xrb_exp_prior": "Bayesian (XRB Exponential Prior)",
 }
 
@@ -22,7 +21,8 @@ METHOD_LABELS = {
     "parallax", type=float, metavar="parallax"
 )
 @click.argument(
-    "parallax_error", type=float, metavar="parallax_error"
+    "parallax_error", type=click.FloatRange(min=0, min_open=True),
+    metavar="parallax_error"
 )
 @click.option(
     "--method",
@@ -33,7 +33,7 @@ METHOD_LABELS = {
     ),
     help=(
         "Method used to derive the distance from the parallax. "
-        f"Valid options are: {', '.join(METHOD_LABELS.values())}. "
+        f"Valid options are: {', '.join(METHOD_LABELS.keys())}. "
         f"'inv' is to directly invert the parallax, and 'xrb_exp_prior' is to "
         "derive distance from the posterior distribution using the "
         "exponential prior for X-ray binaries (e.g., Zhao et al. 2023)."
@@ -90,7 +90,7 @@ def estimate_distance(
     display_results(dist_sample, conf, method)
 
 
-def display_results(dist_arr: np.ndarray, conf: float, method: str) -> Tuple:
+def display_results(dist_arr: np.ndarray, conf: float, method: str) -> None:
     percentiles = [(1 - conf) / 2 * 100, 50, (1 + conf) / 2 * 100]
 
     d_lo, d_est, d_hi = np.percentile(dist_arr, percentiles)
@@ -99,8 +99,9 @@ def display_results(dist_arr: np.ndarray, conf: float, method: str) -> Tuple:
 
     click.echo(
         f"Distance (median): {d_est:.2f} "
-        f"+{d_hi_err:.2f} -{d_lo_err:.2f} kpc\n"
-        f"{conf * 100:.2f}% interval: [{d_lo:.2f}, {d_hi:.2f}] kpc \n"
+        f"+{d_hi_err:.2f}/-{d_lo_err:.2f} kpc\n"
+        f"{conf * 100:.2f}% equal-tailed interval: "
+        f"[{d_lo:.2f}, {d_hi:.2f}] kpc \n"
         f"Method: {METHOD_LABELS[method]}"
     )
 
