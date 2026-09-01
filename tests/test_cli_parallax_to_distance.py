@@ -15,7 +15,7 @@ def test_display_results_reports_median_interval_and_method(capsys):
 
     assert capsys.readouterr().out == (
         "Distance (median): 2.00 +0.50/-0.50 kpc\n"
-        "50% equal-tailed interval: [1.50, 2.50] kpc \n"
+        "50% equal-tailed interval: [1.50, 2.50] kpc\n"
         "Method: Bayesian (XRB exponential prior)\n"
     )
 
@@ -51,7 +51,9 @@ def test_cli_uses_inversion_method_and_displays_results():
         [1.0, 2.0, 3.0]
     )
 
-    mock_distance_module = MagicMock(SimpleInversion=mock_inversion)
+    mock_distance_module = MagicMock(
+        SimpleInversion=mock_inversion, XRBExponentialPriorModel=MagicMock()
+    )
     with patch.dict(
         "sys.modules", {"cobtools.astrometry.distance": mock_distance_module}
     ):
@@ -65,3 +67,25 @@ def test_cli_uses_inversion_method_and_displays_results():
         n_samples=10000
     )
     assert "Method: Inverted parallax" in result.output
+
+
+def test_cli_uses_xrb_exp_prior_method_and_displays_results():
+    mock_prior = MagicMock()
+    mock_prior.return_value.sample_distance.return_value = np.array(
+        [1.0, 2.0, 3.0]
+    )
+    mock_distance_module = MagicMock(
+        SimpleInversion=MagicMock(),
+        XRBExponentialPriorModel=mock_prior,
+    )
+    with patch.dict(
+        "sys.modules", {"cobtools.astrometry.distance": mock_distance_module}
+    ):
+        result = CliRunner().invoke(
+            estimate_distance,
+            ["1.0", "0.1", "--method", "xrb_exp_prior", "--conf", "0.5"],
+        )
+    assert result.exit_code == 0
+    mock_prior.assert_called_once_with(1.0, 0.1)
+    mock_prior.return_value.sample_distance.assert_called_once_with()
+    assert "Method: Bayesian (XRB exponential prior)" in result.output

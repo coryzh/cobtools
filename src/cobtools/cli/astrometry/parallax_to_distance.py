@@ -12,7 +12,7 @@ METHOD_LABELS = {
 @click.command(
     context_settings={"help_option_names": ["-h", "--help"]},
     help="Get parallax-based distance estimates (in kpc)\n\n"
-         "User input the parallax and parallax_error in mas and specify the "
+         "Provide the parallax and parallax_error in mas and specify the "
          "method used to derive the distance. The output is the distance in "
          "kpc and the associated uncertainty at the confidence level "
          "specified by the user."
@@ -135,7 +135,7 @@ def display_results(dist_arr: np.ndarray, conf: float, method: str) -> None:
         f"Distance (median): {d_est:.2f} "
         f"+{d_hi_err:.2f}/-{d_lo_err:.2f} kpc\n"
         f"{conf * 100:.0f}% equal-tailed interval: "
-        f"[{d_lo:.2f}, {d_hi:.2f}] kpc \n"
+        f"[{d_lo:.2f}, {d_hi:.2f}] kpc\n"
         f"Method: {METHOD_LABELS[method]}"
     )
 
