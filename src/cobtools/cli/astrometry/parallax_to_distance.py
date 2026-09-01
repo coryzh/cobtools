@@ -2,6 +2,12 @@
 
 import click
 import numpy as np
+from typing import Tuple
+
+METHOD_LABELS = {
+    "inv": "Inverted Parallax",
+    "xrb_exp_prior": "Bayesian (XRB Exponential Prior)",
+}
 
 
 @click.command(
@@ -9,7 +15,7 @@ import numpy as np
     help="Get parallax-based distance estimates (in kpc)\n\n"
          "User input the parallax and parallax_error in mas and specify the "
          "method used to derive the distance. The output is the distance in "
-         "kpc and the associated uncertainty at the confidence level " 
+         "kpc and the associated uncertainty at the confidence level "
          "specified by the user."
 )
 @click.argument(
@@ -23,11 +29,12 @@ import numpy as np
     default="inv",
     show_default=True,
     type=click.Choice(
-        ["inv", "xrb_exp_prior"]
+        list(METHOD_LABELS.keys()), case_sensitive=False
     ),
     help=(
         "Method used to derive the distance from the parallax. "
-        "'inv' is to directly invert the parallax, and 'xrb_exp_prior' is to "
+        f"Valid options are: {', '.join(METHOD_LABELS.values())}. "
+        f"'inv' is to directly invert the parallax, and 'xrb_exp_prior' is to "
         "derive distance from the posterior distribution using the "
         "exponential prior for X-ray binaries (e.g., Zhao et al. 2023)."
     )
@@ -68,27 +75,34 @@ def estimate_distance(
                 err=True,
             )
         dist_mod = SimpleInversion(parallax, parallax_error)
-        click.echo(
-            f"Distance estimate: {dist_mod.d_est: .2f} "
-            f"+/- {dist_mod.d_est_error:.2f} kpc"
-        )
+        dist_sample = dist_mod.sample_distance(n_samples=10000)
+
     elif method == "xrb_exp_prior":
         dist_mod = XRBExponentialPriorModel(parallax, parallax_error)
-
         dist_sample = dist_mod.sample_distance()
-        d_lo, d_est, d_hi = np.percentile(dist_sample, [16, 50, 84])
-        d_lo_err = d_est - d_lo
-        d_hi_err = d_hi - d_est
-        click.echo(
-            f"Distance estimate: {d_est: .2f} "
-            f"+{d_hi_err:.2f} / -{d_lo_err:.2f} kpc"
-        )
 
     else:
         raise click.UsageError(
             f"Unknown method '{method}'. "
             "Valid options are 'inv' and 'xrb_exp_prior'."
         )
+
+    display_results(dist_sample, conf, method)
+
+
+def display_results(dist_arr: np.ndarray, conf: float, method: str) -> Tuple:
+    percentiles = [(1 - conf) / 2 * 100, 50, (1 + conf) / 2 * 100]
+
+    d_lo, d_est, d_hi = np.percentile(dist_arr, percentiles)
+    d_lo_err = d_est - d_lo
+    d_hi_err = d_hi - d_est
+
+    click.echo(
+        f"Distance (median): {d_est:.2f} "
+        f"+{d_hi_err:.2f} -{d_lo_err:.2f} kpc\n"
+        f"{conf * 100:.2f}% interval: [{d_lo:.2f}, {d_hi:.2f}] kpc \n"
+        f"Method: {METHOD_LABELS[method]}"
+    )
 
 
 if __name__ == "__main__":
