@@ -110,7 +110,7 @@ available columns for a given source_id from the Gaia main source table.</p>
 <p class="rubric">Examples</p>
 <p>Query the Gaia DR3 archive for a specific source:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">SingleSourceFullGaiaQuery</span><span class="p">(</span>
-<span class="gp">... </span><span class="n">source_id</span><span class="o">=</span><span class="mi">123456789</span><span class="p">,</span> <span class="n">data_release</span><span class="o">=</span><span class="s2">&quot;dr3&quot;</span>
+<span class="gp">... </span><span class="n">source_id</span><span class="o">=</span><span class="mi">123456789</span><span class="p">,</span> <span class="n">data_release</span><span class="o">=</span><span class="s2">"dr3"</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">query_result</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>

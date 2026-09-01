@@ -76,7 +76,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cobtools.photometry.flux_conversion</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Utilities for converting between magnitudes and fluxes for supported</span>
 <span class="sd">photometric bands.</span>
 
@@ -84,7 +84,7 @@
 <span class="sd">---------</span>
 <span class="sd">- ``magnitude_to_flux(mag, band)``: Convert magnitude values to fluxes for a</span>
 <span class="sd">  given photometric band.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
@@ -96,7 +96,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">magnitude_to_flux</span><span class="p">(</span>
     <span class="n">mag</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">band</span><span class="p">:</span> <span class="n">Band</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert magnitude to flux for a given band</span>
 
 <span class="sd">    Parameters</span>
@@ -135,7 +135,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from cobtools.data_models.band import Band</span>
 <span class="sd">    &gt;&gt;&gt; from cobtools.photometry.flux_conversion import magnitude_to_flux</span>
-<span class="sd">    &gt;&gt;&gt; band = Band(name=&#39;gaia_g&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; band = Band(name='gaia_g')</span>
 <span class="sd">    &gt;&gt;&gt; mag = 15.0</span>
 <span class="sd">    &gt;&gt;&gt; flux = magnitude_to_flux(mag, band)</span>
 
@@ -143,25 +143,25 @@
 <span class="sd">    ----------</span>
 <span class="sd">    Gaia Collaboration (2021), A&amp;A, 639, A3.</span>
 <span class="sd">    LSST Collaboration (2019), ApJ, 873, 2.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;mag must be a float or array-like of floats: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"mag must be a float or array-like of floats: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">if</span> <span class="n">mag</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mag must be a scalar or 1D array.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"mag must be a scalar or 1D array."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">mag</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mag must contain finite values.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"mag must contain finite values."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="n">Band</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;band must be an instance of Band, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">band</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">"band must be an instance of Band, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">band</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
         <span class="p">)</span>
 
     <span class="n">flam</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">zp_flam</span> <span class="o">*</span> <span class="n">band</span><span class="o">.</span><span class="n">w_eff</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.4</span> <span class="o">*</span> <span class="n">mag</span><span class="p">)</span>

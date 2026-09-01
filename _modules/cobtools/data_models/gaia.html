@@ -76,7 +76,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cobtools.data_models.gaia</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Data model for the Gaia archive.</span>
 
 <span class="sd">This module provides data classes for representing and validating Gaia-specific</span>
@@ -86,20 +86,20 @@
 <span class="sd">-------</span>
 <span class="sd">SourceID</span>
 <span class="sd">    A data class representing a Gaia source ID.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
 
-<span class="n">_VALID_DATA_RELEASES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dr1&quot;</span><span class="p">,</span> <span class="s2">&quot;dr2&quot;</span><span class="p">,</span> <span class="s2">&quot;edr3&quot;</span><span class="p">,</span> <span class="s2">&quot;dr3&quot;</span><span class="p">,</span> <span class="s2">&quot;dr4&quot;</span><span class="p">,</span> <span class="s2">&quot;dr5&quot;</span><span class="p">}</span>
+<span class="n">_VALID_DATA_RELEASES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"dr1"</span><span class="p">,</span> <span class="s2">"dr2"</span><span class="p">,</span> <span class="s2">"edr3"</span><span class="p">,</span> <span class="s2">"dr3"</span><span class="p">,</span> <span class="s2">"dr4"</span><span class="p">,</span> <span class="s2">"dr5"</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="SourceID">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.gaia.SourceID">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SourceID</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Data class representing a Gaia ``source_id``.</span>
 
 <span class="sd">    Parameters</span>
@@ -110,7 +110,7 @@
 <span class="sd">        normalized to an integer during initialization.</span>
 
 <span class="sd">    data_release : str, optional</span>
-<span class="sd">        The data release to which the ``source_id`` belongs. Defaults to &quot;dr3&quot;.</span>
+<span class="sd">        The data release to which the ``source_id`` belongs. Defaults to "dr3".</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -127,36 +127,36 @@
 <span class="sd">        If ``source_id`` is a float or if it cannot be converted to an integer.</span>
 
 <span class="sd">    ValueError</span>
-<span class="sd">        If ``data_release`` is not one of the valid options (&quot;dr1&quot;, &quot;dr2&quot;,</span>
-<span class="sd">        &quot;edr3&quot;, &quot;dr3&quot;, &quot;dr4&quot;, &quot;dr5&quot;).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        If ``data_release`` is not one of the valid options ("dr1", "dr2",</span>
+<span class="sd">        "edr3", "dr3", "dr4", "dr5").</span>
+<span class="sd">    """</span>
 
     <span class="n">source_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-    <span class="n">data_release</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dr3&quot;</span>
+    <span class="n">data_release</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"dr3"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Ensure the input is not a float</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;source_id must not be a float&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"source_id must not be a float"</span><span class="p">)</span>
 
-        <span class="c1"># Convert to integer if it&#39;s a string</span>
+        <span class="c1"># Convert to integer if it's a string</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;source_id&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id</span><span class="p">))</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"source_id"</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id</span><span class="p">))</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;source_id must be an integer or a string representing an &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;integer: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"source_id must be an integer or a string representing an "</span>
+                <span class="sa">f</span><span class="s2">"integer: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_release</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_VALID_DATA_RELEASES</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;data_release must be one of </span><span class="si">{</span><span class="n">_VALID_DATA_RELEASES</span><span class="si">}</span><span class="s2">: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"data_release must be one of </span><span class="si">{</span><span class="n">_VALID_DATA_RELEASES</span><span class="si">}</span><span class="s2">: "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_release</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">designation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The Gaia source designation string, which is derived from the</span>
 <span class="sd">        ``source_id`` and ``data_release``.</span>
 
@@ -164,8 +164,8 @@
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 <span class="sd">            The Gaia source designation string.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Gaia </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_release</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id</span><span class="si">}</span><span class="s2">&quot;</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Gaia </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_release</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_id</span><span class="si">}</span><span class="s2">"</span></div>
 
 </pre></div>
 

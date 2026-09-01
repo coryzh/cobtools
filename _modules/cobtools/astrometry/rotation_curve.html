@@ -93,7 +93,7 @@
         <span class="n">r_sun</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">r_sun</span><span class="p">,</span> <span class="n">theta_sun</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">theta_sun</span><span class="p">,</span>
         <span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ArrayLike</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load a pre-computed rotation curve, and return an interpolated function</span>
 <span class="sd">    for the rotation velocity as a function of radius.</span>
 
@@ -104,13 +104,13 @@
 <span class="sd">        by default con.r_sun</span>
 
 <span class="sd">    theta_sun : float, optional</span>
-<span class="sd">        Circular velocity at the Sun&#39;s position in km/s,</span>
+<span class="sd">        Circular velocity at the Sun's position in km/s,</span>
 <span class="sd">        by default con.theta_sun</span>
 
 <span class="sd">    data_path : Path, optional</span>
 <span class="sd">        Path to the rotation curve data file. If not provided, the default</span>
 <span class="sd">        path is resolved as</span>
-<span class="sd">        `resources.files(&quot;cobtools&quot;) / &quot;data&quot; / &quot;rotcurve_mw2014.npy&quot;`.</span>
+<span class="sd">        `resources.files("cobtools") / "data" / "rotcurve_mw2014.npy"`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -127,27 +127,27 @@
 <span class="sd">        If the rotation curve data file is not found.</span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If there is an error loading the rotation curve data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">r_sun</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">theta_sun</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;r_sun and theta_sun must be positive values.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"r_sun and theta_sun must be positive values."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">data_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">data_path</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;cobtools&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span> <span class="o">/</span> <span class="s2">&quot;rotcurve_mw2014.npy&quot;</span>
+            <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"cobtools"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span> <span class="o">/</span> <span class="s2">"rotcurve_mw2014.npy"</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">data_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Rotation curve data not found at </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Please run the script to generate the data.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Rotation curve data not found at </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="sa">f</span><span class="s2">"Please run the script to generate the data."</span>
         <span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">rot_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Error loading rotation curve data from </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Error loading rotation curve data from </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="n">r_grid</span><span class="p">,</span> <span class="n">v_grid</span> <span class="o">=</span> <span class="n">rot_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">rot_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
@@ -156,7 +156,7 @@
     <span class="n">v_grid</span> <span class="o">=</span> <span class="n">v_grid</span> <span class="o">*</span> <span class="n">theta_sun</span>
 
     <span class="n">v_rot_interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
-        <span class="n">r_grid</span><span class="p">,</span> <span class="n">v_grid</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">,</span>
+        <span class="n">r_grid</span><span class="p">,</span> <span class="n">v_grid</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">'linear'</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">'extrapolate'</span><span class="p">,</span>
         <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
 

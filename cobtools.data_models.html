@@ -1017,8 +1017,8 @@ retrieved from the Lasair API.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.lsst_lasair</span><span class="w"> </span><span class="kn">import</span> <span class="n">LasairObject</span>
 
 <span class="n">L</span> <span class="o">=</span> <span class="n">lasair</span><span class="p">(</span>
-    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;https://api.lasair.lsst.ac.uk/api&quot;</span><span class="p">,</span>
-    <span class="n">token</span><span class="o">=</span><span class="s2">&quot;your_api_token&quot;</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="s2">"https://api.lasair.lsst.ac.uk/api"</span><span class="p">,</span>
+    <span class="n">token</span><span class="o">=</span><span class="s2">"your_api_token"</span>
     <span class="p">)</span>
 <span class="c1"># Replace objectId with a valid diaObjectId</span>
 
@@ -1076,7 +1076,7 @@ class in <cite>cobtools.data_models.light_curve</cite>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get light curve as a DataFrame</span>
 <span class="c1"># Assuming `lasair_object` is an instance of LasairObject</span>
 <span class="n">lc_df</span> <span class="o">=</span> <span class="n">lasair_object</span><span class="o">.</span><span class="n">get_lightcurve_df</span><span class="p">(</span>
-    <span class="n">option</span><span class="o">=</span><span class="s2">&quot;diaSources&quot;</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s2">&quot;g&quot;</span>
+    <span class="n">option</span><span class="o">=</span><span class="s2">"diaSources"</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s2">"g"</span>
 <span class="p">)</span>
 </pre></div>
 </div>

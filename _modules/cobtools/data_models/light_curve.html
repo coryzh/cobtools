@@ -76,7 +76,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cobtools.data_models.light_curve</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">A data model for light curves.</span>
 
 <span class="sd">Classes</span>
@@ -86,7 +86,7 @@
 <span class="sd">    data for flux measurements and their associated uncertainties. The class</span>
 <span class="sd">    includes methods for rebinning the light curve into fixed time intervals</span>
 <span class="sd">    and for folding the light curve on a specified period.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
@@ -97,7 +97,7 @@
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.light_curve.LightCurve">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">LightCurve</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A data class representing a light curve.</span>
 
 <span class="sd">    Parameters</span>
@@ -130,7 +130,7 @@
 <span class="sd">        Rebin light curve into time bins of fixed intervals (even binning).</span>
 <span class="sd">        This method modifies the light curve in place.</span>
 
-<span class="sd">    fold(period: float) -&gt; &quot;LightCurve&quot;</span>
+<span class="sd">    fold(period: float) -&gt; "LightCurve"</span>
 <span class="sd">        Fold the light curve on a given period and return a new LightCurve</span>
 <span class="sd">        instance with the folded data.</span>
 
@@ -140,7 +140,7 @@
 <span class="sd">        If the time_axis is empty or if the lengths of time_axis, flux, and</span>
 <span class="sd">        flux_err do not match.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">time_axis</span><span class="p">:</span> <span class="n">ArrayLike</span>
     <span class="n">flux</span><span class="p">:</span> <span class="n">ArrayLike</span>
     <span class="n">flux_err</span><span class="p">:</span> <span class="n">ArrayLike</span>
@@ -148,25 +148,25 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Light curve must contain at least one data point.&quot;</span>
+                <span class="s2">"Light curve must contain at least one data point."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux_err</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;time_axis, flux, and flux_err must have the same length.&quot;</span>
+                <span class="s2">"time_axis, flux, and flux_err must have the same length."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;time_axis&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">))</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'time_axis'</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;flux&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">))</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'flux'</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux_err</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;flux_err&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux_err</span><span class="p">))</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'flux_err'</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux_err</span><span class="p">))</span>
 
 <div class="viewcode-block" id="LightCurve.rebin">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.light_curve.LightCurve.rebin">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rebin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Regroup light curve data into bins of fixed time intervals.</span>
 
 <span class="sd">        Parameters</span>
@@ -200,12 +200,12 @@
 <span class="sd">            # Rebin the light curve into 0.5 time units</span>
 <span class="sd">            lc.rebin(bin_size=0.5)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">bin_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="n">bin_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;bin_size must be a positive number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"bin_size must be a positive number."</span><span class="p">)</span>
 
         <span class="c1"># Create bins</span>
         <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
@@ -235,8 +235,8 @@
 
 <div class="viewcode-block" id="LightCurve.fold">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.light_curve.LightCurve.fold">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;LightCurve&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"LightCurve"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Fold the light curve on a given period.</span>
 
 <span class="sd">        Parameters</span>
@@ -269,9 +269,9 @@
 <span class="sd">            lc = LightCurve(time_axis=time_axis, flux=flux, flux_err=flux_err)</span>
 <span class="sd">            # Fold the light curve on the period</span>
 <span class="sd">            folded_lc = lc.fold(period=period)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">period</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Period must be a positive number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Period must be a positive number."</span><span class="p">)</span>
 
         <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="n">phase</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">%</span> <span class="n">period</span><span class="p">)</span> <span class="o">/</span> <span class="n">period</span>

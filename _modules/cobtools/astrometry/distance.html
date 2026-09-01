@@ -76,7 +76,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cobtools.astrometry.distance</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">This module provides various classes for estimating distances from parallax.</span>
 
 <span class="sd">Classes</span>
@@ -88,7 +88,7 @@
 
 <span class="sd">The module also includes methods for sampling distances and fitting</span>
 <span class="sd">distributions.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">truncnorm</span><span class="p">,</span> <span class="n">gamma</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Bounds</span>
@@ -100,7 +100,7 @@
 <div class="viewcode-block" id="SimpleInversion">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.SimpleInversion">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SimpleInversion</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A class for estimating distance from parallax using simple inversion.</span>
 <span class="sd">    Use this method when the measured parallax is positive and has a high</span>
 <span class="sd">    signal-to-noise ratio. Commonly parallax/parallax_error &gt;= 5 is preferred.</span>
@@ -144,10 +144,10 @@
 <span class="sd">    0.4</span>
 <span class="sd">    &gt;&gt;&gt; print(model.parallax_over_error)  # Signal-to-noise ratio</span>
 <span class="sd">    5.0</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">parallax_error</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initialize the SimpleInversion model with parallax and its error.</span>
 
 <span class="sd">        Parameters</span>
@@ -164,15 +164,15 @@
 <span class="sd">            If parallax is not positive.</span>
 <span class="sd">        ValueError</span>
 <span class="sd">            If parallax_error is not positive.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">parallax</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;To use SimpleInversion, parallax must be positive.&quot;</span>
+                    <span class="s2">"To use SimpleInversion, parallax must be positive."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parallax_error</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;parallax_error must be a positive number.&quot;</span>
+                    <span class="s2">"parallax_error must be a positive number."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">=</span> <span class="n">parallax</span>
@@ -180,38 +180,38 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">d_est</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Estimate distance by inverting the parallax.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The estimated distance in kiloparsecs (kpc).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">d_est_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Estimate the error in the distance estimate.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The error in the estimated distance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parallax_over_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Calculate the signal-to-noise ratio of the parallax measurement.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The signal-to-noise ratio.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span>
 
 <div class="viewcode-block" id="SimpleInversion.sample_distance">
@@ -220,7 +220,7 @@
             <span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">dist_lo</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
             <span class="n">dist_up</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        A sampler that samples random distance based on a truncated normal</span>
 <span class="sd">        distribution centred on the inversion of parallax with a standard</span>
 <span class="sd">        deviation equal to parallax_error / parallax^2.</span>
@@ -257,13 +257,13 @@
 <span class="sd">        &gt;&gt;&gt; model = SimpleInversion(parallax=0.5, parallax_error=0.1)</span>
 <span class="sd">        &gt;&gt;&gt; samples = model.sample_distance(n_samples=1000)  # Sample distances</span>
 <span class="sd">        &gt;&gt;&gt; print(samples)  # Array of sampled distances</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;n_samples must be an integer.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"n_samples must be an integer."</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_samples must be a positive integer.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"n_samples must be a positive integer."</span><span class="p">)</span>
 
         <span class="c1"># Generate samples from truncated normal distribution</span>
         <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist_lo</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_est_error</span>
@@ -282,7 +282,7 @@
 <div class="viewcode-block" id="FromLiterature">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.FromLiterature">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FromLiterature</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A class for taking literature distance estimates and errors. The errors</span>
 <span class="sd">    can be asymmetric. The class has a method to model the asymmetric errors</span>
 <span class="sd">    with a gamma distribution, and then sample distances from the fitted</span>
@@ -322,12 +322,12 @@
 <span class="sd">    1.0</span>
 <span class="sd">    &gt;&gt;&gt; print(model.x_uperr)  # Upper error</span>
 <span class="sd">    1.0</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">x_est</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x_lo</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x_hi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">conf_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.68</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initialize the FromLiterature model with distance estimates and errors.</span>
 
 <span class="sd">        Parameters</span>
@@ -350,7 +350,7 @@
 <span class="sd">            If x_est is not between x_lo and x_hi.</span>
 <span class="sd">        ValueError</span>
 <span class="sd">            If conf_level is not between 0 and 1.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">=</span> <span class="n">x_est</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_lo</span> <span class="o">=</span> <span class="n">x_lo</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_hi</span> <span class="o">=</span> <span class="n">x_hi</span>
@@ -358,53 +358,53 @@
 
         <span class="k">if</span> <span class="n">x_lo</span> <span class="o">&gt;=</span> <span class="n">x_hi</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Lower limit (x_lo) must be less than the upper limit (x_hi).&quot;</span>
+                <span class="s2">"Lower limit (x_lo) must be less than the upper limit (x_hi)."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">x_est</span> <span class="o">&lt;</span> <span class="n">x_lo</span> <span class="ow">or</span> <span class="n">x_est</span> <span class="o">&gt;</span> <span class="n">x_hi</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Estimated value (x_est) must be between x_lo and x_hi.&quot;</span>
+                <span class="s2">"Estimated value (x_est) must be between x_lo and x_hi."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">conf_level</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">conf_level</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Confidence level must be a number between 0 and 1.&quot;</span>
+                <span class="s2">"Confidence level must be a number between 0 and 1."</span>
             <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">x_loerr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Calculate the lower error of the distance estimate.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The lower error of the distance estimate.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_lo</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">x_uperr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Calculate the upper error of the distance estimate.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The upper error of the distance estimate.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_hi</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_est</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sigma_0</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Calculate the averaged error, which could be used as an initial guess</span>
 <span class="sd">        for fitting a skewed distribution.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_loerr</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_uperr</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_sigma_min</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        The minimum error between the lower and upper errors, which could be</span>
 <span class="sd">        used as the lower bound for fitting a skewed distribution.</span>
 
@@ -412,13 +412,13 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The minimum error between the lower and upper errors.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_loerr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_uperr</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FromLiterature.fit_gamma">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.FromLiterature.fit_gamma">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">fit_gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Fit the asymmetric errors from the literature to a gamma distribution.</span>
 <span class="sd">        The fitting is done by minimizing the difference between the confidence</span>
 <span class="sd">        intervals of the fitted gamma distribution and the literature values.</span>
@@ -431,9 +431,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        dict</span>
 <span class="sd">            A dictionary containing the parameters of the fitted gamma</span>
-<span class="sd">            distribution, including &#39;alpha&#39;, &#39;theta&#39;, and the &#39;distribution&#39;</span>
+<span class="sd">            distribution, including 'alpha', 'theta', and the 'distribution'</span>
 <span class="sd">            object itself.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">get_gamma_distribution</span><span class="p">(</span><span class="n">sigma_x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span>
@@ -451,7 +451,7 @@
 
         <span class="k">def</span><span class="w"> </span><span class="nf">difference</span><span class="p">(</span><span class="n">sigma_x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
             <span class="n">_re</span> <span class="o">=</span> <span class="n">get_gamma_distribution</span><span class="p">(</span><span class="n">sigma_x</span><span class="p">)</span>
-            <span class="n">x_gamma</span> <span class="o">=</span> <span class="n">_re</span><span class="p">[</span><span class="s2">&quot;distribution&quot;</span><span class="p">]</span>
+            <span class="n">x_gamma</span> <span class="o">=</span> <span class="n">_re</span><span class="p">[</span><span class="s2">"distribution"</span><span class="p">]</span>
 
             <span class="n">x_lo_model</span> <span class="o">=</span> <span class="n">x_gamma</span><span class="o">.</span><span class="n">ppf</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf_level</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">x_hi_model</span> <span class="o">=</span> <span class="n">x_gamma</span><span class="o">.</span><span class="n">ppf</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf_level</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
@@ -474,7 +474,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">sample_distance</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Sample distance from the fitted gamma distribution.</span>
 
 <span class="sd">        Parameters</span>
@@ -494,9 +494,9 @@
 <span class="sd">        &gt;&gt;&gt; model = FromLiterature(x_est=5.0, x_lo=4.0, x_hi=6.0)</span>
 <span class="sd">        &gt;&gt;&gt; samples = model.sample_distance(n_samples=100</span>
 <span class="sd">        &gt;&gt;&gt; print(samples)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">gamma_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_gamma</span><span class="p">()</span>
-        <span class="n">x_gamma</span> <span class="o">=</span> <span class="n">gamma_params</span><span class="p">[</span><span class="s2">&quot;distribution&quot;</span><span class="p">]</span>
+        <span class="n">x_gamma</span> <span class="o">=</span> <span class="n">gamma_params</span><span class="p">[</span><span class="s2">"distribution"</span><span class="p">]</span>
 
         <span class="n">samples</span> <span class="o">=</span> <span class="n">x_gamma</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">)</span>
 
@@ -508,7 +508,7 @@
 <div class="viewcode-block" id="XRBExponentialPriorModel">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">XRBExponentialPriorModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    A class representing distance estimation using a Bayesian method with an</span>
 <span class="sd">    exponential prior representative for X-ray binaries. The prior is</span>
 <span class="sd">    formulated as:</span>
@@ -540,13 +540,13 @@
 <span class="sd">        The uncertainty of the parallax measurement in milliarcseconds (mas).</span>
 <span class="sd">    scale_length : float</span>
 <span class="sd">        The scale length of the exponential prior in kiloparsecs (kpc).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">parallax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">parallax_error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.97</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initialize the XRBExponentialPriorModel with parallax, its error, and</span>
 <span class="sd">        the scale length of the exponential prior.</span>
 
@@ -572,16 +572,16 @@
 <span class="sd">        -------</span>
 <span class="sd">        &gt;&gt;&gt; from cobtools.astrometry.distance import XRBExponentialPriorModel</span>
 <span class="sd">        &gt;&gt;&gt; model = XRBExponentialPriorModel(parallax=0.5, parallax_error=0.1)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="n">parallax_error</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;parallax_error must be a positive number.&quot;</span>
+                <span class="s2">"parallax_error must be a positive number."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">scale_length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;scale_length must be a positive number.&quot;</span>
+                <span class="s2">"scale_length must be a positive number."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">=</span> <span class="n">parallax</span>
@@ -590,20 +590,20 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parallax_over_error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Calculate the signal-to-noise ratio of the parallax measurement.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The signal-to-noise ratio of the parallax measurement.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallax_error</span>
 
 <div class="viewcode-block" id="XRBExponentialPriorModel.log_prior">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel.log_prior">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">log_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Logarithm of the exponential prior probability density. For negative</span>
 <span class="sd">        distances, the log prior is set to negative infinity.</span>
 
@@ -617,7 +617,7 @@
 <span class="sd">        float</span>
 <span class="sd">            The logarithm of the exponential prior probability density</span>
 <span class="sd">            at distance d.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
@@ -628,7 +628,7 @@
 <div class="viewcode-block" id="XRBExponentialPriorModel.log_likelihood">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel.log_likelihood">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">log_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Logarithm of the Gaussian likelihood at a given distance d. For</span>
 <span class="sd">        negative distances, the log likelihood is set to negative infinity.</span>
 
@@ -642,7 +642,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            The logarithm of the Gaussian likelihood at distance d.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
@@ -655,7 +655,7 @@
 <div class="viewcode-block" id="XRBExponentialPriorModel.log_posterior">
 <a class="viewcode-back" href="../../../cobtools.astrometry.html#cobtools.astrometry.distance.XRBExponentialPriorModel.log_posterior">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">log_posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Logarithm of the posterior probability at a given distance d. For</span>
 <span class="sd">        negative distances, the log posterior is set to negative infinity.</span>
 
@@ -669,7 +669,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            Logarithm of the posterior probability at distance d.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_prior</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
 
 
@@ -679,7 +679,7 @@
             <span class="bp">self</span><span class="p">,</span> <span class="n">nwalkers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">nsteps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">burn_in</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Sample distances from the posterior distribution using the</span>
 <span class="sd">        EnsembleSampler from the emcee package.</span>
 
@@ -716,18 +716,18 @@
 <span class="sd">        &gt;&gt;&gt; m = XRBExponentialPriorModel(parallax=0.5, parallax_error=0.1)</span>
 <span class="sd">        &gt;&gt;&gt; samples = m.sample_distance(nwalkers=4, nsteps=2000, burn_in=500)</span>
 <span class="sd">        &gt;&gt;&gt; print(samples)  # Array of sampled distances</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nwalkers</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">nwalkers</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;nwalkers must be a positive integer.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"nwalkers must be a positive integer."</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nsteps</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">nsteps</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;nsteps must be a positive integer.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"nsteps must be a positive integer."</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">burn_in</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">burn_in</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;burn_in must be a non-negative integer.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"burn_in must be a non-negative integer."</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">burn_in</span> <span class="o">&gt;=</span> <span class="n">nsteps</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;burn_in must be less than nsteps.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"burn_in must be less than nsteps."</span><span class="p">)</span>
 
         <span class="n">initial_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nwalkers</span><span class="p">)</span>
 

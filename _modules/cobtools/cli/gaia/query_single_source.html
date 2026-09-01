@@ -82,43 +82,43 @@
 
 
 <span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
-    <span class="n">context_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;help_option_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--help&quot;</span><span class="p">]},</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Retrieve and display a subset of columns about a Gaia source.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-         <span class="s2">&quot;This command queries the Gaia archive for the specified source_id &quot;</span>
-         <span class="s2">&quot;and data release (--dr), and displays the results in a formatted &quot;</span>
-         <span class="s2">&quot;table.&quot;</span>
+    <span class="n">context_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">"help_option_names"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"-h"</span><span class="p">,</span> <span class="s2">"--help"</span><span class="p">]},</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">"Retrieve and display a subset of columns about a Gaia source.</span><span class="se">\n\n</span><span class="s2">"</span>
+         <span class="s2">"This command queries the Gaia archive for the specified source_id "</span>
+         <span class="s2">"and data release (--dr), and displays the results in a formatted "</span>
+         <span class="s2">"table."</span>
 <span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span>
-    <span class="s2">&quot;source_id&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;source_id&quot;</span>
+    <span class="s2">"source_id"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">"source_id"</span>
 <span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
-    <span class="s2">&quot;--dr&quot;</span><span class="p">,</span>
-    <span class="n">default</span><span class="o">=</span><span class="s2">&quot;dr3&quot;</span><span class="p">,</span>
+    <span class="s2">"--dr"</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="s2">"dr3"</span><span class="p">,</span>
     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-    <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;Data Release&quot;</span><span class="p">,</span>
+    <span class="n">metavar</span><span class="o">=</span><span class="s2">"Data Release"</span><span class="p">,</span>
     <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-        <span class="s2">&quot;Gaia data release to query. Current valid options are &#39;dr1&#39;, &#39;dr2&#39;, &quot;</span>
-        <span class="s2">&quot;and &#39;dr3&#39;. This will be extended to include &#39;dr4&#39;, and &#39;dr5&#39;.&quot;</span>
+        <span class="s2">"Gaia data release to query. Current valid options are 'dr1', 'dr2', "</span>
+        <span class="s2">"and 'dr3'. This will be extended to include 'dr4', and 'dr5'."</span>
     <span class="p">),</span>
 <span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
-    <span class="s2">&quot;--no-cache&quot;</span><span class="p">,</span>
+    <span class="s2">"--no-cache"</span><span class="p">,</span>
     <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-        <span class="s2">&quot;Disable caching (read and write) of query results. By default, &quot;</span>
-        <span class="s2">&quot;results are cached to avoid duplicated queries in the same data &quot;</span>
-        <span class="s2">&quot;release.&quot;</span>
+        <span class="s2">"Disable caching (read and write) of query results. By default, "</span>
+        <span class="s2">"results are cached to avoid duplicated queries in the same data "</span>
+        <span class="s2">"release."</span>
     <span class="p">),</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">query_useful_info</span><span class="p">(</span><span class="n">source_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">no_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Retrieve useful information about a Gaia source.</span>
 
 <span class="sd">    Queries the Gaia archive for the specified source_id and data release</span>
 <span class="sd">    (--dr), and displays the results in a formatted table.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.query.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaiaUsefulInfoCache</span>
 
     <span class="n">cache</span> <span class="o">=</span> <span class="n">GaiaUsefulInfoCache</span><span class="p">(</span><span class="n">dr</span><span class="o">=</span><span class="n">dr</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">no_cache</span> <span class="k">else</span> <span class="kc">None</span>
@@ -132,8 +132,8 @@
                 <span class="k">return</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Warning: Failed to read from cache for source_id </span><span class="si">{</span><span class="n">source_id</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; in </span><span class="si">{</span><span class="n">dr</span><span class="si">}</span><span class="s2">. Proceeding with query. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Warning: Failed to read from cache for source_id </span><span class="si">{</span><span class="n">source_id</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">" in </span><span class="si">{</span><span class="n">dr</span><span class="si">}</span><span class="s2">. Proceeding with query. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.query.query_gaia</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleSourceUsefulInfoQuery</span>
@@ -142,7 +142,7 @@
         <span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">query_result</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No results found for </span><span class="si">{</span><span class="n">source_id</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">dr</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No results found for </span><span class="si">{</span><span class="n">source_id</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">dr</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="n">display_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
@@ -151,34 +151,34 @@
                 <span class="n">cache</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">())</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Warning: failed to write query result to cache: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"Warning: failed to write query result to cache: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                     <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="p">)</span>
 
     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runtime error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Runtime error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">"An unexpected error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span>
 
 
 <div class="viewcode-block" id="styled_title">
 <a class="viewcode-back" href="../../../../cobtools.cli.gaia.html#cobtools.cli.gaia.query_single_source.styled_title">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">styled_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">:</span><span class="s2">&lt;</span><span class="si">{</span><span class="n">width</span><span class="si">}}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">title</span><span class="si">:</span><span class="s2">&lt;</span><span class="si">{</span><span class="n">width</span><span class="si">}}</span><span class="s2">"</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">"cyan"</span><span class="p">,</span> <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="get_spectral_type">
 <a class="viewcode-back" href="../../../../cobtools.cli.gaia.html#cobtools.cli.gaia.query_single_source.get_spectral_type">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_spectral_type</span><span class="p">(</span><span class="n">bp_rp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mh</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get the spectral type for a given BP-RP value and kind (dwarf/giant).</span>
 
 <span class="sd">    Parameters</span>
@@ -186,111 +186,111 @@
 <span class="sd">    bp_rp : float</span>
 <span class="sd">        The BP-RP color index.</span>
 <span class="sd">    kind : str</span>
-<span class="sd">        The kind of star (&quot;dwarf&quot; or &quot;giant&quot;).</span>
+<span class="sd">        The kind of star ("dwarf" or "giant").</span>
 <span class="sd">    mh : float, optional</span>
 <span class="sd">        The metallicity, by default 0.0 (solar metallicity).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
-<span class="sd">        The spectral type string, or &quot;NA (kind)&quot; if an error occurs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        The spectral type string, or "NA (kind)" if an error occurs.</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.photometry.color_index</span><span class="w"> </span><span class="kn">import</span> <span class="n">bp_rp_to_sptype</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">sptype</span> <span class="o">=</span> <span class="n">bp_rp_to_sptype</span><span class="p">(</span><span class="n">bp_rp</span><span class="o">=</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">mh</span><span class="o">=</span><span class="n">mh</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sptype</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sptype</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">)"</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;NA (</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"NA (</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">)"</span></div>
 
 
 
 <div class="viewcode-block" id="display_result">
 <a class="viewcode-back" href="../../../../cobtools.cli.gaia.html#cobtools.cli.gaia.query_single_source.display_result">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">display_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Display the query in a formatted table.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    result : Table</span>
 <span class="sd">        The query result to display.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
     <span class="n">row</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="n">bp_rp</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;bp_rp&quot;</span><span class="p">]</span>
-    <span class="n">mh</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;mh_gspphot&quot;</span><span class="p">]</span>
+    <span class="n">bp_rp</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"bp_rp"</span><span class="p">]</span>
+    <span class="n">mh</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"mh_gspphot"</span><span class="p">]</span>
     <span class="n">mh_for_sptype</span> <span class="o">=</span> <span class="n">mh</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">mh</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
 
     <span class="n">sptype_dwarf_str</span> <span class="o">=</span> <span class="n">get_spectral_type</span><span class="p">(</span>
-        <span class="n">bp_rp</span><span class="o">=</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;dwarf&quot;</span><span class="p">,</span> <span class="n">mh</span><span class="o">=</span><span class="n">mh_for_sptype</span>
+        <span class="n">bp_rp</span><span class="o">=</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"dwarf"</span><span class="p">,</span> <span class="n">mh</span><span class="o">=</span><span class="n">mh_for_sptype</span>
     <span class="p">)</span>
     <span class="n">sptype_giant_str</span> <span class="o">=</span> <span class="n">get_spectral_type</span><span class="p">(</span>
-        <span class="n">bp_rp</span><span class="o">=</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;giant&quot;</span><span class="p">,</span> <span class="n">mh</span><span class="o">=</span><span class="n">mh_for_sptype</span>
+        <span class="n">bp_rp</span><span class="o">=</span><span class="n">bp_rp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"giant"</span><span class="p">,</span> <span class="n">mh</span><span class="o">=</span><span class="n">mh_for_sptype</span>
     <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">fmt_bool</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s2">&quot;False&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;True&quot;</span> <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;False&quot;</span>
+            <span class="k">return</span> <span class="s2">"False"</span>
+        <span class="k">return</span> <span class="s2">"True"</span> <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"False"</span>
 
     <span class="n">title_width</span> <span class="o">=</span> <span class="mi">17</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;source_id&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;ra, dec&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ra&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;dec&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;l, b&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;l&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"source_id"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'source_id'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"ra, dec"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'ra'</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'dec'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"l, b"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'l'</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
         <span class="p">(</span>
-            <span class="s2">&quot;parallax&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;parallax&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;parallax_error&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> mas&quot;</span><span class="p">,</span>
+            <span class="s2">"parallax"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'parallax'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'parallax_error'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> mas"</span><span class="p">,</span>
         <span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;pmra_cosdec&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;pmra&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;pmra_error&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> mas/yr&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;pmdec&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;pmdec&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;pmdec_error&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> mas/yr&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"pmra_cosdec"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'pmra'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'pmra_error'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> mas/yr"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"pmdec"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'pmdec'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'pmdec_error'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> mas/yr"</span><span class="p">),</span>
         <span class="p">(</span>
-            <span class="s2">&quot;rv&quot;</span><span class="p">,</span>
+            <span class="s2">"rv"</span><span class="p">,</span>
             <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;radial_velocity&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;radial_velocity_error&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> km/s&quot;</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;radial_velocity&#39;</span><span class="p">])</span>
-                <span class="ow">and</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;radial_velocity_error&#39;</span><span class="p">])</span>
-                <span class="k">else</span> <span class="s2">&quot;nan&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'radial_velocity'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"± </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'radial_velocity_error'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> km/s"</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'radial_velocity'</span><span class="p">])</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'radial_velocity_error'</span><span class="p">])</span>
+                <span class="k">else</span> <span class="s2">"nan"</span>
             <span class="p">)</span>
         <span class="p">),</span>
         <span class="p">(</span>
-            <span class="s2">&quot;aen (sig)&quot;</span><span class="p">,</span>
+            <span class="s2">"aen (sig)"</span><span class="p">,</span>
             <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;astrometric_excess_noise&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;astrometric_excess_noise_sig&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">) mas&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'astrometric_excess_noise'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'astrometric_excess_noise_sig'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">) mas"</span>
             <span class="p">),</span>
         <span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;ruwe&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ruwe&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;g mag&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;phot_g_mean_mag&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;A_G&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ag_gspphot&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;bp-rp&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bp_rp</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;E(BP-RP)&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ebpminrp_gspphot&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;sptype&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sptype_dwarf_str</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">sptype_giant_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;mh&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mh</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;galaxy candidates&quot;</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;in_galaxy_candidates&quot;</span><span class="p">])),</span>
-        <span class="p">(</span><span class="s2">&quot;qso candidates&quot;</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;in_qso_candidates&quot;</span><span class="p">])),</span>
-        <span class="p">(</span><span class="s2">&quot;xp spectra&quot;</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;has_xp_continuous&quot;</span><span class="p">])),</span>
-        <span class="p">(</span><span class="s2">&quot;rvs spectrum&quot;</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;has_rvs&quot;</span><span class="p">])),</span>
-        <span class="p">(</span><span class="s2">&quot;epoch rvs&quot;</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;has_epoch_rv&quot;</span><span class="p">])),</span>
-        <span class="p">(</span><span class="s2">&quot;epoch photometry&quot;</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;has_epoch_photometry&quot;</span><span class="p">])),</span>
-        <span class="p">(</span><span class="s2">&quot;non-single star&quot;</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;non_single_star&quot;</span><span class="p">])),</span>
+        <span class="p">(</span><span class="s2">"ruwe"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'ruwe'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"g mag"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'phot_g_mean_mag'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"A_G"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'ag_gspphot'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"bp-rp"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">bp_rp</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"E(BP-RP)"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'ebpminrp_gspphot'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"sptype"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sptype_dwarf_str</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">sptype_giant_str</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"mh"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mh</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"galaxy candidates"</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"in_galaxy_candidates"</span><span class="p">])),</span>
+        <span class="p">(</span><span class="s2">"qso candidates"</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"in_qso_candidates"</span><span class="p">])),</span>
+        <span class="p">(</span><span class="s2">"xp spectra"</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"has_xp_continuous"</span><span class="p">])),</span>
+        <span class="p">(</span><span class="s2">"rvs spectrum"</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"has_rvs"</span><span class="p">])),</span>
+        <span class="p">(</span><span class="s2">"epoch rvs"</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"has_epoch_rv"</span><span class="p">])),</span>
+        <span class="p">(</span><span class="s2">"epoch photometry"</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"has_epoch_photometry"</span><span class="p">])),</span>
+        <span class="p">(</span><span class="s2">"non-single star"</span><span class="p">,</span> <span class="n">fmt_bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"non_single_star"</span><span class="p">])),</span>
     <span class="p">]</span>
 
     <span class="n">output_lines</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">styled_title</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="n">title_width</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">styled_title</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="n">title_width</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">rows</span>
     <span class="p">]</span>
-    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_lines</span><span class="p">))</span></div>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_lines</span><span class="p">))</span></div>
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">query_useful_info</span><span class="p">()</span>
 </pre></div>
 

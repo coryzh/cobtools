@@ -76,7 +76,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cobtools.data_models.lsst_lasair</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Data models defined for the Lasair data objects. For more information, see the</span>
 <span class="sd">`Lasair documentation &lt;https://lasair-lsst.readthedocs.io/en/main/&gt;`_.</span>
 
@@ -91,7 +91,7 @@
 <span class="sd">    A data class representing a single object from the Lasair database. This</span>
 <span class="sd">    class is a wrapper that combines the LSST diaObject and Lasair-derived</span>
 <span class="sd">    metadata.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cobtools.data_models.light_curve</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightCurve</span>
@@ -102,18 +102,18 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
 
-<span class="n">_BASE_IMAGE_URL</span> <span class="o">=</span> <span class="s1">&#39;https://lasair.lsst.ac.uk/fits/&#39;</span>
+<span class="n">_BASE_IMAGE_URL</span> <span class="o">=</span> <span class="s1">'https://lasair.lsst.ac.uk/fits/'</span>
 
 
 <div class="viewcode-block" id="LasairData">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairData">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">LasairData</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A data class representing a data object from the Lasair database, which</span>
 <span class="sd">    includes metadata provided by Lasair. Parameter meaning can be found in the</span>
 <span class="sd">    `Lasair Schema Browser &lt;https://lasair.lsst.ac.uk/schema/&gt;`_.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">nDiaSources</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">firstDiaSourceMjdTai</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">lastDiaSourceMjdTai</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -151,7 +151,7 @@
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">LasairObject</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A data class representing a single object from the Lasair database. This</span>
 <span class="sd">    class is a wrapper that combines the LSST diaObject and Lasair-derived</span>
 <span class="sd">    metadata. It is mainly designed to parse the data retrieved from the Lasair</span>
@@ -176,7 +176,7 @@
 
 <span class="sd">    diaForcedSourcesList : List[DiaForcedSource]</span>
 <span class="sd">        A list of diaForcedSource records associated with the object,</span>
-<span class="sd">        representing forced photometry measurements at the object&#39;s position</span>
+<span class="sd">        representing forced photometry measurements at the object's position</span>
 <span class="sd">        on difference images.</span>
 
 <span class="sd">    Methods</span>
@@ -187,7 +187,7 @@
 
 <span class="sd">    get_lightcurve_df(option: str, band: str) -&gt; pd.DataFrame</span>
 <span class="sd">        Retrieve the light curve data as a pandas DataFrame. The `option`</span>
-<span class="sd">        parameter specifies whether to use &#39;diaSources&#39; or &#39;diaForcedSources&#39;</span>
+<span class="sd">        parameter specifies whether to use 'diaSources' or 'diaForcedSources'</span>
 <span class="sd">        for the light curve data, and the `band` parameter allows filtering</span>
 <span class="sd">        by photometric band.</span>
 
@@ -202,7 +202,7 @@
 
 <span class="sd">    to_json(file_path: str | Path) -&gt; None</span>
 <span class="sd">        Save the LasairObject instance to a JSON file at the specified path.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">diaObjectId</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">lasairData</span><span class="p">:</span> <span class="n">LasairData</span>
     <span class="n">diaObject</span><span class="p">:</span> <span class="n">DiaObject</span>
@@ -213,14 +213,14 @@
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.info">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;diaObjectId: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObjectId</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;ra, dec: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">ra</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">decl</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;glat, glon: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">glat</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">g_lon</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Discovery: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">firstDiaSourceMjdTai</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Latest: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">lastDiaSourceMjdTai</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;nDiaSources: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">nDiaSources</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;Type: &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">sherlock</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"diaObjectId: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObjectId</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"ra, dec: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">ra</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">decl</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"glat, glon: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">glat</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">g_lon</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"Discovery: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">firstDiaSourceMjdTai</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"Latest: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diaObject</span><span class="o">.</span><span class="n">lastDiaSourceMjdTai</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"nDiaSources: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">nDiaSources</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="s2">"Type: "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lasairData</span><span class="o">.</span><span class="n">sherlock</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'classification'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Unknown'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span></div>
 
 
@@ -230,8 +230,8 @@
 <div class="viewcode-block" id="LasairObject.from_api_data">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.from_api_data">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_api_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;LasairObject&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_api_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"LasairObject"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create a LasairObject instance from a nested dictionary</span>
 <span class="sd">        retrieved from the Lasair API.</span>
 
@@ -262,35 +262,35 @@
 <span class="sd">            from cobtools.data_models.lsst_lasair import LasairObject</span>
 
 <span class="sd">            L = lasair(</span>
-<span class="sd">                endpoint=&quot;https://api.lasair.lsst.ac.uk/api&quot;,</span>
-<span class="sd">                token=&quot;your_api_token&quot;</span>
+<span class="sd">                endpoint="https://api.lasair.lsst.ac.uk/api",</span>
+<span class="sd">                token="your_api_token"</span>
 <span class="sd">                )</span>
 <span class="sd">            # Replace objectId with a valid diaObjectId</span>
 
 <span class="sd">            api_data = L.object(objectId)</span>
 <span class="sd">            lasair_object = LasairObject.from_api_data(api_data)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Convert the nested dictionary for diaObject into a DiaObject instance</span>
-        <span class="n">dia_object</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diaObject&#39;</span><span class="p">)</span>
+        <span class="n">dia_object</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'diaObject'</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dia_object</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">dia_object</span> <span class="o">=</span> <span class="n">DiaObject</span><span class="p">(</span><span class="o">**</span><span class="n">dia_object</span><span class="p">)</span>
 
-        <span class="n">lasair_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lasairData&#39;</span><span class="p">)</span>
+        <span class="n">lasair_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'lasairData'</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lasair_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">lasair_data</span> <span class="o">=</span> <span class="n">LasairData</span><span class="p">(</span><span class="o">**</span><span class="n">lasair_data</span><span class="p">)</span>
 
-        <span class="n">dia_sources</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diaSourcesList&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">dia_sources</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'diaSourcesList'</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dia_sources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">dia_sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">DiaSource</span><span class="p">(</span><span class="o">**</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">dia_sources</span><span class="p">]</span>
 
-        <span class="n">dia_forced_sources</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diaForcedSourcesList&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">dia_forced_sources</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'diaForcedSourcesList'</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dia_forced_sources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">dia_forced_sources</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">DiaForcedSource</span><span class="p">(</span><span class="o">**</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">dia_forced_sources</span>
             <span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">diaObjectId</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;diaObjectId&#39;</span><span class="p">],</span>
+            <span class="n">diaObjectId</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">'diaObjectId'</span><span class="p">],</span>
             <span class="n">lasairData</span><span class="o">=</span><span class="n">lasair_data</span><span class="p">,</span>
             <span class="n">diaObject</span><span class="o">=</span><span class="n">dia_object</span><span class="p">,</span>
             <span class="n">diaSourcesList</span><span class="o">=</span><span class="n">dia_sources</span><span class="p">,</span>
@@ -302,20 +302,20 @@
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.get_lightcurve_df">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_lightcurve_df</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">option</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;diaSources&quot;</span><span class="p">,</span>
-        <span class="n">band</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+        <span class="n">option</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"diaSources"</span><span class="p">,</span>
+        <span class="n">band</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"all"</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Retrieve the light curve data as a pandas DataFrame.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        option : str, optional</span>
 <span class="sd">            The type of sources to include in the light curve. Choose</span>
-<span class="sd">            &#39;diaSources&#39; or &#39;diaForcedSources&#39;.</span>
+<span class="sd">            'diaSources' or 'diaForcedSources'.</span>
 <span class="sd">        band : str, optional</span>
-<span class="sd">            The band to filter the data by. Choose &#39;all&#39;, &#39;u&#39;, &#39;g&#39;, &#39;r&#39;, &#39;i&#39;,</span>
-<span class="sd">            &#39;z&#39;, or &#39;y&#39;.</span>
+<span class="sd">            The band to filter the data by. Choose 'all', 'u', 'g', 'r', 'i',</span>
+<span class="sd">            'z', or 'y'.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -325,8 +325,8 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If the `option` parameter is not &#39;diaSources&#39; or</span>
-<span class="sd">            &#39;diaForcedSources&#39;, or if the `band` parameter is not one of the</span>
+<span class="sd">            If the `option` parameter is not 'diaSources' or</span>
+<span class="sd">            'diaForcedSources', or if the `band` parameter is not one of the</span>
 <span class="sd">            allowed values.</span>
 
 <span class="sd">        Example</span>
@@ -337,38 +337,38 @@
 <span class="sd">            # Get light curve as a DataFrame</span>
 <span class="sd">            # Assuming `lasair_object` is an instance of LasairObject</span>
 <span class="sd">            lc_df = lasair_object.get_lightcurve_df(</span>
-<span class="sd">                option=&quot;diaSources&quot;, band=&quot;g&quot;</span>
+<span class="sd">                option="diaSources", band="g"</span>
 <span class="sd">            )</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">option</span> <span class="o">==</span> <span class="s2">&quot;diaSources&quot;</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">option</span> <span class="o">==</span> <span class="s2">"diaSources"</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diaSourcesList</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No diaSources available for this object.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No diaSources available for this object."</span><span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                 <span class="n">asdict</span><span class="p">(</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diaSourcesList</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="s2">&quot;diaForcedSources&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="s2">"diaForcedSources"</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diaForcedSourcesList</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;No diaForcedSources available for this object.&quot;</span>
+                    <span class="s2">"No diaForcedSources available for this object."</span>
                 <span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                 <span class="n">asdict</span><span class="p">(</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diaForcedSourcesList</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid option. Choose &#39;diaSources&#39; or &#39;diaForcedSources&#39;.&quot;</span>
+                <span class="s2">"Invalid option. Choose 'diaSources' or 'diaForcedSources'."</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">band</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">band</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"all"</span><span class="p">,</span> <span class="s2">"u"</span><span class="p">,</span> <span class="s2">"g"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="s2">"i"</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid band. Choose &#39;all&#39;, &#39;u&#39;, &#39;g&#39;, &#39;r&#39;, &#39;i&#39;, &#39;z&#39;, or &#39;y&#39;.&quot;</span>
+                <span class="s2">"Invalid band. Choose 'all', 'u', 'g', 'r', 'i', 'z', or 'y'."</span>
             <span class="p">)</span>
-        <span class="k">if</span> <span class="n">band</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">band</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">df</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;band == &#39;</span><span class="si">{</span><span class="n">band</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;band&quot;</span><span class="p">])</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">"band == '</span><span class="si">{</span><span class="n">band</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"band"</span><span class="p">])</span>
 
             <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
@@ -376,7 +376,7 @@
 <div class="viewcode-block" id="LasairObject.get_lightcurve">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.get_lightcurve">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_lightcurve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LightCurve</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the light curve data as a LightCurve instance.</span>
 
 <span class="sd">        Parameters</span>
@@ -390,20 +390,20 @@
 <span class="sd">            LightCurve instance containing the light curve data for the object.</span>
 <span class="sd">            More details can be found in the documentation of the LightCurve</span>
 <span class="sd">            class in `cobtools.data_models.light_curve`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_lightcurve_df</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">LightCurve</span><span class="p">(</span>
-            <span class="n">time_axis</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;midpointMjdTai&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
-            <span class="n">flux</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;psfFlux&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
-            <span class="n">flux_err</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;psfFluxErr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="n">time_axis</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">"midpointMjdTai"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+            <span class="n">flux</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">"psfFlux"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+            <span class="n">flux_err</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">"psfFluxErr"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LasairObject.image_urls">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.image_urls">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">image_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">band</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Retrieve the URLs of images associated with the Lasair object for a</span>
 <span class="sd">        specific band. Each image is associated with a diaSource in the</span>
 <span class="sd">        specified band.</span>
@@ -411,29 +411,29 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        img_type : str</span>
-<span class="sd">            The type of image to retrieve. Choose &#39;Science&#39;, &#39;Template&#39;, or</span>
-<span class="sd">            &quot;Difference&quot;. Case-insensitive.</span>
+<span class="sd">            The type of image to retrieve. Choose 'Science', 'Template', or</span>
+<span class="sd">            "Difference". Case-insensitive.</span>
 
 <span class="sd">        band : str</span>
-<span class="sd">            The band for which to retrieve image URLs. Choose &#39;u&#39;, &#39;g&#39;,</span>
-<span class="sd">            &#39;r&#39;, &#39;i&#39;, &#39;z&#39;, &#39;y&#39;, or &#39;all&#39; for all bands.</span>
+<span class="sd">            The band for which to retrieve image URLs. Choose 'u', 'g',</span>
+<span class="sd">            'r', 'i', 'z', 'y', or 'all' for all bands.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        List[str]</span>
 <span class="sd">            A list of image URLs for the specified band and image type.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">img_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;science&quot;</span><span class="p">,</span> <span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="s2">&quot;difference&quot;</span><span class="p">]:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">img_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"science"</span><span class="p">,</span> <span class="s2">"template"</span><span class="p">,</span> <span class="s2">"difference"</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid img_type. Choose &#39;Science&#39;, &#39;Template&#39;, or &quot;</span>
-                <span class="s2">&quot;&#39;Difference&#39;; case-insensitive.&quot;</span>
+                <span class="s2">"Invalid img_type. Choose 'Science', 'Template', or "</span>
+                <span class="s2">"'Difference'; case-insensitive."</span>
             <span class="p">)</span>
 
-        <span class="n">df_sources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_lightcurve_df</span><span class="p">(</span><span class="n">option</span><span class="o">=</span><span class="s2">&quot;diaSources&quot;</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">band</span><span class="p">)</span>
+        <span class="n">df_sources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_lightcurve_df</span><span class="p">(</span><span class="n">option</span><span class="o">=</span><span class="s2">"diaSources"</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">band</span><span class="p">)</span>
 
         <span class="n">img_urls</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_BASE_IMAGE_URL</span><span class="si">}{</span><span class="n">ids</span><span class="si">}</span><span class="s2">_cutout</span><span class="si">{</span><span class="n">img_type</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="k">for</span> <span class="n">ids</span> <span class="ow">in</span> <span class="n">df_sources</span><span class="p">[</span><span class="s1">&#39;diaSourceId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_BASE_IMAGE_URL</span><span class="si">}{</span><span class="n">ids</span><span class="si">}</span><span class="s2">_cutout</span><span class="si">{</span><span class="n">img_type</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
+            <span class="k">for</span> <span class="n">ids</span> <span class="ow">in</span> <span class="n">df_sources</span><span class="p">[</span><span class="s1">'diaSourceId'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">img_urls</span></div>
@@ -442,7 +442,7 @@
 <div class="viewcode-block" id="LasairObject.to_json">
 <a class="viewcode-back" href="../../../cobtools.data_models.html#cobtools.data_models.lsst_lasair.LasairObject.to_json">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Save the LasairObject instance to a JSON file.</span>
 
 <span class="sd">        Parameters</span>
@@ -450,8 +450,8 @@
 <span class="sd">        file_path : str or Path</span>
 <span class="sd">            The path to the JSON file where the LasairObject data will be</span>
 <span class="sd">            saved. Could be a string or a pathlib.Path object.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 </div>
 
