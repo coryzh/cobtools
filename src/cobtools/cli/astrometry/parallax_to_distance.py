@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import click
+import numpy as np
 
 
 @click.command(
@@ -54,6 +55,15 @@ def estimate_distance(
         )
     elif method == "xrb_exp_prior":
         dist_mod = XRBExponentialPriorModel(parallax, parallax_error)
+
+        dist_sample = dist_mod.sample_distance()
+        d_lo, d_est, d_hi = np.percentile(dist_sample, [16, 50, 84])
+        d_lo_err = d_est - d_lo
+        d_hi_err = d_hi - d_est
+        click.echo(
+            f"Distance estimate: {d_est: .2f} "
+            f"+{d_hi_err:.2f} / -{d_lo_err:.2f} kpc"
+        )
 
     else:
         raise click.UsageError(
