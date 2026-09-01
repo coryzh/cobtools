@@ -55,7 +55,26 @@ METHOD_LABELS = {
 def estimate_distance(
     parallax: float, parallax_error: float, method: str, conf: float
 ) -> None:
-    """placeholder function for the estimate_distance command."""
+    """
+    Estimate distance from user-input arguments.
+
+    Parameters
+    ----------
+    parallax : float
+        User-input parallax in mas.
+    parallax_error : float
+        User-input parallax error in mas.
+    method : str
+        User-input method string.
+    conf : float
+        User-input decimal confidence level between 0 and 1.
+
+    Raises
+    ------
+    click.UsageError
+        If the confidence level is not between 0 and 1, or if the method is
+        not recognized.
+    """
     from cobtools.astrometry.distance import (
         SimpleInversion,
         XRBExponentialPriorModel
@@ -91,6 +110,20 @@ def estimate_distance(
 
 
 def display_results(dist_arr: np.ndarray, conf: float, method: str) -> None:
+    """Display point estimate and confidence interval of the distance.
+
+    Parameters
+    ----------
+    dist_arr : np.ndarray
+        Array of sampled distances in kpc.
+
+    conf : float
+        Decimal confidence level (between 0 and 1).
+
+    method : str
+        Method string.
+    """
+
     percentiles = [(1 - conf) / 2 * 100, 50, (1 + conf) / 2 * 100]
 
     d_lo, d_est, d_hi = np.percentile(dist_arr, percentiles)
