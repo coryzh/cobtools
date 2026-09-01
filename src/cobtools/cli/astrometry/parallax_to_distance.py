@@ -5,7 +5,7 @@ import numpy as np
 
 METHOD_LABELS = {
     "inv": "Inverted parallax",
-    "xrb_exp_prior": "Bayesian (XRB Exponential Prior)",
+    "xrb_exp_prior": "Bayesian (XRB exponential prior)",
 }
 
 
@@ -100,7 +100,7 @@ def display_results(dist_arr: np.ndarray, conf: float, method: str) -> None:
     click.echo(
         f"Distance (median): {d_est:.2f} "
         f"+{d_hi_err:.2f}/-{d_lo_err:.2f} kpc\n"
-        f"{conf * 100:.2f}% equal-tailed interval: "
+        f"{conf * 100:.0f}% equal-tailed interval: "
         f"[{d_lo:.2f}, {d_hi:.2f}] kpc \n"
         f"Method: {METHOD_LABELS[method]}"
     )
