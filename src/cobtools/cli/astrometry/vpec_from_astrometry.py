@@ -95,8 +95,8 @@ def calc_vpec(
     Any option omitted on the command line will be prompted for
     interactively.
 
-    The output is the point estimate and uncertainty of the vpec in
-    km/s at the given confidence level.
+    The output is the point estimate and uncertainty of the vpec and its
+    Cartesian components in km/s at the given confidence level.
     """
     np.random.seed(seed)
 
