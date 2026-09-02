@@ -1,34 +1,64 @@
 import click
 import numpy as np
-# from cobtools.astrometry.kinematics import peculiar_velocity
+from cobtools.astrometry.kinematics import peculiar_velocity
 
 
 @click.command(
     context_settings={"help_option_names": ["-h", "--help"]},
 )
-@click.argument("ra", type=click.FloatRange(min=0, max=360), metavar="ra")
-@click.argument("dec", type=click.FloatRange(min=-90, max=90), metavar="dec")
-@click.argument("pmra", type=float, metavar="pmra")
-@click.argument(
-    "pmra_error", type=click.FloatRange(min=0, min_open=True),
-    metavar="pmra_error",
+@click.option(
+    "--ra", prompt="Right ascension (deg)",
+    type=click.FloatRange(min=0, max=360),
+    help="Right ascension in decimal degrees. Range [0, 360] degrees.",
 )
-@click.argument("pmdec", type=float, metavar="pmdec")
-@click.argument(
-    "pmdec_error", type=click.FloatRange(min=0, min_open=True),
-    metavar="pmdec_error",
+@click.option(
+    "--dec", prompt="Declination (deg)",
+    type=click.FloatRange(min=-90, max=90),
+    help="Declination in decimal degrees. Range [-90, 90] degrees.",
 )
-@click.argument(
-    "dist", type=click.FloatRange(min=0, min_open=True), metavar="dist",
+@click.option(
+    "--pmra", prompt="Proper motion in RA (mas/yr)", type=float,
+    help=(
+        "Proper motion in right ascension (including the cos(dec) "
+        "factor) in mas/yr."
+    ),
 )
-@click.argument(
-    "dist_error", type=click.FloatRange(min=0, min_open=True),
-    metavar="dist_error",
+@click.option(
+    "--pmra_error", prompt="1-sigma error in pmra (mas/yr)",
+    type=click.FloatRange(min=0, min_open=True),
+    help="1-sigma error in proper motion in ra in mas/yr.",
 )
-@click.argument("rv", type=click.FloatRange(min=-3e5, max=3e5), metavar="rv")
-@click.argument(
-    "rv_error", type=click.FloatRange(min=0, min_open=True),
-    metavar="rv_error",
+@click.option(
+    "--pmdec", prompt="Proper motion in Dec (mas/yr)", type=float,
+    help="Proper motion in declination in mas/yr.",
+)
+@click.option(
+    "--pmdec_error", prompt="1-sigma error in pmdec (mas/yr)",
+    type=click.FloatRange(min=0, min_open=True),
+    help="1-sigma error in proper motion in declination in mas/yr.",
+)
+@click.option(
+    "--dist", prompt="Distance (kpc)",
+    type=click.FloatRange(min=0, min_open=True),
+    help="Distance in kpc. Must be a positive value.",
+)
+@click.option(
+    "--dist_error", prompt="1-sigma error in distance (kpc)",
+    type=click.FloatRange(min=0, min_open=True),
+    help="1-sigma error in distance in kpc.",
+)
+@click.option(
+    "--rv", prompt="Radial velocity (km/s)",
+    type=click.FloatRange(min=-3e5, max=3e5),
+    help=(
+        "Radial velocity in km/s. Must be in the range [-3e5, 3e5] "
+        "km/s (inclusive)."
+    ),
+)
+@click.option(
+    "--rv_error", prompt="1-sigma error in radial velocity (km/s)",
+    type=click.FloatRange(min=0, min_open=True),
+    help="1-sigma error in radial velocity in km/s.",
 )
 @click.option(
     "-c", "--conf", default=0.68,
@@ -42,15 +72,19 @@ import numpy as np
     "-n", "--n_samples", default=1000, type=click.IntRange(min=1),
     help="Number of samples to use in the Monte Carlo simulation."
 )
+@click.option(
+    "-s", "--seed", default=42, type=click.INT,
+    help="Random seed for reproducibility."
+)
 def calc_vpec(
         ra: float, dec: float,
         pmra: float, pmra_error: float, pmdec: float, pmdec_error: float,
         dist: float, dist_error: float, rv: float, rv_error: float,
-        conf: float, n_samples: int
+        conf: float, n_samples: int, seed: int | None
 ) -> None:
-    """Calculate peculiar velocity (vpec) based on from astrometry
+    """Calculate peculiar velocity (vpec) based on astrometry
 
-    The user provide the astrometric parameters (ra, dec, pmra, pmdec,
+    The user provides the astrometric parameters (ra, dec, pmra, pmdec,
     dist, rv) and the uncertainties on pmra, pmdec, dist, and rv. The
     tool will then generate Monte Carlo samples of the parameters and
     compute the vpec values.
@@ -58,30 +92,44 @@ def calc_vpec(
     The user can also specify the confidence level and the number of
     samples to use in the Monte Carlo simulation.
 
-    \b
-    ra: Right ascension in decimal degrees. Must be in the range
-        [0, 360] degrees.
-    dec: Declination in decimal degrees. Must be in the range
-        [-90, 90] degrees.
-    pmra: Proper motion in right ascension (including the cos(dec)
-        factor) in mas/yr.
-    pmra_error: Error in proper motion in right ascension in mas/yr.
-    pmdec: Proper motion in declination in mas/yr.
-    pmdec_error: Error in proper motion in declination in mas/yr.
-    dist: Distance in kpc. Must be a positive value.
-    dist_error: (no help text was provided for this argument)
-    rv: Radial velocity in km/s. Must be in the range [-3e5, 3e5] km/s
-        (inclusive).
-    rv_error: (no help text was provided for this argument)
+    Any option omitted on the command line will be prompted for
+    interactively.
 
     The output is the point estimate and uncertainty of the vpec in
     km/s at the given confidence level.
     """
-    pass
+    np.random.seed(seed)
+
+    pmra_rand = np.random.normal(pmra, pmra_error, n_samples)
+    pmdec_rand = np.random.normal(pmdec, pmdec_error, n_samples)
+    dist_rand = np.random.normal(dist, dist_error, n_samples)
+    rv_rand = np.random.normal(rv, rv_error, n_samples)
+
+    results = peculiar_velocity(
+        ra=ra, dec=dec, pmra_cosdec=pmra_rand, pmdec=pmdec_rand,
+        dist=dist_rand, rv=rv_rand
+    )
+
+    display_results(results, conf, n_samples)
 
 
-def display_results(vpec_sample: np.ndarray, conf: float) -> None:
-    pass
+def display_results(
+        results: np.ndarray, conf: float, n_samples: int
+) -> None:
+    labels = ("U", "V", "W", "vpec")
+    percentiles = [(1 - conf) / 2 * 100, 50, (1 + conf) / 2 * 100]
+
+    lines = []
+    for label, sample in zip(labels, results):
+        lo, est, hi = np.percentile(sample, percentiles)
+        lo_err, hi_err = est - lo, hi - est
+        lines.append(
+            f"{label:>4}: {est:8.2f} +{hi_err:.2f}/-{lo_err:.2f} km/s  "
+            f"[{lo:.2f}, {hi:.2f}] km/s ({conf * 100:.0f}% CI)"
+        )
+
+    click.echo("\n".join(lines))
+    click.echo(f"Number of samples: {n_samples}")
 
 
 if __name__ == "__main__":
