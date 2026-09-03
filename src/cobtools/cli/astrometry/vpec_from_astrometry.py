@@ -8,8 +8,8 @@ from cobtools.astrometry.kinematics import peculiar_velocity
 )
 @click.option(
     "--ra", prompt="Right ascension (deg)",
-    type=click.FloatRange(min=0, max=360),
-    help="Right ascension in decimal degrees. Range [0, 360] degrees.",
+    type=click.FloatRange(min=0, max=360, max_open=True),
+    help="Right ascension in decimal degrees. Range [0, 360) degrees.",
 )
 @click.option(
     "--dec", prompt="Declination (deg)",
@@ -73,7 +73,7 @@ from cobtools.astrometry.kinematics import peculiar_velocity
     help="Number of samples to use in the Monte Carlo simulation."
 )
 @click.option(
-    "-s", "--seed", default=42, type=click.INT,
+    "-s", "--seed", default=42, type=click.IntRange(min=0, max=2**32 - 1),
     help="Random seed for reproducibility."
 )
 def calc_vpec(
