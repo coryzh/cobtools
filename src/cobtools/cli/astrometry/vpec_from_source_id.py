@@ -8,7 +8,7 @@ def _get_astrometry_from_source_id(
 ) -> dict:
     from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
 
-    query = SingleSourceUsefulInfoQuery(source_id=source_id, dr=dr)
+    query = SingleSourceUsefulInfoQuery(source_id=source_id, data_release=dr)
 
     try:
         query_results = query.query_result()
@@ -66,6 +66,19 @@ def _get_distance_samples(
 @click.option(
     "--source_id", prompt="Gaia source ID", type=click.INT,
     help="Gaia source_id for which to calculate the peculiar velocity.",
+)
+@click.option(
+    "--rv", prompt="Radial velocity (km/s)",
+    type=click.FloatRange(min=-3e5, max=3e5),
+    help=(
+        "Radial velocity in km/s. Must be in the range [-3e5, 3e5] km/s "
+        "(inclusive)."
+    ),
+)
+@click.option(
+    "--rv_error", prompt="1-sigma error in radial velocity (km/s)",
+    type=click.FloatRange(min=0, min_open=True),
+    help="1-sigma error in radial velocity in km/s.",
 )
 @click.option(
     "--dist_method", prompt="Distance estimation method",
@@ -127,13 +140,18 @@ def calc_vpec(
         ra=ra, dec=dec, pmra_cosdec=pmra_rand, pmdec=pmdec_rand,
         dist=dist_rand, rv=rv_rand
     )
+
+    # Pack the distance samples with the results for display
+    # results[0] corresponds to the distance samples.
+    results = np.vstack((dist_rand, results))
+
     display_results(results, conf, n_rand)
 
 
 def display_results(
         results: np.ndarray, conf: float, n_samples: int
 ) -> None:
-    labels = ("U", "V", "W", "vpec")
+    labels = ("dist", "U", "V", "W", "vpec")
     percentiles = [(1 - conf) / 2 * 100, 50, (1 + conf) / 2 * 100]
 
     lines = []
