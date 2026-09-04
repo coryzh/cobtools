@@ -42,7 +42,7 @@ dev = [
 gaia_single_source = "cobtools.cli.gaia.query_single_source:query_useful_info"
 par_to_dist = "cobtools.cli.astrometry.parallax_to_distance:estimate_distance"
 vpec_from_astrometry = "cobtools.cli.astrometry.vpec_from_astrometry:calc_vpec"
-
+vpec_from_source_id = "cobtools.cli.astrometry.vpec_from_source_id:calc_vpec"
 [tool.black]
 line-length = 88
 
