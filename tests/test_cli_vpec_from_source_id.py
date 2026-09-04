@@ -37,7 +37,7 @@ def test_display_results_formats_output(capsys):
     display_results(results, conf=0.5, n_samples=3)
 
     out = capsys.readouterr().out
-    assert "dist:     2.00 +0.50/-0.50 km/s" in out
+    assert "dist:     2.00 +0.50/-0.50 kpc" in out
     assert "vpec:     2.00 +0.50/-0.50 km/s" in out
     assert "Number of samples: 3" in out
 
