@@ -139,6 +139,32 @@ def calc_vpec(
         dist_source: str, dist: float | None, dist_error: float | None,
         dist_method: str | None, conf: float, seed: int | None
 ) -> None:
+    """Calculate peculiar velocity (vpec) for a Gaia source_id.
+
+    Queries the Gaia archive for the astrometric parameters (ra, dec,
+    pmra, pmdec, parallax) of the given source_id, combines them with a
+    user-supplied radial velocity (and its error), and generates Monte
+    Carlo samples to compute the vpec and its Cartesian (U, V, W)
+    components.
+
+    Distance can come from two sources, selected via --dist_source:
+
+    \b
+    - 'gaia': distance is inferred from the Gaia parallax using the
+      method chosen via --dist_method ('inv' or 'xrb_exp_prior').
+    - 'user': distance and its 1-sigma error are supplied directly by
+      the user (via --dist/--dist_error or an interactive prompt).
+
+    Any option omitted on the command line will be prompted for
+    interactively; --dist_method, --dist, and --dist_error are only
+    prompted for when relevant to the chosen --dist_source.
+
+    The output is the point estimate and the uncertainty of the distance,
+    vpec, and its Cartesian components in km/s at the given confidence
+    level. The uncertainties correspond to equal-tailed intervals at the
+    specified confidence level.
+    """
+
     from cobtools.astrometry.kinematics import peculiar_velocity
 
     np.random.seed(seed)
