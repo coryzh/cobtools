@@ -152,8 +152,7 @@ vpec_from_astrometry \
 
 ### Calculate peculiar velocity from a Gaia source
 
-This command retrieves astrometric parameters for the specified Gaia source
-and prompts for the radial velocity and its uncertainty:
+ This command retrieves astrometric parameters for the specified Gaia source and uses the provided radial velocity and its uncertainty (prompting for them if omitted):
 
 ```bash
 vpec_from_source_id --source_id <source_id> --dr dr3 --rv 35.0 --rv_error 2.0
