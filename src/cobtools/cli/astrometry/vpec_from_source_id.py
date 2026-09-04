@@ -159,7 +159,7 @@ def calc_vpec(
     interactively; --dist_method, --dist, and --dist_error are only
     prompted for when relevant to the chosen --dist_source.
 
-    The output is the point estimate and the uncertainty of the distance,
+    The output is the point estimate and the uncertainty of the distance (kpc),
     vpec, and its Cartesian components in km/s at the given confidence
     level. The uncertainties correspond to equal-tailed intervals at the
     specified confidence level.
@@ -228,15 +228,16 @@ def display_results(
         results: np.ndarray, conf: float, n_samples: int
 ) -> None:
     labels = ("dist", "U", "V", "W", "vpec")
+    units = ("kpc", "km/s", "km/s", "km/s", "km/s")
     percentiles = [(1 - conf) / 2 * 100, 50, (1 + conf) / 2 * 100]
 
     lines = []
-    for label, sample in zip(labels, results):
+    for label, unit, sample in zip(labels, units, results):
         lo, est, hi = np.percentile(sample, percentiles)
         lo_err, hi_err = est - lo, hi - est
         lines.append(
-            f"{label:>4}: {est:8.2f} +{hi_err:.2f}/-{lo_err:.2f} km/s  "
-            f"[{lo:.2f}, {hi:.2f}] km/s ({conf * 100:.0f}% CI)"
+            f"{label:>4}: {est:8.2f} +{hi_err:.2f}/-{lo_err:.2f} {unit}  "
+            f"[{lo:.2f}, {hi:.2f}] {unit} ({conf * 100:.0f}% CI)"
         )
 
     click.echo("\n".join(lines))
