@@ -4,7 +4,7 @@ from rich.console import Console
 
 
 def _get_astrometry_from_source_id(
-        source_id: int | str, dr: str = "dr3"
+        source_id: int, dr: str = "dr3"
 ) -> dict:
     from cobtools.query.query_gaia import SingleSourceUsefulInfoQuery
 
@@ -18,7 +18,7 @@ def _get_astrometry_from_source_id(
             f"Error querying Gaia {dr.upper()} for source_id {source_id}: {e}"
         )
 
-    if query_results is not None:
+    if query_results is not None and len(query_results) > 0:
         cols = [
             "source_id", "ra", "dec", "parallax", "parallax_error",
             "pmra", "pmra_error", "pmdec", "pmdec_error",
@@ -68,6 +68,11 @@ def _get_distance_samples(
     help="Gaia source_id for which to calculate the peculiar velocity.",
 )
 @click.option(
+    "--dr", prompt="Gaia data release (dr2 or dr3)",
+    type=click.Choice(["dr2", "dr3"]), default="dr3", show_default=True,
+    help="Gaia data release to use for astrometry.",
+)
+@click.option(
     "--rv", prompt="Radial velocity (km/s)",
     type=click.FloatRange(min=-3e5, max=3e5),
     help=(
@@ -81,18 +86,41 @@ def _get_distance_samples(
     help="1-sigma error in radial velocity in km/s.",
 )
 @click.option(
-    "--dist_method", prompt="Distance estimation method",
+    "--dist_source", prompt="Distance source (gaia or user)",
+    type=click.Choice(["gaia", "user"]),
+    help=(
+        "Source of distance information. 'gaia' uses Gaia parallax to "
+        "estimate distance, while 'user' uses user-provided distance and "
+        "error."
+    ),
+    default="gaia",
+    show_default=True
+)
+@click.option(
+    "--dist_method", default=None,
     type=click.Choice(["inv", "xrb_exp_prior"]),
     help=(
-        "Method to estimate distance from parallax. "
+        "Method to estimate distance from parallax, used only when "
+        "--dist_source=gaia. Options are "
         "'inv' for simple inversion, 'xrb_exp_prior' for XRB exponential "
         "prior."
     ),
 )
 @click.option(
-    "--dr", prompt="Gaia data release (dr2 or dr3)",
-    type=click.Choice(["dr2", "dr3"]), default="dr3", show_default=True,
-    help="Gaia data release to use for astrometry.",
+    "--dist", default=None,
+    type=click.FloatRange(min=0, min_open=True),
+    help=(
+        "Distance in kpc. Must be a positive value. Used only when "
+        "--dist_source='user'."
+    ),
+)
+@click.option(
+    "--dist_error", default=None,
+    type=click.FloatRange(min=0, min_open=True),
+    help=(
+        "1-sigma error in distance in kpc. Must be a positive number. Used "
+        "only when --dist_source='user'."
+    ),
 )
 @click.option(
     "-c", "--conf", default=0.68,
@@ -108,7 +136,8 @@ def _get_distance_samples(
 )
 def calc_vpec(
         source_id: int | str, dr: str, rv: float, rv_error: float,
-        dist_method: str, conf: float, seed: int | None
+        dist_source: str, dist: float | None, dist_error: float | None,
+        dist_method: str | None, conf: float, seed: int | None
 ) -> None:
     from cobtools.astrometry.kinematics import peculiar_velocity
 
@@ -118,11 +147,32 @@ def calc_vpec(
         f"Query Gaia {dr.upper()} for source {source_id}..."
     ):
         astrometry_dict = _get_astrometry_from_source_id(source_id, dr=dr)
-    dist_rand = _get_distance_samples(
-        astrometry_dict["parallax"],
-        astrometry_dict["parallax_error"],
-        method=dist_method
-    )
+
+    if dist_source == "user":
+        if dist is None:
+            dist = click.prompt(
+                "Distance (kpc)", type=click.FloatRange(min=0, min_open=True)
+            )
+
+        if dist_error is None:
+            dist_error = click.prompt(
+                "1-sigma error in distance (kpc)",
+                type=click.FloatRange(min=0, min_open=True)
+            )
+
+        dist_rand = np.random.normal(dist, dist_error, 10000)
+    else:
+        if dist_method is None:
+            dist_method = click.prompt(
+                "Distance estimation method",
+                type=click.Choice(["inv", "xrb_exp_prior"])
+            )
+        dist_rand = _get_distance_samples(
+            astrometry_dict["parallax"],
+            astrometry_dict["parallax_error"],
+            method=dist_method
+        )
+
     n_rand = len(dist_rand)
     ra = astrometry_dict["ra"]
     dec = astrometry_dict["dec"]
