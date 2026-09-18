@@ -35,7 +35,8 @@ dev = [
     "ruff",
     "black",
     "sphinx",
-    "sphinx-rtd-theme"
+    "sphinx-rtd-theme",
+    "sphinx-click",
 ]
 
 [project.scripts]
