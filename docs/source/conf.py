@@ -22,6 +22,7 @@ extensions = [
     'sphinx.ext.napoleon',  # For Google/NumPy-style docstrings
     'sphinx.ext.viewcode',  # Adds links to source code
     "matplotlib.sphinxext.roles",  # adds the :mpltype: role
+    "sphinx_click", # adds the :command: role for click commands
 ]
 
 templates_path = ['_templates']
