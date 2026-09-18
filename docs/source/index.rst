@@ -32,11 +32,10 @@ For development purposes, you can clone the repository and install it in editabl
 
 Common tasks
 ------------
-* :doc:`Estimate distances and velocities <cobtools.astrometry>`
+* :doc:`Estimate distances and peculiar velocities <cobtools.astrometry>`
 * :doc:`Convert fluxes, magnitudes, and colour indices <cobtools.photometry>`
-* :doc:`Query Gaia data <cobtools.query>`
-* :doc:`Work with Gaia, LSST, and Lasair data models <cobtools.data_models>`
-* :doc:`Create CMD and ECDF plots <cobtools.plot_utils>`
+* :doc:`Wrapper classes for querying commonly used astronomical databases <cobtools.query>`
+* :doc:`Quick plotting utilities <cobtools.plot_utils>`
 * :doc:`Browse the complete API reference <cobtools>`
 
 
