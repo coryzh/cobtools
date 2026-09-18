@@ -26,7 +26,8 @@ dependencies = [
     "astroquery>=0.4.10",
     "lasair>=0.1.2",
     "click>=8.0.0",
-    "platformdirs>=4.3.6"
+    "platformdirs>=4.3.6",
+    "rich>=13.0.0",
 ]
 
 [project.optional-dependencies]
