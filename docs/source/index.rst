@@ -37,12 +37,18 @@ Common tasks
 * :doc:`Wrapper classes for querying commonly used astronomical databases <cobtools.query>`
 * :doc:`Quick plotting utilities <cobtools.plot_utils>`
 * :doc:`Browse the complete API reference <cobtools>`
+* :doc:`Use the command-line tools <cli>`
 
 
-API reference
--------------
-
+Contents
+--------
 .. toctree::
    :maxdepth: 2
-
+   cli
    cobtools
+   modules
+   cobtools.astrometry
+   cobtools.photometry
+   cobtools.query
+   cobtools.plot_utils
+   cobtools.data_models
