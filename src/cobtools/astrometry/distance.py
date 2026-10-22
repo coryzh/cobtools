@@ -280,6 +280,11 @@ class FromLiterature:
                 "Estimated value (x_est) must be between x_lo and x_hi."
             )
 
+        if x_est < 0 or x_lo < 0 or x_hi < 0:
+            raise ValueError(
+                "Distance estimates and limits must be non-negative."
+            )
+
         if conf_level < 0 or conf_level > 1:
             raise ValueError(
                 "Confidence level must be a number between 0 and 1."
@@ -336,7 +341,7 @@ class FromLiterature:
         intervals of the fitted gamma distribution and the literature values.
 
         Fitting is performed using the scipy.optimize.minimize function, with
-        the initial guess for the scale parameter (sigma_x) set to the
+        the initial guess for the variance (variance_x) set to the
         averaged error (self.sigma_0).
 
         Returns
@@ -347,13 +352,15 @@ class FromLiterature:
             object itself.
         """
 
-        def get_gamma_distribution(sigma_x) -> dict:
+        def get_gamma_distribution(variance_x) -> dict:
             alpha = (
                 (
-                    2 * sigma_x + self.x_est ** 2
-                    + np.sqrt(4 * sigma_x * self.x_est ** 2 + self.x_est ** 4)
+                    2 * variance_x + self.x_est ** 2
+                    + np.sqrt(
+                        4 * variance_x * self.x_est ** 2 + self.x_est ** 4
+                    )
                 )
-                / (2 * sigma_x)
+                / (2 * variance_x)
             )
 
             theta = self.x_est / (alpha - 1)
@@ -361,8 +368,8 @@ class FromLiterature:
 
             return dict(alpha=alpha, theta=theta, distribution=x_gamma)
 
-        def difference(sigma_x) -> float:
-            _re = get_gamma_distribution(sigma_x)
+        def difference(variance_x) -> float:
+            _re = get_gamma_distribution(variance_x)
             x_gamma = _re["distribution"]
 
             x_lo_model = x_gamma.ppf((1 - self.conf_level) / 2)
@@ -375,7 +382,8 @@ class FromLiterature:
             return diff
 
         results = minimize(
-            difference, x0=self.sigma_0, bounds=Bounds(self._sigma_min, np.inf)
+            difference, x0=self.sigma_0 ** 2,
+            bounds=Bounds(self._sigma_min ** 2, np.inf)
         )
 
         return get_gamma_distribution(results.x[0])
