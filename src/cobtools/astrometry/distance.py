@@ -341,7 +341,7 @@ class FromLiterature:
         intervals of the fitted gamma distribution and the literature values.
 
         Fitting is performed using the scipy.optimize.minimize function, with
-        the initial guess for the scale parameter (sigma_x) set to the
+        the initial guess for the variance (variance_x) set to the
         averaged error (self.sigma_0).
 
         Returns
