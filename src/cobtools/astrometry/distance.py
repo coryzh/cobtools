@@ -280,6 +280,11 @@ class FromLiterature:
                 "Estimated value (x_est) must be between x_lo and x_hi."
             )
 
+        if x_est < 0 or x_lo < 0 or x_hi < 0:
+            raise ValueError(
+                "Distance estimates and limits must be non-negative."
+            )
+
         if conf_level < 0 or conf_level > 1:
             raise ValueError(
                 "Confidence level must be a number between 0 and 1."
