@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cobtools documentation &mdash; cobtools 0.1.0 documentation</title>
+  <title>cobtools &mdash; cobtools 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,8 +19,7 @@
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cobtools package" href="cobtools.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,17 +41,16 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.html">cobtools package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">cobtools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.astrometry.html">cobtools.astrometry package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.photometry.html">cobtools.photometry package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.query.html">cobtools.query package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.plot_utils.html">cobtools.plot_utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.data_models.html">cobtools.data_models package</a></li>
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">cobtools</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#common-tasks">Common tasks</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
 </ul>
-
+</li>
+</ul>
+</div>
         </div>
       </div>
     </nav>
@@ -67,7 +65,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">cobtools documentation</li>
+      <li class="breadcrumb-item active">cobtools</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,73 +75,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cobtools-documentation">
-<h1>cobtools documentation<a class="headerlink" href="#cobtools-documentation" title="Link to this heading"></a></h1>
-<p>Add your content using <code class="docutils literal notranslate"><span class="pre">reStructuredText</span></code> syntax. See the
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html">reStructuredText</a>
-documentation for details.</p>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.html">cobtools package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.html#subpackages">Subpackages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.html#module-cobtools.constants">cobtools.constants module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.html#module-cobtools">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">cobtools</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.html">cobtools package</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.astrometry.html">cobtools.astrometry package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.astrometry.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.astrometry.html#module-cobtools.astrometry.distance">cobtools.astrometry.distance module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.astrometry.html#module-cobtools.astrometry.kinematics">cobtools.astrometry.kinematics module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.astrometry.html#module-cobtools.astrometry.rotation_curve">cobtools.astrometry.rotation_curve module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.astrometry.html#module-cobtools.astrometry">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.photometry.html">cobtools.photometry package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.photometry.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.photometry.html#module-cobtools.photometry.color_index">cobtools.photometry.color_index module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.photometry.html#module-cobtools.photometry.flux_conversion">cobtools.photometry.flux_conversion module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.photometry.html#module-cobtools.photometry">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.query.html">cobtools.query package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.query.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.query.html#cobtools-query-query-gaia-module">cobtools.query.query_gaia module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.query.html#module-cobtools.query">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.plot_utils.html">cobtools.plot_utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.plot_utils.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.plot_utils.html#module-cobtools.plot_utils.cmd">cobtools.plot_utils.cmd module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.plot_utils.html#module-cobtools.plot_utils.ecdf">cobtools.plot_utils.ecdf module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.plot_utils.html#module-cobtools.plot_utils">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.data_models.html">cobtools.data_models package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.data_models.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.data_models.html#cobtools-data-models-gaia-module">cobtools.data_models.gaia module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.data_models.html#cobtools-data-models-band-module">cobtools.data_models.band module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.data_models.html#cobtools-data-models-light-curve-module">cobtools.data_models.light_curve module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.data_models.html#cobtools-data-models-lsst-module">cobtools.data_models.lsst module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.data_models.html#cobtools-data-models-lsst-lasair-module">cobtools.data_models.lsst_lasair module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cobtools.data_models.html#module-cobtools.data_models">Module contents</a></li>
-</ul>
-</li>
-</ul>
+  <section id="cobtools">
+<h1>cobtools<a class="headerlink" href="#cobtools" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">cobtools</span></code> is a Python toolkit of utilities I use for compact-binary research.
+The current version includes tools for astrometry, photometry, plotting, and querying astronomical databases.
+These tools can be imported and used in Python scripts, and there are also command-line scripts available for easier
+usage.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>Install the latest development version directly from GitHub:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m pip install git+https://github.com/coryzh/cobtools.git</span>
+</pre></div>
 </div>
+<p>For development purposes, you can clone the repository and install it in editable mode:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/coryzh/cobtools.git</span>
+<span class="go">cd cobtools</span>
+<span class="go">python -m pip install -e .</span>
+</pre></div>
+</div>
+</section>
+<section id="common-tasks">
+<h2>Common tasks<a class="headerlink" href="#common-tasks" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="cobtools.astrometry.html"><span class="doc">Estimate distances and peculiar velocities</span></a></p></li>
+<li><p><a class="reference internal" href="cobtools.photometry.html"><span class="doc">Convert fluxes, magnitudes, and colour indices</span></a></p></li>
+<li><p><a class="reference internal" href="cobtools.query.html"><span class="doc">Wrapper classes for querying commonly used astronomical databases</span></a></p></li>
+<li><p><a class="reference internal" href="cobtools.plot_utils.html"><span class="doc">Quick plotting utilities</span></a></p></li>
+<li><p><a class="reference internal" href="cobtools.html"><span class="doc">Browse the complete API reference</span></a></p></li>
+<li><p><a class="reference internal" href="cli.html"><span class="doc">Use the command-line tools</span></a></p></li>
+</ul>
+</section>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading"></a></h2>
+</section>
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="cobtools.html" class="btn btn-neutral float-right" title="cobtools package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

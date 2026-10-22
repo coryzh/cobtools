@@ -20,9 +20,7 @@
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cobtools.data_models package" href="cobtools.data_models.html" />
-    <link rel="prev" title="cobtools package" href="cobtools.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,72 +42,66 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="cobtools.html">cobtools package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">cobtools</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">cobtools.astrometry package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cobtools.astrometry.distance">cobtools.astrometry.distance module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature"><code class="docutils literal notranslate"><span class="pre">FromLiterature</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_est"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_est</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_lo"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_lo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_hi"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_hi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.conf_level"><code class="docutils literal notranslate"><span class="pre">FromLiterature.conf_level</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.fit_gamma"><code class="docutils literal notranslate"><span class="pre">FromLiterature.fit_gamma()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.sample_distance"><code class="docutils literal notranslate"><span class="pre">FromLiterature.sample_distance()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.sigma_0"><code class="docutils literal notranslate"><span class="pre">FromLiterature.sigma_0</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_loerr"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_loerr</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_uperr"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_uperr</span></code></a></li>
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">cobtools.astrometry package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cobtools.astrometry.distance">cobtools.astrometry.distance module</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature"><code class="docutils literal notranslate"><span class="pre">FromLiterature</span></code></a><ul>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_est"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_est</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_lo"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_lo</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_hi"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_hi</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.conf_level"><code class="docutils literal notranslate"><span class="pre">FromLiterature.conf_level</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.fit_gamma"><code class="docutils literal notranslate"><span class="pre">FromLiterature.fit_gamma()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.sample_distance"><code class="docutils literal notranslate"><span class="pre">FromLiterature.sample_distance()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.sigma_0"><code class="docutils literal notranslate"><span class="pre">FromLiterature.sigma_0</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_loerr"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_loerr</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.FromLiterature.x_uperr"><code class="docutils literal notranslate"><span class="pre">FromLiterature.x_uperr</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion"><code class="docutils literal notranslate"><span class="pre">SimpleInversion</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.parallax"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.parallax</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.parallax_error"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.parallax_error</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.d_est"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.d_est</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.d_est_error"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.d_est_error</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.parallax_over_error"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.parallax_over_error</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.sample_distance"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.sample_distance()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion"><code class="docutils literal notranslate"><span class="pre">SimpleInversion</span></code></a><ul>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.parallax"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.parallax</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.parallax_error"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.parallax_error</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.d_est"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.d_est</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.d_est_error"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.d_est_error</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.parallax_over_error"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.parallax_over_error</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.SimpleInversion.sample_distance"><code class="docutils literal notranslate"><span class="pre">SimpleInversion.sample_distance()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.parallax</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_error"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.parallax_error</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.scale_length"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.scale_length</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_likelihood"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.log_likelihood()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_posterior"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.log_posterior()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_prior"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.log_prior()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_over_error"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.parallax_over_error</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.sample_distance"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.sample_distance()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel</span></code></a><ul>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.parallax</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_error"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.parallax_error</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.scale_length"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.scale_length</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_likelihood"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.log_likelihood()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_posterior"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.log_posterior()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.log_prior"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.log_prior()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.parallax_over_error"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.parallax_over_error</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.distance.XRBExponentialPriorModel.sample_distance"><code class="docutils literal notranslate"><span class="pre">XRBExponentialPriorModel.sample_distance()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cobtools.astrometry.kinematics">cobtools.astrometry.kinematics module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#kinematics-py">kinematics.py</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#module-cobtools.astrometry.kinematics">cobtools.astrometry.kinematics module</a><ul>
+<li><a class="reference internal" href="#kinematics-py">kinematics.py</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.kinematics.equatorial_to_galactic"><code class="docutils literal notranslate"><span class="pre">equatorial_to_galactic()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.kinematics.galactic_proper_motion"><code class="docutils literal notranslate"><span class="pre">galactic_proper_motion()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.kinematics.galactocentric_cartesian_velocity"><code class="docutils literal notranslate"><span class="pre">galactocentric_cartesian_velocity()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.kinematics.peculiar_velocity"><code class="docutils literal notranslate"><span class="pre">peculiar_velocity()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.kinematics.equatorial_to_galactic"><code class="docutils literal notranslate"><span class="pre">equatorial_to_galactic()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.kinematics.galactic_proper_motion"><code class="docutils literal notranslate"><span class="pre">galactic_proper_motion()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.kinematics.galactocentric_cartesian_velocity"><code class="docutils literal notranslate"><span class="pre">galactocentric_cartesian_velocity()</span></code></a></li>
+<li><a class="reference internal" href="#cobtools.astrometry.kinematics.peculiar_velocity"><code class="docutils literal notranslate"><span class="pre">peculiar_velocity()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cobtools.astrometry.rotation_curve">cobtools.astrometry.rotation_curve module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cobtools.astrometry.rotation_curve.get_rotation_curve"><code class="docutils literal notranslate"><span class="pre">get_rotation_curve()</span></code></a></li>
+<li><a class="reference internal" href="#module-cobtools.astrometry.rotation_curve">cobtools.astrometry.rotation_curve module</a><ul>
+<li><a class="reference internal" href="#cobtools.astrometry.rotation_curve.get_rotation_curve"><code class="docutils literal notranslate"><span class="pre">get_rotation_curve()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cobtools.astrometry">Module contents</a></li>
+<li><a class="reference internal" href="#module-cobtools.astrometry">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.photometry.html">cobtools.photometry package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.query.html">cobtools.query package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.plot_utils.html">cobtools.plot_utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cobtools.data_models.html">cobtools.data_models package</a></li>
 </ul>
-
+</div>
         </div>
       </div>
     </nav>
@@ -124,7 +116,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="cobtools.html">cobtools package</a></li>
       <li class="breadcrumb-item active">cobtools.astrometry package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/cobtools.astrometry.rst.txt" rel="nofollow"> View page source</a>
@@ -909,10 +900,7 @@ negative radii to zero, i.e., v_rot(r &lt; 0) = v_rot(0).</p>
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="cobtools.html" class="btn btn-neutral float-left" title="cobtools package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="cobtools.data_models.html" class="btn btn-neutral float-right" title="cobtools.data_models package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

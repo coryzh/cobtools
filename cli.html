@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command-line interface &mdash; cobtools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://coryzh.github.io/cobtools/cli.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cobtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Command-line interface</a><ul>
+<li><a class="reference internal" href="#distance-from-parallax">Distance from parallax</a><ul>
+<li><a class="reference internal" href="#par-to-dist">par_to_dist</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#peculiar-velocity-from-astrometry">Peculiar velocity from astrometry</a><ul>
+<li><a class="reference internal" href="#vpec-from-astrometry">vpec_from_astrometry</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gaia-source-query">Gaia source query</a><ul>
+<li><a class="reference internal" href="#gaia-single-source">gaia_single_source</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#peculiar-velocity-from-gaia">Peculiar velocity from Gaia</a><ul>
+<li><a class="reference internal" href="#vpec-from-source-id">vpec_from_source_id</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cobtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Command-line interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cli.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="command-line-interface">
+<h1>Command-line interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h1>
+<section id="distance-from-parallax">
+<h2>Distance from parallax<a class="headerlink" href="#distance-from-parallax" title="Link to this heading"></a></h2>
+<section id="par-to-dist">
+<h3>par_to_dist<a class="headerlink" href="#par-to-dist" title="Link to this heading"></a></h3>
+<p>Get parallax-based distance estimates (in kpc)</p>
+<p>Provide the parallax and parallax_error in mas and specify the method used to derive the distance. The output is the distance in kpc and the associated uncertainty at the confidence level specified by the user.</p>
+<p class="rubric">Usage</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>par_to_dist<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>parallax<span class="w"> </span>parallax_error
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-par_to_dist-method">
+<span class="sig-name descname"><span class="pre">--method</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;method&gt;</span></span><a class="headerlink" href="#cmdoption-par_to_dist-method" title="Link to this definition"></a></dt>
+<dd><p>Method used to derive the distance from the parallax. Valid options are: inv, xrb_exp_prior. ‘inv’ is to directly invert the parallax, and ‘xrb_exp_prior’ is to derive distance from the posterior distribution using the exponential prior for X-ray binaries (e.g., Zhao et al. 2023).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">'inv'</span></code></p>
+</dd>
+<dt class="field-even">Options<span class="colon">:</span></dt>
+<dd class="field-even"><p>inv | xrb_exp_prior</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-par_to_dist-conf">
+<span class="sig-name descname"><span class="pre">--conf</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;conf&gt;</span></span><a class="headerlink" href="#cmdoption-par_to_dist-conf" title="Link to this definition"></a></dt>
+<dd><p>Confidence level for the output distance uncertainty in decimal form, which should be a value between 0 and 1. The default is 0.68, i.e., 68% confidence level, the lower and upper errors will be calculated at the 16th and 84th percentiles of the sampled distribution, and the point estimate will be the median.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">0.68</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-par_to_dist-arg-parallax">
+<span class="sig-name descname"><span class="pre">parallax</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-par_to_dist-arg-parallax" title="Link to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-par_to_dist-arg-parallax_error">
+<span class="sig-name descname"><span class="pre">parallax_error</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-par_to_dist-arg-parallax_error" title="Link to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="peculiar-velocity-from-astrometry">
+<h2>Peculiar velocity from astrometry<a class="headerlink" href="#peculiar-velocity-from-astrometry" title="Link to this heading"></a></h2>
+<section id="vpec-from-astrometry">
+<h3>vpec_from_astrometry<a class="headerlink" href="#vpec-from-astrometry" title="Link to this heading"></a></h3>
+<p>Calculate peculiar velocity (vpec) based on astrometry</p>
+<p>The user provides the astrometric parameters (ra, dec, pmra, pmdec,
+dist, rv) and the uncertainties on pmra, pmdec, dist, and rv. The
+tool will then generate Monte Carlo samples of the parameters and
+compute the vpec values.</p>
+<p>The user can also specify the confidence level and the number of
+samples to use in the Monte Carlo simulation.</p>
+<p>Any option omitted on the command line will be prompted for
+interactively.</p>
+<p>The output is the point estimate and uncertainty of the vpec and its
+Cartesian components in km/s at the given confidence level.</p>
+<p class="rubric">Usage</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vpec_from_astrometry<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-ra">
+<span class="sig-name descname"><span class="pre">--ra</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ra&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-ra" title="Link to this definition"></a></dt>
+<dd><p>Right ascension in decimal degrees. Range [0, 360) degrees.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-dec">
+<span class="sig-name descname"><span class="pre">--dec</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dec&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-dec" title="Link to this definition"></a></dt>
+<dd><p>Declination in decimal degrees. Range [-90, 90] degrees.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-pmra">
+<span class="sig-name descname"><span class="pre">--pmra</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;pmra&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-pmra" title="Link to this definition"></a></dt>
+<dd><p>Proper motion in right ascension (including the cos(dec) factor) in mas/yr.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-pmra_error">
+<span class="sig-name descname"><span class="pre">--pmra_error</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;pmra_error&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-pmra_error" title="Link to this definition"></a></dt>
+<dd><p>1-sigma error in proper motion in ra in mas/yr.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-pmdec">
+<span class="sig-name descname"><span class="pre">--pmdec</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;pmdec&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-pmdec" title="Link to this definition"></a></dt>
+<dd><p>Proper motion in declination in mas/yr.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-pmdec_error">
+<span class="sig-name descname"><span class="pre">--pmdec_error</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;pmdec_error&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-pmdec_error" title="Link to this definition"></a></dt>
+<dd><p>1-sigma error in proper motion in declination in mas/yr.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-dist">
+<span class="sig-name descname"><span class="pre">--dist</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dist&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-dist" title="Link to this definition"></a></dt>
+<dd><p>Distance in kpc. Must be a positive value.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-dist_error">
+<span class="sig-name descname"><span class="pre">--dist_error</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dist_error&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-dist_error" title="Link to this definition"></a></dt>
+<dd><p>1-sigma error in distance in kpc.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-rv">
+<span class="sig-name descname"><span class="pre">--rv</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;rv&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-rv" title="Link to this definition"></a></dt>
+<dd><p>Radial velocity in km/s. Must be in the range [-3e5, 3e5] km/s (inclusive).</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-rv_error">
+<span class="sig-name descname"><span class="pre">--rv_error</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;rv_error&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-rv_error" title="Link to this definition"></a></dt>
+<dd><p>1-sigma error in radial velocity in km/s.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-c">
+<span id="cmdoption-vpec_from_astrometry-conf"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--conf</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;conf&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-c" title="Link to this definition"></a></dt>
+<dd><p>Confidence level in decimal form. Must be between 0 and 1 (exclusive).</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-n">
+<span id="cmdoption-vpec_from_astrometry-n_samples"></span><span class="sig-name descname"><span class="pre">-n</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--n_samples</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;n_samples&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-n" title="Link to this definition"></a></dt>
+<dd><p>Number of samples to use in the Monte Carlo simulation.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_astrometry-s">
+<span id="cmdoption-vpec_from_astrometry-seed"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--seed</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;seed&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_astrometry-s" title="Link to this definition"></a></dt>
+<dd><p>Random seed for reproducibility.</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="gaia-source-query">
+<h2>Gaia source query<a class="headerlink" href="#gaia-source-query" title="Link to this heading"></a></h2>
+<section id="gaia-single-source">
+<h3>gaia_single_source<a class="headerlink" href="#gaia-single-source" title="Link to this heading"></a></h3>
+<p>Retrieve and display a subset of columns about a Gaia source.</p>
+<p>This command queries the Gaia archive for the specified source_id and data release (–dr), and displays the results in a formatted table.</p>
+<p class="rubric">Usage</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gaia_single_source<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>source_id
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-gaia_single_source-dr">
+<span class="sig-name descname"><span class="pre">--dr</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;Data</span> <span class="pre">Release&gt;</span></span><a class="headerlink" href="#cmdoption-gaia_single_source-dr" title="Link to this definition"></a></dt>
+<dd><p>Gaia data release to query. Current valid options are ‘dr1’, ‘dr2’, and ‘dr3’. This will be extended to include ‘dr4’, and ‘dr5’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">'dr3'</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-gaia_single_source-no-cache">
+<span class="sig-name descname"><span class="pre">--no-cache</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-gaia_single_source-no-cache" title="Link to this definition"></a></dt>
+<dd><p>Disable caching (read and write) of query results. By default, results are cached to avoid duplicated queries in the same data release.</p>
+</dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-gaia_single_source-arg-source_id">
+<span class="sig-name descname"><span class="pre">source_id</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-gaia_single_source-arg-source_id" title="Link to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="peculiar-velocity-from-gaia">
+<h2>Peculiar velocity from Gaia<a class="headerlink" href="#peculiar-velocity-from-gaia" title="Link to this heading"></a></h2>
+<section id="vpec-from-source-id">
+<h3>vpec_from_source_id<a class="headerlink" href="#vpec-from-source-id" title="Link to this heading"></a></h3>
+<p>Calculate peculiar velocity (vpec) for a Gaia source_id.</p>
+<p>Queries the Gaia archive for the astrometric parameters (ra, dec,
+pmra, pmdec, parallax) of the given source_id, combines them with a
+user-supplied radial velocity (and its error), and generates Monte
+Carlo samples to compute the vpec and its Cartesian (U, V, W)
+components.</p>
+<p>Distance can come from two sources, selected via –dist_source:</p>
+<div class="line-block">
+<div class="line">- ‘gaia’: distance is inferred from the Gaia parallax using the</div>
+<div class="line-block">
+<div class="line">method chosen via –dist_method (‘inv’ or ‘xrb_exp_prior’).</div>
+</div>
+<div class="line">- ‘user’: distance and its 1-sigma error are supplied directly by</div>
+<div class="line-block">
+<div class="line">the user (via –dist/–dist_error or an interactive prompt).</div>
+</div>
+</div>
+<p>Any option omitted on the command line will be prompted for
+interactively; –dist_method, –dist, and –dist_error are only
+prompted for when relevant to the chosen –dist_source.</p>
+<p>The output is the point estimate and the uncertainty of the distance (kpc),
+vpec, and its Cartesian components in km/s at the given confidence
+level. The uncertainties correspond to equal-tailed intervals at the
+specified confidence level.</p>
+<p class="rubric">Usage</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vpec_from_source_id<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-source_id">
+<span class="sig-name descname"><span class="pre">--source_id</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;source_id&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-source_id" title="Link to this definition"></a></dt>
+<dd><p>Gaia source_id for which to calculate the peculiar velocity.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-dr">
+<span class="sig-name descname"><span class="pre">--dr</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dr&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-dr" title="Link to this definition"></a></dt>
+<dd><p>Gaia data release to use for astrometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">'dr3'</span></code></p>
+</dd>
+<dt class="field-even">Options<span class="colon">:</span></dt>
+<dd class="field-even"><p>dr2 | dr3</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-rv">
+<span class="sig-name descname"><span class="pre">--rv</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;rv&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-rv" title="Link to this definition"></a></dt>
+<dd><p>Radial velocity in km/s. Must be in the range [-3e5, 3e5] km/s (inclusive).</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-rv_error">
+<span class="sig-name descname"><span class="pre">--rv_error</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;rv_error&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-rv_error" title="Link to this definition"></a></dt>
+<dd><p>1-sigma error in radial velocity in km/s.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-dist_source">
+<span class="sig-name descname"><span class="pre">--dist_source</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dist_source&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-dist_source" title="Link to this definition"></a></dt>
+<dd><p>Source of distance information. ‘gaia’ uses Gaia parallax to estimate distance, while ‘user’ uses user-provided distance and error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">'gaia'</span></code></p>
+</dd>
+<dt class="field-even">Options<span class="colon">:</span></dt>
+<dd class="field-even"><p>gaia | user</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-dist_method">
+<span class="sig-name descname"><span class="pre">--dist_method</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dist_method&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-dist_method" title="Link to this definition"></a></dt>
+<dd><p>Method to estimate distance from parallax, used only when –dist_source=gaia. Options are ‘inv’ for simple inversion, ‘xrb_exp_prior’ for XRB exponential prior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p>inv | xrb_exp_prior</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-dist">
+<span class="sig-name descname"><span class="pre">--dist</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dist&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-dist" title="Link to this definition"></a></dt>
+<dd><p>Distance in kpc. Must be a positive value. Used only when –dist_source=’user’.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-dist_error">
+<span class="sig-name descname"><span class="pre">--dist_error</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dist_error&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-dist_error" title="Link to this definition"></a></dt>
+<dd><p>1-sigma error in distance in kpc. Must be a positive number. Used only when –dist_source=’user’.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-c">
+<span id="cmdoption-vpec_from_source_id-conf"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--conf</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;conf&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-c" title="Link to this definition"></a></dt>
+<dd><p>Confidence level in decimal form. Must be between 0 and 1 (exclusive).</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-vpec_from_source_id-s">
+<span id="cmdoption-vpec_from_source_id-seed"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--seed</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;seed&gt;</span></span><a class="headerlink" href="#cmdoption-vpec_from_source_id-s" title="Link to this definition"></a></dt>
+<dd><p>Random seed for reproducibility.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yue (Cory) Zhao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
