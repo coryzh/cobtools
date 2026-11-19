@@ -175,7 +175,7 @@ class TestSingleSourceUsefulInfoQuery:
         Test that invalid data_release raises for single-source useful info
         query.
         """
-        dr = "dr4"
+        dr = "dr5"
         with pytest.raises(
             ValueError,
             match=(
