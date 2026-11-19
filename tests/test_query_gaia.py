@@ -418,7 +418,7 @@ class TestSingleSourceUsefulInfoQuery:
 
     def test_init_custom_data_release(self):
         """Test initialization with custom data_release."""
-        for release in ["dr1", "dr2", "dr3"]:
+        for release in ["dr1", "dr2", "dr3", "dr4"]:
             query = SingleSourceUsefulInfoQuery(
                 source_id=123456, data_release=release
             )
