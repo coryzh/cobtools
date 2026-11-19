@@ -222,6 +222,34 @@ class TestSingleSourceUsefulInfoQuery:
 
         assert query.query_str == expected_query
 
+    def test_query_str_dr4(self):
+        """Test query_str with DR4 data release."""
+        query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr4")
+        expected_columns = [
+            "source_id", "winning_source_id_astro", "winning_source_id_phot",
+            "astrometry_origin", "unreliable_astrometry", "ref_epoch", "ra",
+            "dec", "parallax", "parallax_error", "pmra", "pmra_error", "pmdec",
+            "pmdec_error", "astrometric_params", "tentative_parallax_bias",
+            "astrometric_excess_noise", "ruwe", "phot_g_mean_mag",
+            "phot_bp_mean_mag", "phot_rp_mean_mag", "bp_rp",
+            "radial_velocity_origin", "radial_velocity",
+            "radial_velocity_error", "rv_invalid_reason", "has_systemic_rv",
+            "mh", "ag", "classprob_dsc_combmod_quasar",
+            "classprob_dsc_combmod_galaxy", "classprob_dsc_combmod_star",
+            "phot_variable_flag", "ipd_frac_multi_peak",
+            "ipd_gof_harmonic_amplitude", "astrometric_gof_al"
+        ]
+        expected_query = dedent(
+            f"""
+            SELECT
+                {', '.join(expected_columns)}
+            FROM gaiadr4.gaia_source
+            WHERE source_id = {query.source_id_obj.source_id}
+            """
+        ).strip()
+
+        assert query.query_str == expected_query
+
     def test_query_str_select_clause(self):
         """Test that SELECT clause contains expected columns as whole words."""
         query = SingleSourceUsefulInfoQuery(source_id=123456)
