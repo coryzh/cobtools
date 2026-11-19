@@ -250,6 +250,26 @@ class TestSingleSourceUsefulInfoQuery:
 
         assert query.query_str == expected_query
 
+    def test_dr4_columns_included(self):
+        """Test that DR4-specific columns are present in the query."""
+        query = SingleSourceUsefulInfoQuery(
+            source_id=123456, data_release="dr4"
+        )
+        query_str = query.query_str
+
+        dr4_specific_columns = [
+            "winning_source_id_astro", "winning_source_id_phot",
+            "astrometry_origin", "tentative_parallax_bias",
+            "phot_bp_mean_mag", "phot_rp_mean_mag",
+            "radial_velocity_origin", "has_systemic_rv",
+            "classprob_dsc_combmod_quasar", "classprob_dsc_combmod_galaxy"
+        ]
+
+        for col in dr4_specific_columns:
+            assert re.search(rf"\b{re.escape(col)}\b", query_str), (
+                f"DR4 column '{col}' not found in query"
+            )
+
     def test_query_str_select_clause(self):
         """Test that SELECT clause contains expected columns as whole words."""
         query = SingleSourceUsefulInfoQuery(source_id=123456)
