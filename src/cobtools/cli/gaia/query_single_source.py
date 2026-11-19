@@ -21,7 +21,7 @@ import click
     metavar="Data Release",
     help=(
         "Gaia data release to query. Current valid options are "
-        "'dr3', and 'dr4'. This will be extended to include 'dr4', and 'dr5'."
+        "'dr3', and 'dr4'. This will be extended to include 'dr5'."
     ),
 )
 @click.option(
