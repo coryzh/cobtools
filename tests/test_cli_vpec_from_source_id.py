@@ -124,7 +124,7 @@ def test_cli_gaia_distance_source_uses_dist_method(capsys):
             [
                 "--source_id", "123", "--rv", "10", "--rv_error", "1",
                 "--dist_source", "gaia", "--dist_method", "inv",
-                "--conf", "0.5", "--seed", "1",
+                "--conf", "0.5", "--seed", "1", "--dr", "dr3"
             ],
         )
 
@@ -199,6 +199,7 @@ def test_cli_user_distance_source_skips_dist_method(capsys):
                 "--source_id", "123", "--rv", "10", "--rv_error", "1",
                 "--dist_source", "user", "--dist", "5.0",
                 "--dist_error", "0.5", "--conf", "0.5", "--seed", "1",
+                "--dr", "dr3"
             ],
         )
 
