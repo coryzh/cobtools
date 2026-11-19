@@ -364,7 +364,21 @@
             <span class="s2">"in_qso_candidates"</span><span class="p">,</span> <span class="s2">"in_galaxy_candidates"</span><span class="p">,</span>
             <span class="s2">"has_xp_continuous"</span><span class="p">,</span> <span class="s2">"has_epoch_photometry"</span><span class="p">,</span> <span class="s2">"has_rvs"</span><span class="p">,</span>
             <span class="s2">"has_epoch_rv"</span>
-        <span class="p">]</span>
+        <span class="p">],</span>
+        <span class="s2">"dr4"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"source_id"</span><span class="p">,</span> <span class="s2">"winning_source_id_astro"</span><span class="p">,</span> <span class="s2">"winning_source_id_phot"</span><span class="p">,</span>
+            <span class="s2">"astrometry_origin"</span><span class="p">,</span> <span class="s2">"unreliable_astrometry"</span><span class="p">,</span> <span class="s2">"ref_epoch"</span><span class="p">,</span> <span class="s2">"ra"</span><span class="p">,</span>
+            <span class="s2">"dec"</span><span class="p">,</span> <span class="s2">"parallax"</span><span class="p">,</span> <span class="s2">"parallax_error"</span><span class="p">,</span> <span class="s2">"pmra"</span><span class="p">,</span> <span class="s2">"pmra_error"</span><span class="p">,</span> <span class="s2">"pmdec"</span><span class="p">,</span>
+            <span class="s2">"pmdec_error"</span><span class="p">,</span> <span class="s2">"astrometric_params"</span><span class="p">,</span> <span class="s2">"tentative_parallax_bias"</span><span class="p">,</span>
+            <span class="s2">"astrometric_excess_noise"</span><span class="p">,</span> <span class="s2">"ruwe"</span><span class="p">,</span> <span class="s2">"phot_g_mean_mag"</span><span class="p">,</span>
+            <span class="s2">"phot_bp_mean_mag"</span><span class="p">,</span> <span class="s2">"phot_rp_mean_mag"</span><span class="p">,</span> <span class="s2">"bp_rp"</span><span class="p">,</span>
+            <span class="s2">"radial_velocity_origin"</span><span class="p">,</span> <span class="s2">"radial_velocity"</span><span class="p">,</span>
+            <span class="s2">"radial_velocity_error"</span><span class="p">,</span> <span class="s2">"rv_invalid_reason"</span><span class="p">,</span> <span class="s2">"has_systemic_rv"</span><span class="p">,</span>
+            <span class="s2">"mh"</span><span class="p">,</span> <span class="s2">"ag"</span><span class="p">,</span> <span class="s2">"classprob_dsc_combmod_quasar"</span><span class="p">,</span>
+            <span class="s2">"classprob_dsc_combmod_galaxy"</span><span class="p">,</span> <span class="s2">"classprob_dsc_combmod_star"</span><span class="p">,</span>
+            <span class="s2">"phot_variable_flag"</span><span class="p">,</span> <span class="s2">"ipd_frac_multi_peak"</span><span class="p">,</span>
+            <span class="s2">"ipd_gof_harmonic_amplitude"</span><span class="p">,</span> <span class="s2">"astrometric_gof_al"</span>
+        <span class="p">],</span>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_release</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"dr3"</span><span class="p">):</span>
