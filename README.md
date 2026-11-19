@@ -41,74 +41,83 @@
 | `lasair` | 0.1.2 |
 | `click` | 8.0.0 |
 | `platformdirs` | 4.3.6 |
+| `rich` | 13.0.0 |
 
 It is recommended to install `cobtools` in a dedicated virtual environment to avoid dependency conflicts with other packages.
+### Install uv
+The virtual environment is managed by `uv`. To install uv, follow the [official guide](https://docs.astral.sh/uv/getting-started/installation/). In general, it is recommended to use the installation script. For Linux or MacOS, for example, run
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
 
 ### Creating a virtual environment
-Using `venv`:
-
-```bash
-python3.11 -m venv cobtools-env
-source cobtools-env/bin/activate
-```
-
-Or using `conda`:
-```bash
-conda create -n cobtools-env python=3.11
-conda activate cobtools-env
-```
-
-To install, first, clone the repository to your machine:
+Then, clone the repository to your machine:
 
 ```bash
 git clone https://github.com/coryzh/cobtools.git
 cd cobtools
 ```
 
-Then, install the package in editable mode:
+Then, install the package using `uv`
 ```bash
-pip install -e .
+uv sync --extra dev
 ```
+This will install the package in editable mode. `--extra dev` will include the extra tools for development (`pytest`, `ruff`, etc.).
 
 <details>
-<summary>About the editable installation</summary>
+<summary>What is editable mode?</summary>
 
-The "editable" mode (indicated by the `-e` flag) means that changes to the source code will immediately reflect in the installed package.
+The "editable" mode means that changes to the source code will immediately reflect in the installed package.
 
 </details>
 
-To verify the package is installed correctly, open a Python shell and import the package:
+### Verify installation
+To verify the package is installed correctly, open a terminal and run:
 
-```python
-import cobtools
-print(cobtools.__version__)
+```bash
+uv run python -c "import cobtools; print(cobtools.__version__)"
 ```
+This should print out the version number of the package.
 
 ## Updating
-To update the package, pull the latest changes from the branch and re-run the pip install command.
+To update the package, pull the latest changes from the branch and re-run the `uv` command.
 
 ```bash
 cd cobtools
 git pull
-pip install -e .
+uv sync --extra dev
 ```
 
 ## Using the command-line interfaces
 
-After installation, the command-line interfaces are available directly from the terminal.
+After installation, the command-line interfaces are available from the terminal. There are two ways to use these commands. To activate the environment and run commands directly
+
+```bash
+source .venv/bin/activate
+```
+then
+```bash
+<command-name>
+```
+
+Alternatively, you can prefix the commands with `uv run` without activating the virtual environment, i.e.,
+```bash
+uv run <command-name>
+```
 
 ### Query a Gaia source
-
 Display selected Gaia columns for a source from Gaia DR3:
 
 ```bash
-gaia_single_source <source_id> --dr dr3
+uv run gaia_single_source <source_id> --dr dr3
 ```
 
 By default, query results are cached. Use `--no-cache` to bypass the cache:
 
 ```bash
-gaia_single_source <source_id> --dr dr3 --no-cache
+uv run gaia_single_source <source_id> --dr dr3 --no-cache
 ```
 
 ### Estimate distance from parallax
@@ -116,19 +125,19 @@ gaia_single_source <source_id> --dr dr3 --no-cache
 Provide the parallax and its uncertainty in milliarcseconds. The default method is direct parallax inversion:
 
 ```bash
-par_to_dist 1.25 0.10
+uv run par_to_dist 1.25 0.10
 ```
 
 To use the X-ray binary exponential-prior model instead:
 
 ```bash
-par_to_dist 1.25 0.10 --method xrb_exp_prior
+uv run par_to_dist 1.25 0.10 --method xrb_exp_prior
 ```
 
 Use `--conf` to change the confidence level for the reported uncertainty:
 
 ```bash
-par_to_dist 1.25 0.10 --conf 0.95
+uv run par_to_dist 1.25 0.10 --conf 0.95
 ```
 
 ### Calculate peculiar velocity from astrometry
@@ -136,13 +145,13 @@ par_to_dist 1.25 0.10 --conf 0.95
 `vpec_from_astrometry` prompts interactively for any astrometric values that are not provided on the command line. For example:
 
 ```bash
-vpec_from_astrometry
+uv run vpec_from_astrometry
 ```
 
 Options can also be supplied explicitly:
 
 ```bash
-vpec_from_astrometry \
+uv run vpec_from_astrometry \
     --ra 83.63 --dec 22.01 \
     --pmra 5.2 --pmra_error 0.3 \
     --pmdec -2.1 --pmdec_error 0.2 \
@@ -155,7 +164,7 @@ vpec_from_astrometry \
  This command retrieves astrometric parameters for the specified Gaia source and uses the provided radial velocity and its uncertainty (prompting for them if omitted):
 
 ```bash
-vpec_from_source_id --source_id <source_id> --dr dr3 --rv 35.0 --rv_error 2.0
+uv run vpec_from_source_id --source_id <source_id> --dr dr3 --rv 35.0 --rv_error 2.0
 ```
 
 By default, the distance is estimated from the Gaia parallax. To provide a
@@ -163,7 +172,7 @@ user-supplied distance instead, use `--dist_source user` together with
 `--dist` and `--dist_error`:
 
 ```bash
-vpec_from_source_id \
+uv run vpec_from_source_id \
     --source_id Gaia-source-id --dr dr3 \
     --rv 35.0 --rv_error 2.0 \
     --dist_source user --dist 2.0 --dist_error 0.1
@@ -172,9 +181,9 @@ vpec_from_source_id \
 ## Documentation
 The API documentation is available [here](https://coryzh.github.io/cobtools).
 
-To build the documentation locally, navigate to the `docs/` folder and run:
+To build the documentation locally, `cd` to the repository root, then:
 ```bash
-make html
+uv run --extra dev make -C docs html
 ```
 The generated HTML files will be located in `docs/build/html/`
 
@@ -182,18 +191,17 @@ The generated HTML files will be located in `docs/build/html/`
 ## Testing
 Unit tests are located in tests/ folder and can be performed with `pytest`, e.g.,
 ```bash
-pytest tests/test_flux_conversion.py
+uv run --extra dev pytest tests/test_flux_conversion.py
 ```
 
-## Development
-For development, install development dependencies by running
+To run all tests in `tests/`
 ```bash
-pip install -e .[dev]
+uv run --extra dev pytest
 ```
 
 
 ## Contributing
-We welcome contributions! To contribute:
+To contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bugfix.
