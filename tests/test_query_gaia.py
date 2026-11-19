@@ -175,7 +175,7 @@ class TestSingleSourceUsefulInfoQuery:
         Test that invalid data_release raises for single-source useful info
         query.
         """
-        dr = "dr4"
+        dr = "dr5"
         with pytest.raises(
             ValueError,
             match=(
@@ -221,6 +221,129 @@ class TestSingleSourceUsefulInfoQuery:
         ).strip()
 
         assert query.query_str == expected_query
+
+    def test_query_str_dr4(self):
+        """Test query_str with DR4 data release."""
+        query = SingleSourceUsefulInfoQuery(source_id=789, data_release="dr4")
+        expected_columns = [
+            "source_id", "winning_source_id_astro", "winning_source_id_phot",
+            "astrometry_origin", "unreliable_astrometry", "ref_epoch", "ra",
+            "dec", "parallax", "parallax_error", "pmra", "pmra_error", "pmdec",
+            "pmdec_error", "astrometric_params", "tentative_parallax_bias",
+            "astrometric_excess_noise", "ruwe", "phot_g_mean_mag",
+            "phot_bp_mean_mag", "phot_rp_mean_mag", "bp_rp",
+            "radial_velocity_origin", "radial_velocity",
+            "radial_velocity_error", "rv_invalid_reason", "has_systemic_rv",
+            "mh", "ag", "classprob_dsc_combmod_quasar",
+            "classprob_dsc_combmod_galaxy", "classprob_dsc_combmod_star",
+            "phot_variable_flag", "ipd_frac_multi_peak",
+            "ipd_gof_harmonic_amplitude", "astrometric_gof_al"
+        ]
+        expected_query = dedent(
+            f"""
+            SELECT
+                {', '.join(expected_columns)}
+            FROM gaiadr4.gaia_source
+            WHERE source_id = {query.source_id_obj.source_id}
+            """
+        ).strip()
+
+        assert query.query_str == expected_query
+
+    def test_dr4_columns_included(self):
+        """Test that DR4-specific columns are present in the query."""
+        query = SingleSourceUsefulInfoQuery(
+            source_id=123456, data_release="dr4"
+        )
+        query_str = query.query_str
+
+        dr4_specific_columns = [
+            "winning_source_id_astro", "winning_source_id_phot",
+            "astrometry_origin", "tentative_parallax_bias",
+            "phot_bp_mean_mag", "phot_rp_mean_mag",
+            "radial_velocity_origin", "has_systemic_rv",
+            "classprob_dsc_combmod_quasar", "classprob_dsc_combmod_galaxy"
+        ]
+
+        for col in dr4_specific_columns:
+            assert re.search(rf"\b{re.escape(col)}\b", query_str), (
+                f"DR4 column '{col}' not found in query"
+            )
+
+    @patch("cobtools.query.query_gaia.Gaia.launch_job")
+    def test_query_result_success_dr4(self, mock_launch_job):
+        """Test query_result returns table successfully for DR4."""
+        mock_job = MagicMock()
+        mock_job.get_phase.return_value = "COMPLETED"
+        mock_job.get_results.return_value = Table(
+            names=[
+                "source_id", "winning_source_id_astro",
+                "winning_source_id_phot", "astrometry_origin",
+                "unreliable_astrometry", "ref_epoch", "ra",
+                "dec", "parallax", "parallax_error", "pmra", "pmra_error",
+                "pmdec", "pmdec_error", "astrometric_params",
+                "tentative_parallax_bias", "astrometric_excess_noise", "ruwe",
+                "phot_g_mean_mag", "phot_bp_mean_mag", "phot_rp_mean_mag",
+                "bp_rp", "radial_velocity_origin", "radial_velocity",
+                "radial_velocity_error", "rv_invalid_reason",
+                "has_systemic_rv", "mh", "ag", "classprob_dsc_combmod_quasar",
+                "classprob_dsc_combmod_galaxy", "classprob_dsc_combmod_star",
+                "phot_variable_flag", "ipd_frac_multi_peak",
+                "ipd_gof_harmonic_amplitude", "astrometric_gof_al"
+            ],
+            data=[
+                [4787135780363189504],  # source_id
+                [4787135780363189504],  # winning_source_id_astro
+                [4787135780363189504],  # winning_source_id_phot
+                ["Gaia"],  # astrometry_origin
+                [False],  # unreliable_astrometry
+                [2015.5],  # ref_epoch
+                [71.75571839171829],  # ra
+                [-46.59034574895981],  # dec
+                [0.38555175893640115],  # parallax
+                [0.02],  # parallax_error
+                [17.106916182108442],  # pmra
+                [0.02],  # pmra_error
+                [17.156456857994684],  # pmdec
+                [0.02],  # pmdec_error
+                [[1, 2]],  # astrometric_params
+                [0.1],  # tentative_parallax_bias
+                [0.65],  # astrometric_excess_noise
+                [1.5],  # ruwe
+                [14.051228],  # phot_g_mean_mag
+                [14.2],  # phot_bp_mean_mag
+                [13.9],  # phot_rp_mean_mag
+                [0.3],  # bp_rp
+                ["Gaia"],  # radial_velocity_origin
+                [-50.0],  # radial_velocity
+                [0.02],  # radial_velocity_error
+                [0],  # rv_invalid_reason
+                [False],  # has_systemic_rv
+                [0.0],  # mh
+                [0.0],  # ag
+                [0.1],  # classprob_dsc_combmod_quasar
+                [0.2],  # classprob_dsc_combmod_galaxy
+                [0.7],  # classprob_dsc_combmod_star
+                ["VARIABLE"],  # phot_variable_flag
+                [0.5],  # ipd_frac_multi_peak
+                [0.01],  # ipd_gof_harmonic_amplitude
+                [0.9]  # astrometric_gof_al
+            ]
+        )
+        mock_launch_job.return_value = mock_job
+
+        query = SingleSourceUsefulInfoQuery(
+            source_id=4787135780363189504, data_release="dr4"
+        )
+        result = query.query_result()
+
+        assert isinstance(result, Table)
+        for col in mock_job.get_results().colnames:
+            assert col in result.colnames
+            if result[col].dtype.kind == 'f':
+                assert np.allclose(result[col], mock_job.get_results()[col])
+            else:
+                assert np.array_equal(result[col], mock_job.get_results()[col])
 
     def test_query_str_select_clause(self):
         """Test that SELECT clause contains expected columns as whole words."""
@@ -295,7 +418,7 @@ class TestSingleSourceUsefulInfoQuery:
 
     def test_init_custom_data_release(self):
         """Test initialization with custom data_release."""
-        for release in ["dr1", "dr2", "dr3"]:
+        for release in ["dr1", "dr2", "dr3", "dr4"]:
             query = SingleSourceUsefulInfoQuery(
                 source_id=123456, data_release=release
             )

@@ -284,7 +284,21 @@ class SingleSourceUsefulInfoQuery(SingleSourceQuery):
             "in_qso_candidates", "in_galaxy_candidates",
             "has_xp_continuous", "has_epoch_photometry", "has_rvs",
             "has_epoch_rv"
-        ]
+        ],
+        "dr4": [
+            "source_id", "winning_source_id_astro", "winning_source_id_phot",
+            "astrometry_origin", "unreliable_astrometry", "ref_epoch", "ra",
+            "dec", "parallax", "parallax_error", "pmra", "pmra_error", "pmdec",
+            "pmdec_error", "astrometric_params", "tentative_parallax_bias",
+            "astrometric_excess_noise", "ruwe", "phot_g_mean_mag",
+            "phot_bp_mean_mag", "phot_rp_mean_mag", "bp_rp",
+            "radial_velocity_origin", "radial_velocity",
+            "radial_velocity_error", "rv_invalid_reason", "has_systemic_rv",
+            "mh", "ag", "classprob_dsc_combmod_quasar",
+            "classprob_dsc_combmod_galaxy", "classprob_dsc_combmod_star",
+            "phot_variable_flag", "ipd_frac_multi_peak",
+            "ipd_gof_harmonic_amplitude", "astrometric_gof_al"
+        ],
     }
 
     def __init__(self, source_id: int | str, data_release: str = "dr3"):
