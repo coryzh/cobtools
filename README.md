@@ -74,12 +74,12 @@ The "editable" mode means that changes to the source code will immediately refle
 </details>
 
 ### Verify installation
-To verify the package is installed correctly, open a Python shell and import the package:
+To verify the package is installed correctly, open a terminal and run:
 
-```python
-import cobtools
-print(cobtools.__version__)
+```bash
+uv run python -c "import cobtools; print(cobtools.__version__)"
 ```
+This should print out the version number of the package.
 
 ## Updating
 To update the package, pull the latest changes from the branch and re-run the `uv` command.
